@@ -272,3 +272,126 @@ footer{padding:0 0 34px;color:#87a99c;font-size:12px}
   .count-choices{grid-template-columns:repeat(2,1fr)}
   .landing-stats{gap:18px 26px}
 }
+
+/* HODON v6 — board and controls separated, compact responsive layout */
+.app{max-width:1160px;padding:0 14px}
+header{height:65px}
+.brand{font-size:27px}.brand span{font-size:18px}
+#room-section{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+#room-section.hidden{display:none!important}
+.room-head{order:3;padding:8px 0 20px;grid-template-columns:minmax(0,1fr) auto;border-top:1px solid var(--border);margin-top:2px}
+.room-head h1{font-size:20px;margin:0 0 3px}.room-head .eyebrow{margin-bottom:5px}
+.room-head p{font-size:12px}.invite{padding:10px 14px;min-width:200px}
+.invite strong{font-size:25px;margin:3px 0 7px}.small-btn{padding:7px 9px}
+.game-layout{order:1;grid-template-columns:minmax(0,1fr) 235px;gap:10px}
+.game-card{display:grid;grid-template-columns:minmax(0,1fr) 228px;column-gap:10px;row-gap:8px;padding:11px;align-items:start}
+.game-top{grid-column:1/-1;margin:0;min-height:26px}
+.board-shell{grid-column:1;grid-row:2;padding:6px;border-radius:12px;min-height:unset;overflow:hidden}
+#board{width:100%;max-width:100%;height:auto;aspect-ratio:1}
+.play-panel{grid-column:2;grid-row:2;margin:0;padding:10px;border-radius:12px;align-self:stretch;display:flex;flex-direction:column;gap:6px;min-height:0}
+.play-panel.hidden{display:none!important}
+.turn-info{font-size:13px;margin:2px 0 4px}
+.turn-bar{gap:3px}.clock{font-size:11px;padding:5px 8px}
+.throw-row{display:flex;flex-direction:column;gap:4px}
+.dice-area{gap:3px}.yut-arena{min-height:72px;border-radius:10px}.sticks{min-height:56px;gap:7px}
+.yut-stick{width:13px;height:49px}.throw-result{font-size:12px}
+.throw-controls{gap:4px}.throw-controls label{font-size:10px}.power-slider{margin:0}
+.throw-controls .primary{padding:10px 6px;margin-top:4px;border-radius:9px;font-size:13px}
+#moves,#destination-options{margin-top:2px;gap:5px}.move-chip,.piece-button{padding:6px 7px;font-size:11px;border-radius:8px}
+#move-hint{font-size:10px;margin:2px 0;line-height:1.5}.piece-buttons{gap:5px;margin-top:1px}
+.side{gap:10px}.players{padding:12px;border-radius:15px}
+#players{margin-top:9px;gap:5px}.player-row{padding:7px;border-radius:9px;font-size:12px}
+.piece-roster-title{font-size:12px;margin:10px 0 6px}
+.roster{gap:6px}.roster-player{padding:8px;border-radius:11px}.roster-name{font-size:11px}
+.roster-tokens{gap:4px;margin-top:6px}.token-control{font-size:10px;padding:5px 6px;border-radius:8px}
+#lobby-action{margin-top:8px}#lobby-action .wide{margin-top:8px;padding:10px}
+.bottom-panels{order:2;grid-template-columns:1fr 1.1fr 1fr;gap:10px;margin:0}
+.rules,.log-box{padding:11px;border-radius:14px}.rules div{padding:5px 0;font-size:11px}.rules .mini,.log-box .mini{font-size:10px}
+#game-log,.rankings{max-height:118px;gap:5px;margin-top:7px}.log-item,.rank-row{padding:6px 7px;font-size:11px}
+.board-status{font-size:10px;padding:6px 8px;bottom:10px;right:10px}
+/* Round Ronaldo-face image clipped to a jersey-colored token. */
+.piece-avatar{filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.piece-avatar.selected-piece{filter:drop-shadow(0 0 8px rgba(138,244,184,.95))}
+.piece-avatar .face-cutout{pointer-events:none}
+/* Result appears above board only while animating; it never intercepts clicks. */
+.roll-effect{pointer-events:none;position:absolute;inset:0;display:grid;place-items:center;z-index:12;opacity:0;transform:scale(.55);visibility:hidden}
+.roll-effect.active{visibility:visible;animation:rollPop 1.55s cubic-bezier(.21,.78,.25,1) both}
+.roll-word{font-size:clamp(42px,6vw,92px);font-weight:900;line-height:1;letter-spacing:-3px;color:#ffe8a9;-webkit-text-stroke:2px #644017;text-shadow:0 5px 0 #9d5719,0 0 18px #ffca58,0 0 40px rgba(252,183,42,.85)}
+.roll-effect.back .roll-word{color:#f1b6ff;-webkit-text-stroke:2px #703795;text-shadow:0 5px 0 #6836a0,0 0 28px #c267ff}
+.roll-effect.nak .roll-word{color:#ffad9d;-webkit-text-stroke:2px #a63024;text-shadow:0 5px 0 #a63024,0 0 28px #ff654c}
+@keyframes rollPop{0%{opacity:0;transform:scale(.5) rotate(-12deg)}17%{opacity:1;transform:scale(1.27) rotate(5deg)}35%{opacity:1;transform:scale(.96) rotate(-2deg)}68%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.23)}}
+.victory-overlay{position:fixed;inset:0;background:rgba(0,13,11,.83);backdrop-filter:blur(7px);z-index:100;display:grid;place-items:center;overflow:hidden;padding:20px}
+.victory-card{text-align:center;border:2px solid #f4cb72;background:radial-gradient(circle at 50% 0%,#315e3a,#09251e 75%);border-radius:28px;padding:35px 28px;max-width:min(480px,100%);width:100%;box-shadow:0 0 80px #d6a64c70;animation:winnerIn .7s cubic-bezier(.2,.9,.2,1) both}
+.victory-crown{font-size:68px;animation:floatCrown 2s ease-in-out infinite}
+.victory-card p{margin:2px 0;color:#d7f2df}.victory-card h2{font-size:clamp(58px,9vw,100px);color:#ffdb71;text-shadow:0 4px 0 #854f15,0 0 30px #ffc556;line-height:1;margin:12px 0}
+.victory-card strong{display:block;font-size:clamp(20px,4vw,32px);color:#fff}
+.victory-confetti{font-size:25px;letter-spacing:16px;margin:16px 0;animation:floatCrown 2s ease-in-out infinite}
+.victory-stars{position:absolute;top:10%;left:0;width:100%;text-align:center;white-space:nowrap;letter-spacing:35px;font-size:42px;color:#ffe78e;animation:twinkle 1.5s infinite alternate;pointer-events:none}
+@keyframes winnerIn{from{opacity:0;transform:translateY(85px) scale(.6) rotate(-5deg)}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes floatCrown{50%{transform:translateY(-8px)}}
+@keyframes twinkle{from{opacity:.35;transform:scale(.9)}to{opacity:1;transform:scale(1.1)}}
+@media(max-width:980px){.game-layout{grid-template-columns:minmax(0,1fr)}.side{grid-row:2}.players{position:static}}
+@media(max-width:650px){.app{padding:0 8px}header{height:60px}.brand{font-size:24px}.brand span{font-size:15px}.top-chip{font-size:10px;padding:6px}
+ .game-card{grid-template-columns:minmax(0,1fr);padding:8px}.game-top{grid-column:1}.board-shell{grid-row:2;grid-column:1}.play-panel{grid-row:3;grid-column:1}
+ .play-panel{display:block}.throw-row{display:grid;grid-template-columns:100px 1fr;gap:10px}.yut-arena{min-height:63px}.throw-controls .primary{margin-top:0}.room-head{grid-template-columns:1fr}.invite{text-align:left}.actions{justify-content:flex-start}.bottom-panels{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.roll-effect.active,.victory-card,.victory-crown,.victory-stars,.victory-confetti{animation:none!important}.roll-effect.active{opacity:1;transform:none;visibility:visible}}
+
+/* v7 PREMIUM ART DIRECTION: layered emerald enamel, gold trim, wood board and glossy controls */
+:root{--bg:#03110e;--card:#082219;--card2:#0c2b20;--mint:#a3ff7c;--mint2:#55db78;--gold:#f7cc56;--text:#fffbea;--muted:#b4cfc2;--border:#275c40;--border2:#377a50}
+body{background:radial-gradient(ellipse 68% 33% at 45% -10%,rgba(40,122,50,.22),transparent),radial-gradient(ellipse 42% 62% at 100% 65%,rgba(1,54,37,.24),transparent),linear-gradient(160deg,#06170e 0%,#00130e 60%,#01100c 100%)}
+.app{max-width:1450px;padding:0 18px}
+header{height:85px;padding:8px 6px 12px;box-shadow:0 5px 18px rgba(0,0,0,.14);border-bottom:1px solid rgba(152,240,125,.36)}
+.brand{display:flex;align-items:center;gap:13px;line-height:1;text-shadow:0 2px 5px #000,0 0 14px rgba(254,189,51,.5);font-size:30px;color:#ffd568}
+.brand-face{width:67px;height:67px;object-fit:cover;border-radius:100%;border:3px solid #e3c45d;box-shadow:0 0 0 3px #10452a,0 0 21px #74d65a7d;mask-image:linear-gradient(to bottom,#000 76%,transparent 100%)}
+.brand-word{display:flex;flex-direction:column;font-size:31px!important;color:#ffcf61!important;font-weight:900!important;letter-spacing:-1px!important;margin:0!important}
+.brand-word small{font-size:10px;color:#b9f8a3;letter-spacing:4px;margin-top:6px;font-weight:800}
+.brand i{font-size:20px;color:#ffdc75;transform:translateY(-20px)}
+.header-right{gap:12px}.top-chip{border:1px solid #3c7853;background:#082318;border-radius:999px;box-shadow:inset 0 1px 0 #e8ffcf20}
+.panel{background:linear-gradient(149deg,#0b3024 0%,#05231a 55%,#041b15 100%);border:1px solid #2b6243;border-radius:18px;box-shadow:inset 0 1px 0 rgba(166,255,177,.10),0 8px 24px #0008}
+#room-section{gap:10px;padding-top:13px}.game-layout{grid-template-columns:minmax(0,1fr) 252px;gap:12px}
+.game-card{grid-template-columns:minmax(0,1fr) 195px;padding:11px;gap:10px;background:linear-gradient(130deg,#0a281b,#041912)}
+.game-top{padding:4px 3px 6px}.section-title{font-weight:900;font-size:15px;color:#f7f6e6;text-shadow:0 1px 4px #000}
+.game-top .section-title{font-size:18px;color:#ebffce}.game-top .section-title span{color:#8bffaf;background:#0d4024;padding:4px 10px;border:1px solid #327451;border-radius:20px}
+.board-shell{background:radial-gradient(ellipse at 50% 50%,#09271a,#03120c 80%);padding:7px;border-radius:17px;border:1px solid #527f37;box-shadow:inset 0 0 0 3px #071b10,0 0 12px rgba(128,247,83,.10)}
+#board{filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+.play-panel{background:linear-gradient(155deg,#0d281e,#04130e);border:1px solid #426d32;box-shadow:inset 0 0 0 1px #000,inset 0 1px 10px rgba(255,211,102,.07);padding:10px;gap:8px}
+.area-label{text-align:center;color:#d8b76d;letter-spacing:2px;font-weight:900;font-size:10px;padding:1px 0 3px}
+.yut-arena{height:125px;min-height:125px;border:1px solid #796c33;border-radius:15px;background:radial-gradient(ellipse at 50% 45%,rgba(167,119,42,.23),transparent 62%),linear-gradient(145deg,#13291f,#081b15);box-shadow:inset 0 0 16px #000a,0 2px 8px #0009;position:relative}
+.yut-arena:after{content:'✦';position:absolute;bottom:6px;color:#d8ad49;font-size:15px;opacity:.4}
+.sticks{gap:8px;perspective:400px}.yut-stick{width:16px;height:64px;border-radius:11px;background:linear-gradient(90deg,#7b451e,#f3b464 35%,#f5d48d 62%,#925329);box-shadow:inset 1px 0 2px #fff6,0 5px 5px #0006;border:1px solid #b7813e}
+.yut-stick.back{background:linear-gradient(90deg,#452313,#9a5a2a,#65401d)}
+.yut-stick:after{content:'×';position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:900;color:#a66e34}
+.throw-result{text-align:center;color:#fadd82;font-weight:900;font-size:14px;text-shadow:0 0 9px #d99a4399;min-height:19px}
+.turn-info{font-weight:900;color:#c6ff9a}
+.throw-controls label{font-size:10px;color:#a5c7b1}.throw-controls .primary,.primary{background:linear-gradient(#d3ff8e 0%,#76e869 48%,#36b854 100%);color:#083118;border:1px solid #e4ffb6;box-shadow:inset 0 2px 0 #fff9,0 4px 0 #14652e,0 6px 14px #0008;text-shadow:0 1px 0 #a9f5a2}
+.throw-controls .primary{min-height:45px;font-size:14px!important;margin-bottom:4px}
+.clock{background:linear-gradient(120deg,#103e2a,#092217);border:1px solid #3d7447;color:#faf8ec}
+.moves{gap:5px}.move-chip,.piece-button,.token-control{border:1px solid #4a7951;background:linear-gradient(145deg,#16402e,#08261c);color:#d8f5de;box-shadow:inset 0 1px 0 #d1ff9b12}
+.move-chip.active,.piece-button.sel,.token-control.sel{border-color:#e0c65b;color:#fff4bd;background:#34552a;box-shadow:0 0 13px #b5e7572b}
+.players{background:linear-gradient(155deg,#0d3025,#031c15);border:1px solid #3c7750;padding:12px}
+.player-row{min-height:46px;background:linear-gradient(120deg,#0e3025,#051a14);border:1px solid #326747;border-radius:11px;box-shadow:inset 0 1px 0 #ffffff0d}
+.player-row.active{border-color:#b7f975;box-shadow:0 0 10px #8aff6e44}
+.roster-player{background:linear-gradient(150deg,#092a1e,#041b13);border-color:#2b5840}
+.roster-player.turn{border-color:#e3c85b}
+.roster-name{font-weight:900}.roster-tokens{gap:5px}.token-control{border-radius:9px}
+.bottom-panels{gap:12px}.bottom-panels .panel{border:1px solid #355b3c}.rules div{font-size:11px}.log-item,.rank-row{background:#082118;border:1px solid #26543b}
+.room-head{border-top:1px solid #266347;margin-top:3px;padding:12px 6px 28px}.invite{border:1px solid #397746;background:#09291e}
+.invite strong{color:#e2f993;text-shadow:0 0 9px #a6ed6780}
+/* Board effect floats above the board but remains click-through */
+.roll-word{font-family:'Noto Sans KR',sans-serif;font-weight:1000;font-style:italic;color:#fff4ab;-webkit-text-stroke:2px #704118;text-shadow:0 3px 0 #ab6c24,0 6px 0 #502a12,0 0 12px #ffe86c,0 0 35px #f9a631}
+.roll-effect.active:before,.roll-effect.active:after{content:'✦';position:absolute;font-size:65px;color:#fff79d;text-shadow:0 0 20px gold;top:27%;left:17%;animation:twinkle .4s infinite alternate}
+.roll-effect.active:after{top:59%;left:78%;font-size:38px;animation-delay:.2s}
+.victory-card{background:radial-gradient(ellipse at 50% -30%,#628a33,#133920 58%,#041b14);border:3px solid #ffd367;box-shadow:0 0 0 4px #2c4e1b,0 0 60px #f0cd4980}
+.victory-card:before{content:'★ CHAMPION ★';display:block;color:#f9d874;letter-spacing:4px;font-size:13px;font-weight:900;margin-bottom:12px}
+/* Responsive: controls never overlap the actual game board */
+@media(max-width:1120px){.game-layout{grid-template-columns:minmax(0,1fr) 210px}.game-card{grid-template-columns:minmax(0,1fr) 175px}.brand-face{height:55px;width:55px}.brand-word{font-size:26px!important}}
+@media(max-width:850px){.game-layout{grid-template-columns:1fr}.side{grid-row:2}.players{position:static}.game-card{grid-template-columns:minmax(0,1fr) 190px}.bottom-panels{grid-template-columns:repeat(2,1fr)}.bottom-panels>div:last-child{grid-column:1/-1}}
+@media(max-width:580px){.app{padding:0 9px}.game-card{grid-template-columns:1fr}.board-shell{grid-column:1;grid-row:2}.play-panel{grid-column:1;grid-row:3;display:block}.throw-row{display:grid;grid-template-columns:115px 1fr;gap:10px}.yut-arena{height:94px;min-height:94px}.sticks .yut-stick{height:47px}.bottom-panels{grid-template-columns:1fr}.bottom-panels>div:last-child{grid-column:auto}.brand-face{width:47px;height:47px}.brand-word{font-size:22px!important}.top-chip{display:none}}
+/* Ronaldo player portraits and end-game hero */
+.roster-name:before{content:'';width:30px;height:30px;flex:0 0 30px;background-image:url('/hodon-face.png');background-size:cover;background-position:center 34%;border-radius:50%;border:2px solid #e5bf4d;box-shadow:0 0 0 2px #18412c,0 0 11px #e0ba4b44}
+.roster-player:nth-child(1) .roster-name:before{border-color:#ef6461}
+.roster-player:nth-child(2) .roster-name:before{border-color:#5e9eff}
+.roster-player:nth-child(3) .roster-name:before{border-color:#f3c763}
+.roster-player:nth-child(4) .roster-name:before{border-color:#59cfa6}
+.roster-name{justify-content:flex-start}.roster-name small{margin-left:auto}
+.victory-face{height:102px;width:102px;object-fit:cover;border-radius:100%;border:4px solid #ffdc79;box-shadow:0 0 25px #eac44f77}

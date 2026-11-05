@@ -1,4 +1,5 @@
 const socket=io();
+let rollEffectTimer=null, lastWinnerKey='';
 const $=id=>document.getElementById(id);
 const ui={landing:$('landing'),room:$('room-section')};
 let state=null,seat=null,token=null,selectedMove=0,chosenCount=4,chosenPlayers=4,chosenMode='solo',turnSeconds=45,toastTimer=null;
@@ -60,7 +61,8 @@ $('copy-link').addEventListener('click',async()=>{if(!state)return;const link=`$
  try{await navigator.clipboard.writeText(link);notify('초대 링크가 복사되었습니다.')}catch{prompt('초대 링크를 복사하세요',link)}
 });
 $('leave').addEventListener('click',async()=>{const r=await action('room:leave');if(r)forgetSession()});
-$('start').addEventListener('click',async()=>{await action('game:start')});
+$('start').addEventListener('click',async()=>{lastWinnerKey='';await action('game:start')});
+$('victory-close').addEventListener('click',()=>{$('victory-overlay').classList.add('hidden')});
 $('throw').addEventListener('click',async()=>{
  if(animating)return;
  animating=true;$('throw').disabled=true;const arena=$('yut-arena');arena.classList.remove('throwing');void arena.offsetWidth;arena.classList.add('throwing');
@@ -92,7 +94,24 @@ socket.on('connect',async()=>{
  else if(requestedCode && savedName){await join(requestedCode)}
 });
 socket.on('disconnect',()=>{$('connection').textContent='● 연결 끊김 · 재연결 중';$('connection').classList.add('off')});
-socket.on('room:state',s=>{const old=state?.game;const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(old.pieces)!==JSON.stringify(s.game.pieces));if(turnChanged)clearSelection();state=s;render()});
+socket.on('room:state',s=>{const old=state?.game;const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(old.pieces)!==JSON.stringify(s.game.pieces));if(turnChanged)clearSelection();state=s;render();checkVictory(old,s.game);});
+function showRollEffect(result){
+ if(!result?.name)return;
+ const el=$('roll-effect');clearTimeout(rollEffectTimer);
+ el.classList.remove('active','back','nak');void el.offsetWidth;
+ el.classList.toggle('back',result.steps===-1);el.classList.toggle('nak',result.steps===0);
+ el.replaceChildren();const word=document.createElement('strong');word.className='roll-word';word.textContent=`${result.name}!`;el.append(word);
+ el.classList.add('active');rollEffectTimer=setTimeout(()=>el.classList.remove('active'),1550);
+}
+function checkVictory(oldGame,newGame){
+ if(!newGame||newGame.status!=='finished'||oldGame?.status==='finished')return;
+ const code=state?.code||'';const key=`${code}:${newGame.winner}:${newGame.log?.at(-1)||''}`;
+ if(key===lastWinnerKey)return;lastWinnerKey=key;
+ const winner=newGame.mode==='team'?(newGame.winner%2===0?'청팀':'홍팀'):(state.players[newGame.winner]?.name||'플레이어');
+ $('victory-name').textContent=`${winner} 우승!`;
+ $('victory-overlay').classList.remove('hidden');
+}
+socket.on('game:roll-effect',showRollEffect);
 socket.on('session:replaced',()=>{notify('다른 브라우저에서 같은 참가자 계정으로 접속했습니다.');forgetSession()});
 function render(){ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
  const g=state.game;
@@ -166,19 +185,25 @@ function pathD(ids){return ids.map((id,i)=>(i?'L':'M')+XY[id].join(' ')).join(' 
 function drawHodongPiece(root,{x,y,color,index,stack=1,selected=false,clickable=false,onClick}){
  const g=svgEl('g',{transform:`translate(${x} ${y})`,class:'piece-avatar'+(selected?' selected-piece':'')});
  if(clickable&&onClick){g.style.cursor='pointer';g.addEventListener('click',onClick)}
- g.append(svgEl('circle',{cx:0,cy:13,r:selected?20:18,fill:'rgba(0,0,0,.12)'}));
- g.append(svgEl('rect',{x:-17,y:4,width:34,height:21,rx:10,fill:color,stroke:'#17362c','stroke-width':2}));
- g.append(svgEl('circle',{cx:0,cy:-9,r:16,fill:'#d89c6e',stroke:'#87562f','stroke-width':1.5}));
- g.append(svgEl('path',{d:'M-15 -10 C-11 -25 11 -25 15 -10 L15 -5 C10 -9 5 -10 0 -10 C-5 -10 -10 -9 -15 -5 Z',fill:'#2a1f18'}));
- g.append(svgEl('circle',{cx:-5,cy:-10,r:1.7,fill:'#1b140f'}));
- g.append(svgEl('circle',{cx:5,cy:-10,r:1.7,fill:'#1b140f'}));
- g.append(svgEl('path',{d:'M-4 -2 Q0 2 4 -2',fill:'none',stroke:'#6b4021','stroke-width':1.8,'stroke-linecap':'round'}));
- g.append(svgEl('text',{x:0,y:18,'text-anchor':'middle','font-size':12,'font-weight':900,fill:JERSEY_TEXT[index%JERSEY_TEXT.length],'pointer-events':'none'},stack>1?`×${stack}`:String(index+1)));
+ g.append(svgEl('circle',{cx:0,cy:0,r:22,fill:color,stroke:selected?'#a1ffca':'#2e3628','stroke-width':selected?4:2.2}));
+ // The face is a real Ronaldo portrait asset. Color is the player jersey ring/body.
+ g.append(svgEl('image',{href:'/hodon-face.png',x:-17,y:-19,width:34,height:34,class:'face-cutout'}));
+ g.append(svgEl('rect',{x:-13,y:11,width:26,height:9,rx:4,fill:color,stroke:'rgba(0,0,0,.35)','stroke-width':1}));
+ g.append(svgEl('text',{x:0,y:18,'text-anchor':'middle','font-size':8.5,'font-weight':900,fill:'#fff','pointer-events':'none'},stack>1?`×${stack}`:String(index+1)));
  root.append(g);
 }
 function drawBoard(){const root=$('board');root.replaceChildren();
- root.append(svgEl('rect',{x:20,y:20,width:560,height:560,rx:22,fill:'#f3e6c5',stroke:'#b5a175','stroke-width':5}));
- root.append(svgEl('rect',{x:43,y:43,width:514,height:514,rx:7,fill:'none',stroke:'#d2be96','stroke-width':2}));
+ const defs=svgEl('defs');
+ const wood=svgEl('linearGradient',{id:'hodon-wood',x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
+ [['0%','#f9eacf'],['48%','#f4e0b8'],['100%','#d7b77d']].forEach(([offset,color])=>wood.append(svgEl('stop',{offset,'stop-color':color})));
+ const edge=svgEl('linearGradient',{id:'hodon-edge',x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
+ [['0%','#ffe9a1'],['50%','#9b6e2f'],['100%','#f4d380']].forEach(([offset,color])=>edge.append(svgEl('stop',{offset,'stop-color':color})));
+ defs.append(wood,edge);root.append(defs);
+ root.append(svgEl('rect',{x:12,y:12,width:576,height:576,rx:30,fill:'#6e4c22',stroke:'#bf9b50','stroke-width':5}));
+ root.append(svgEl('rect',{x:19,y:19,width:562,height:562,rx:24,fill:'url(#hodon-wood)',stroke:'url(#hodon-edge)','stroke-width':9}));
+ root.append(svgEl('rect',{x:43,y:43,width:514,height:514,rx:7,fill:'none',stroke:'#caa878','stroke-width':2}));
+ root.append(svgEl('image',{href:'/hodon-face.png',x:215,y:205,width:170,height:170,opacity:.075,'pointer-events':'none'}));
+ root.append(svgEl('text',{x:300,y:425,'text-anchor':'middle',fill:'#90744f',opacity:.24,'font-size':44,'font-weight':900,'pointer-events':'none'},'호돈 윷놀이'));
  const outer=[0,...Array.from({length:19},(_,i)=>i+1),0];
  [outer,[5,20,21,24,25,26,15],[10,27,28,24,29,30,0]].forEach(route=>root.append(svgEl('path',{d:pathD(route),class:'path'})));
  Object.entries(XY).forEach(([id,[x,y]])=>{const important=[0,5,10,15,24].includes(Number(id));root.append(svgEl('circle',{cx:x,cy:y,r:important?19:13,class:'spot'+(important?' big':'')}));});
