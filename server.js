@@ -9,6 +9,7 @@ import { newGame, throwYut, throwWithPower, movePiece, maybeNextTurn, publicGame
 
 const app=express();
 app.disable('x-powered-by');
+app.use((req,res,next)=>{if(req.path==='/'||/\.(js|css|html)$/.test(req.path))res.set('Cache-Control','no-store, max-age=0');next();});
 const ROOT=dirname(fileURLToPath(import.meta.url));
 // Bonto: HTML/CSS/JS assets reside alongside server.js at application root.
 app.get('/',(req,res)=>res.sendFile(join(ROOT,'index.html')));
