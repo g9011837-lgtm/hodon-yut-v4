@@ -430,3 +430,14 @@ header{height:85px;padding:8px 6px 12px;box-shadow:0 5px 18px rgba(0,0,0,.14);bo
 @keyframes hodonResultV9{0%{opacity:0;transform:scale(.2) rotate(-12deg)}17%{opacity:1;transform:scale(1.25) rotate(4deg)}37%{opacity:1;transform:scale(1)}75%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.2)}}
 .piece-avatar image{opacity:1!important;visibility:visible!important}
 .victory-overlay:not(.hidden){display:grid!important;z-index:2000!important}
+
+/* v10: room moderation, spectator roster and shared-team labels */
+.watch-entry{margin-top:8px;border:1px solid #71b88b;background:linear-gradient(135deg,#143d2b,#08251a);color:#c9f6d5;font-weight:900}
+.spectator-heading{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 7px;padding-top:10px;border-top:1px solid #315e43;color:#a8d9bd;font-size:12px;font-weight:900}
+.spectator-heading span{background:#1d4a34;color:#d9ffe4;border-radius:99px;padding:2px 8px}
+.spectator-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;padding:5px 9px;margin:4px 0;border:1px solid #294e3a;border-radius:9px;background:#071f17;color:#b9d8c6;font-size:11px}
+.kick-btn{flex:none;border:1px solid #a34e48;border-radius:7px;padding:4px 8px;background:linear-gradient(135deg,#692c28,#3c1918);color:#ffd8d2;font-size:10px;font-weight:900;cursor:pointer}
+.kick-btn:hover{background:linear-gradient(135deg,#a13d35,#65211d);box-shadow:0 0 10px #e45c4e55}
+.player-row .name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.piece-roster-title small{margin-left:6px;color:#9fc8ad;font-size:10px;font-weight:600}
+.shared-pool-note{margin:8px 2px 4px;color:#9bbba8;font-size:10px;line-height:1.5}

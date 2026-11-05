@@ -1,6 +1,6 @@
 {
   "name": "field-yut-online",
-  "version": "4.0.0",
+  "version": "10.0.0",
   "private": true,
   "description": "가입 없이 즐기는 2~4인 실시간 윷놀이",
   "type": "module",
