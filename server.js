@@ -15,6 +15,7 @@ app.get('/',(req,res)=>res.sendFile(join(ROOT,'index.html')));
 app.get('/index.html',(req,res)=>res.sendFile(join(ROOT,'index.html')));
 app.get('/app.js',(req,res)=>res.sendFile(join(ROOT,'app.js')));
 app.get('/style.css',(req,res)=>res.sendFile(join(ROOT,'style.css')));
+app.get('/hodon-face.png',(req,res)=>res.sendFile(join(ROOT,'hodon-face.png')));
 const server=createServer(app);
 const io=new Server(server,{maxHttpBufferSize:50_000,cors:{origin:false}});
 const PORT=Number(process.env.PORT)||3000;
@@ -114,7 +115,7 @@ io.on('connection',socket=>{
     if(g.turn!==seat)return failure(cb,'현재 본인 차례가 아닙니다.');
     if(g.rollCredits<1)return failure(cb,'먼저 윷 결과를 사용해 말을 이동하세요.');
     let result;try{result=throwWithPower(data?.power??50)}catch(e){return failure(cb,e.message)}
-    g.rollCredits--;g.lastThrow=result;
+    g.rollCredits--;result.id=randomUUID();g.lastThrow=result;
     // 빽도만 나왔고 판 위에 움직일 내 말이 없다면 결과를 자동 소멸하여 게임이 멈추지 않게 합니다.
     const canBack= g.pieces[seat].some((piece,i)=>legalMoves({...g,moves:[-1]},seat,i,0).length>0);
     const skipBack=result.steps===0||(result.steps===-1&&!canBack);
@@ -122,7 +123,7 @@ io.on('connection',socket=>{
     if(result.steps>=4)g.rollCredits++;resetClock(g);
     say(room,`${room.players[seat].name}: ${result.name} (${result.steps}칸)${result.steps>=4?' · 한 번 더!':''}${result.steps===0?' · 낙! 차례 소모':skipBack?' · 이동 가능한 말이 없어 빽도 소멸':''}`);
     if(maybeNextTurn(g))say(room,`➡️ ${room.players[g.turn].name} 님 차례입니다.`);
-    reply(cb,{result});broadcast(room);
+    reply(cb,{result});broadcast(room);io.to(room.code).emit('game:roll-effect',result);
   });
   socket.on('game:options',(data={},cb)=>{
     const a=authorization(socket);if(!a)return failure(cb,'방에 참가해 주세요.');
@@ -163,11 +164,11 @@ setInterval(()=>{for(const room of rooms.values()){
   if(!moved){g.moves.shift();activity='이동할 말이 없어 결과 소멸';}
  } else if(g.rollCredits>0){
   // Automatically throw once rather than granting user-controlled outcomes.
-  const result=throwYut();g.rollCredits--;g.lastThrow=result;
+  const result=throwYut();g.rollCredits--;result.id=randomUUID();g.lastThrow=result;
   const allowed=result.steps!==-1||g.pieces[seat].some((p,i)=>legalMoves({...g,moves:[-1]},seat,i,0).length);
   if(allowed)g.moves.push(result.steps);
   if(result.steps>=4)g.rollCredits++;
-  activity=`자동 윷 던지기: ${result.name}`;
+  activity=`자동 윷 던지기: ${result.name}`;io.to(room.code).emit('game:roll-effect',result);
  }
  say(room,`${room.players[seat]?.name||'플레이어'} · 시간 초과 · ${activity}`);
  if(g.status==='finished'){recordWin(room)}

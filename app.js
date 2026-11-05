@@ -1,5 +1,5 @@
 const socket=io();
-let rollEffectTimer=null, lastWinnerKey='';
+let rollEffectTimer=null, lastWinnerKey='', lastRollId=null, fireworksTimer=null;
 const $=id=>document.getElementById(id);
 const ui={landing:$('landing'),room:$('room-section')};
 let state=null,seat=null,token=null,selectedMove=0,chosenCount=4,chosenPlayers=4,chosenMode='solo',turnSeconds=45,toastTimer=null;
@@ -61,8 +61,8 @@ $('copy-link').addEventListener('click',async()=>{if(!state)return;const link=`$
  try{await navigator.clipboard.writeText(link);notify('초대 링크가 복사되었습니다.')}catch{prompt('초대 링크를 복사하세요',link)}
 });
 $('leave').addEventListener('click',async()=>{const r=await action('room:leave');if(r)forgetSession()});
-$('start').addEventListener('click',async()=>{lastWinnerKey='';await action('game:start')});
-$('victory-close').addEventListener('click',()=>{$('victory-overlay').classList.add('hidden')});
+$('start').addEventListener('click',async()=>{lastWinnerKey='';lastRollId=null;hideVictory();await action('game:start')});
+$('victory-close').addEventListener('click',()=>{hideVictory()});
 $('throw').addEventListener('click',async()=>{
  if(animating)return;
  animating=true;$('throw').disabled=true;const arena=$('yut-arena');arena.classList.remove('throwing');void arena.offsetWidth;arena.classList.add('throwing');
@@ -94,14 +94,50 @@ socket.on('connect',async()=>{
  else if(requestedCode && savedName){await join(requestedCode)}
 });
 socket.on('disconnect',()=>{$('connection').textContent='● 연결 끊김 · 재연결 중';$('connection').classList.add('off')});
-socket.on('room:state',s=>{const old=state?.game;const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(old.pieces)!==JSON.stringify(s.game.pieces));if(turnChanged)clearSelection();state=s;render();checkVictory(old,s.game);});
+socket.on('room:state',s=>{const old=state?.game;const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(old.pieces)!==JSON.stringify(s.game.pieces));if(turnChanged)clearSelection();state=s;render();if(old&&s.game?.lastThrow?.id&&old.lastThrow?.id!==s.game.lastThrow.id)showRollEffect(s.game.lastThrow);checkVictory(old,s.game);});
 function showRollEffect(result){
  if(!result?.name)return;
+ // The server gives every throw a unique ID, allowing live events and state updates
+ // to share a single visual effect without double playback.
+ if(result.id && result.id===lastRollId)return;
+ if(result.id)lastRollId=result.id;
  const el=$('roll-effect');clearTimeout(rollEffectTimer);
  el.classList.remove('active','back','nak');void el.offsetWidth;
  el.classList.toggle('back',result.steps===-1);el.classList.toggle('nak',result.steps===0);
- el.replaceChildren();const word=document.createElement('strong');word.className='roll-word';word.textContent=`${result.name}!`;el.append(word);
- el.classList.add('active');rollEffectTimer=setTimeout(()=>el.classList.remove('active'),1550);
+ el.replaceChildren();
+ const spark=document.createElement('div');spark.className='roll-sparks';spark.setAttribute('aria-hidden','true');
+ for(let n=0;n<18;n++){
+  const dot=document.createElement('i');dot.style.setProperty('--a',`${n*20}deg`);dot.style.setProperty('--delay',`${(n%5)*40}ms`);spark.append(dot);
+ }
+ const word=document.createElement('strong');word.className='roll-word';word.textContent=`${result.name}!`;
+ const subtitle=document.createElement('span');subtitle.className='roll-subtitle';subtitle.textContent=result.steps===-1?'한 칸 뒤로!':result.steps===0?'아쉽게 낙!':result.steps>=4?'한 번 더 던지세요!':`${result.steps}칸 이동`;
+ el.append(spark,word,subtitle);
+ el.classList.add('active');rollEffectTimer=setTimeout(()=>el.classList.remove('active'),1900);
+}
+function hideVictory(){
+ $('victory-overlay').classList.add('hidden');
+ clearTimeout(fireworksTimer);
+ $('victory-particles').replaceChildren();
+}
+function startFireworks(){
+ const root=$('victory-particles');root.replaceChildren();
+ const palette=['#fff3a1','#fdd354','#a4ff8d','#f48b63','#a4dbff','#ff7ed4'];
+ // DOM-based CSS particles, no external libraries or continuous animation loops.
+ for(let burst=0;burst<7;burst++){
+  const centerX=15+(burst*13)%75,centerY=16+(burst*19)%48;
+  for(let i=0;i<24;i++){
+   const p=document.createElement('span');p.className='firework-particle';
+   const angle=i*Math.PI/12,dist=65+(i%4)*19;
+   p.style.cssText=`--x:${centerX}%;--y:${centerY}%;--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;--delay:${burst*0.35}s;--color:${palette[(i+burst)%palette.length]}`;
+   root.append(p);
+  }
+ }
+ for(let i=0;i<85;i++){
+  const p=document.createElement('span');p.className='confetti-particle';
+  p.style.cssText=`--left:${(i*47)%101}%;--delay:${(i*19)%47/10}s;--duration:${3+(i%7)*.25}s;--rot:${(i*139)%720}deg;--color:${palette[i%palette.length]}`;
+  root.append(p);
+ }
+ fireworksTimer=setTimeout(()=>root.replaceChildren(),9000);
 }
 function checkVictory(oldGame,newGame){
  if(!newGame||newGame.status!=='finished'||oldGame?.status==='finished')return;
@@ -109,7 +145,8 @@ function checkVictory(oldGame,newGame){
  if(key===lastWinnerKey)return;lastWinnerKey=key;
  const winner=newGame.mode==='team'?(newGame.winner%2===0?'청팀':'홍팀'):(state.players[newGame.winner]?.name||'플레이어');
  $('victory-name').textContent=`${winner} 우승!`;
- $('victory-overlay').classList.remove('hidden');
+ const overlay=$('victory-overlay');overlay.classList.add('hidden');void overlay.offsetWidth;overlay.classList.remove('hidden');
+ startFireworks();
 }
 socket.on('game:roll-effect',showRollEffect);
 socket.on('session:replaced',()=>{notify('다른 브라우저에서 같은 참가자 계정으로 접속했습니다.');forgetSession()});
@@ -147,7 +184,7 @@ function renderRoster(){
    const n=g?node(g.pieces[p][i]):null;const b=document.createElement('button');b.className='token-control';
    const ready=!!g&&g.turn===seat&&seat===p&&g.moves.length>0&&n!=='FIN'&&(g.moves[selectedMove]!==-1||n!==null)&&g.status==='playing';
    if(ready)b.classList.add('ready');if(selectedPiece===i&&p===seat)b.classList.add('sel');
-   b.style.borderColor=COLORS[p];b.textContent=`호돈 ${i+1} ${n==='FIN'?'✓':n===null?'대기':'이동중'}`;b.title=n==='FIN'?'완주':n===null?'대기 중':`${n}번 칸`;
+   b.style.borderColor=COLORS[p];b.classList.add('hodon-token');b.style.setProperty('--player-color',COLORS[p]);b.replaceChildren();const avatar=document.createElement('img');avatar.src='/hodon-face.png';avatar.alt='호돈 얼굴';avatar.loading='lazy';const label=document.createElement('span');label.textContent=`${i+1} ${n==='FIN'?'✓':n===null?'대기':'이동중'}`;b.append(avatar,label);b.title=n==='FIN'?'완주':n===null?'대기 중':`${n}번 칸`;
    b.disabled=!ready;b.addEventListener('click',()=>selectPiece(i));tokens.append(b);
   }
   panel.append(tokens);root.append(panel);
@@ -185,11 +222,16 @@ function pathD(ids){return ids.map((id,i)=>(i?'L':'M')+XY[id].join(' ')).join(' 
 function drawHodongPiece(root,{x,y,color,index,stack=1,selected=false,clickable=false,onClick}){
  const g=svgEl('g',{transform:`translate(${x} ${y})`,class:'piece-avatar'+(selected?' selected-piece':'')});
  if(clickable&&onClick){g.style.cursor='pointer';g.addEventListener('click',onClick)}
- g.append(svgEl('circle',{cx:0,cy:0,r:22,fill:color,stroke:selected?'#a1ffca':'#2e3628','stroke-width':selected?4:2.2}));
- // The face is a real Ronaldo portrait asset. Color is the player jersey ring/body.
- g.append(svgEl('image',{href:'/hodon-face.png',x:-17,y:-19,width:34,height:34,class:'face-cutout'}));
- g.append(svgEl('rect',{x:-13,y:11,width:26,height:9,rx:4,fill:color,stroke:'rgba(0,0,0,.35)','stroke-width':1}));
- g.append(svgEl('text',{x:0,y:18,'text-anchor':'middle','font-size':8.5,'font-weight':900,fill:'#fff','pointer-events':'none'},stack>1?`×${stack}`:String(index+1)));
+ // An SVG clipPath in user coordinates ensures the actual Ronaldo portrait is visible.
+ const clipId=`avatar-${Math.round(x)}-${Math.round(y)}-${index}-${root.childNodes.length}`;
+ const defs=svgEl('defs');const clip=svgEl('clipPath',{id:clipId,clipPathUnits:'userSpaceOnUse'});
+ clip.append(svgEl('circle',{cx:0,cy:-2,r:17}));defs.append(clip);g.append(defs);
+ g.append(svgEl('circle',{cx:0,cy:0,r:23,fill:'#123628',stroke:'#062618','stroke-width':2}));
+ g.append(svgEl('circle',{cx:0,cy:0,r:21,fill:color,stroke:'#ffe9b3','stroke-width':2.5}));
+ g.append(svgEl('image',{href:'/hodon-face.png',x:-18,y:-20,width:36,height:36,'preserveAspectRatio':'xMidYMid slice','clip-path':`url(#${clipId})`,class:'face-cutout'}));
+ g.append(svgEl('path',{d:'M-13 15 Q0 11 13 15 L15 19 Q0 27 -15 19 Z',fill:color,stroke:'#18372b','stroke-width':1}));
+ g.append(svgEl('text',{x:0,y:21,'text-anchor':'middle','font-size':10,'font-weight':900,fill:'#fff','pointer-events':'none'},stack>1?`×${stack}`:String(index+1)));
+ if(selected)g.append(svgEl('circle',{cx:0,cy:0,r:26,fill:'none',stroke:'#9effa9','stroke-width':3}));
  root.append(g);
 }
 function drawBoard(){const root=$('board');root.replaceChildren();
