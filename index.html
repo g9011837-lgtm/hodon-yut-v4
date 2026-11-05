@@ -1,13 +1,192 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/><meta name="theme-color" content="#071d1a"/><meta name="description" content="가입 없이 친구들과 즐기는 2~4인 실시간 윷놀이"/><title>FIELD 윷놀이 — 친구와 실시간 대전</title><link rel="stylesheet" href="/style.css"/></head>
-<body><div class="app">
-<header><a class="brand" href="/">FIELD<span>YUT</span><i>●</i></a><div class="header-right"><span id="connection" class="status">● 연결 중</span><span class="top-chip">🎲 실시간 2~4인 대전</span></div></header>
-<main>
-<section id="landing" class="landing">
- <div class="landing-copy"><div class="eyebrow">KOREAN CLASSIC · ONLINE MULTIPLAYER</div><h1>같이 던질수록<br/><em>더 재미있는 윷놀이.</em></h1><p>회원가입 없이, 닉네임 하나로 시작하세요.<br/>방을 만들고 친구에게 링크를 보내면 끝!</p><div class="landing-stats"><div><strong>2~4명</strong><span>동시 대전</span></div><div><strong>1~4개</strong><span>말 선택</span></div><div><strong>0초</strong><span>가입 절차</span></div></div></div>
- <div class="panel join-box"><div class="panel-label">GAME START</div><h2>윷놀이 시작하기</h2><label for="nickname">닉네임</label><input id="nickname" maxlength="14" autocomplete="nickname" placeholder="예: 호돈"/><div id="create-controls"><label>참가 인원</label><div class="count-choices"><button class="count player-limit" data-n="2">2명</button><button class="count player-limit" data-n="3">3명</button><button class="count player-limit selected" data-n="4">4명</button></div><label>대전 방식</label><div class="count-choices mode-choices"><button class="count match-mode selected" data-mode="solo">개인전</button><button class="count match-mode" data-mode="team">2대2 팀전</button></div><p id="mode-explain" class="mini">개인전: 2~4명 · 말 1~4개</p><label for="turn-seconds">한 차례 제한시간</label><select id="turn-seconds" class="select-input"><option value="20">20초</option><option value="30">30초</option><option value="45" selected>45초</option><option value="60">60초</option><option value="90">90초</option></select><label for="piece-count">사용할 말 개수</label><div class="count-choices" id="piece-options"><button class="count" data-n="1">1개</button><button class="count" data-n="2">2개</button><button class="count" data-n="3">3개</button><button class="count selected" data-n="4">4개</button></div><button class="primary wide" id="create">새 방 만들기 <span>↗</span></button></div><div class="separator">또는</div><label for="joincode">초대 코드로 참가</label><input id="joincode" maxlength="6" placeholder="6자리 방 코드" autocapitalize="characters"/><button class="outline wide" id="join">방 참가하기 →</button><p class="mini">이미 받은 초대 링크가 있다면 코드가 자동 입력됩니다.</p></div>
-</section>
-<section id="room-section" class="hidden"><div class="room-head"><div><div class="eyebrow">PRIVATE MULTIPLAYER</div><h1>친구들과 <em>한 판!</em></h1><p id="room-subtitle">참가자가 모이면 게임을 시작할 수 있습니다.</p></div><div class="invite panel"><div class="muted">초대 코드</div><strong id="room-code">------</strong><div class="actions"><button class="small-btn" id="copy-link">🔗 초대 링크 복사</button><button class="small-btn ghost" id="leave">나가기</button></div></div></div>
-<div class="game-layout"><section class="panel game-card"><div class="game-top"><div class="section-title">🎯 윷놀이판 <span id="game-mode">대기 중</span></div><span id="round-tip" class="muted">말을 잡으면 한 번 더!</span></div><div id="board-shell" class="board-shell"><svg id="board" viewBox="0 0 600 600" role="img" aria-label="윷놀이판"></svg><div id="board-status" class="board-status">친구를 기다리는 중...</div></div><div id="play-panel" class="play-panel hidden"><div class="turn-bar"><span id="turn-clock" class="clock">⏱ 45초</span><span id="team-label" class="mini"></span></div><div id="turn-info" class="turn-info">차례를 기다리는 중</div><div class="dice-area"><div class="yut-arena" id="yut-arena"><div class="sticks" id="sticks"><i class="yut-stick"></i><i class="yut-stick"></i><i class="yut-stick"></i><i class="yut-stick"></i></div></div><div id="throw-result" class="throw-result">윷을 던져주세요</div></div><label for="throw-power" class="mini">윷 던지기 세기 <strong id="power-label">50</strong> · 너무 약하거나 세면 낙</label><input id="throw-power" class="power-slider" type="range" min="0" max="100" value="50" aria-label="윷 던지기 세기"/><button class="primary wide" id="throw">🎲 윷 던지기</button><div id="moves" class="moves"></div><p id="move-hint" class="mini">윷 결과 선택 → 우측 내 말 선택 → 빛나는 도착 칸 클릭.</p><div id="piece-buttons" class="piece-buttons"></div><div id="destination-options" class="moves"></div></div></section>
-<aside class="side"><div class="panel players"><div class="section-title">👥 참가자 <span id="player-count">1 / 4</span></div><div id="players"></div><div class="piece-roster-title">각 플레이어 말 현황</div><div id="roster" class="roster"></div><div id="lobby-action"><p class="mini">초대 링크를 공유해 친구를 초대하세요.</p><button class="primary wide" id="start" disabled>4명 모이면 시작</button></div></div><div class="panel rules"><div class="section-title">📖 게임 안내</div><div>빽도 −1칸 · 도 1칸 · 개 2칸 · 걸 3칸</div><div>윷 4칸 · 모 5칸</div><div>윷/모 · 상대 말 잡기 → 추가 던지기</div><div>지름길 선택 · 업기 · 제한시간 자동 진행</div><p class="mini">빽도: 판 위 말 1칸 후퇴 · 대기 중인 말만 있으면 자동 소멸. 갈림길은 말 선택 후 원하는 도착 칸을 눌러 결정합니다.</p></div><div class="panel log-box"><div class="section-title">📣 진행 기록</div><div id="game-log">아직 기록이 없습니다.</div></div><div class="panel log-box"><div class="section-title">🏆 게임 랭킹</div><p class="mini">닉네임별 승리 수 · 이 서버의 저장 기록</p><div id="rankings" class="rankings">전적을 불러오는 중...</div><button id="refresh-rank" class="small-btn">새로고침</button></div></aside></div></section>
-</main><footer>FIELD YUT · 무료 웹게임 프로토타입 · 현금/베팅 기능 없음</footer></div>
-<div id="toast" role="status" aria-live="polite"></div><script src="/socket.io/socket.io.js"></script><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#071d1a"/>
+  <meta name="description" content="가입 없이 친구들과 즐기는 2~4인 실시간 호돈 윷놀이"/>
+  <title>호돈 윷놀이 — 친구와 실시간 대전</title>
+  <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div class="app">
+  <header>
+    <a class="brand" href="/">호돈 <span>윷놀이</span><i>●</i></a>
+    <div class="header-right">
+      <span id="connection" class="status">● 연결 중</span>
+      <span class="top-chip">🎲 실시간 2~4인 대전</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="landing" class="landing">
+      <div class="landing-copy">
+        <div class="eyebrow">KOREAN CLASSIC · ONLINE MULTIPLAYER</div>
+        <h1>친구와 함께 던지는<br/><em>호돈 윷놀이.</em></h1>
+        <p>회원가입 없이 닉네임 하나로 시작하세요.<br/>방을 만들고 친구에게 링크를 보내면 바로 입장할 수 있습니다.</p>
+        <div class="landing-stats">
+          <div><strong>2~4명</strong><span>동시 대전</span></div>
+          <div><strong>개인전/팀전</strong><span>플레이 모드</span></div>
+          <div><strong>1~4개</strong><span>말 선택</span></div>
+        </div>
+      </div>
+
+      <div class="panel join-box">
+        <div class="panel-label">GAME START</div>
+        <h2>호돈 윷놀이 시작하기</h2>
+        <label for="nickname">닉네임</label>
+        <input id="nickname" maxlength="14" autocomplete="nickname" placeholder="예: 호돈"/>
+
+        <div id="create-controls">
+          <label>참가 인원</label>
+          <div class="count-choices">
+            <button class="count player-limit" data-n="2">2명</button>
+            <button class="count player-limit" data-n="3">3명</button>
+            <button class="count player-limit selected" data-n="4">4명</button>
+          </div>
+
+          <label>대전 방식</label>
+          <div class="count-choices mode-choices">
+            <button class="count match-mode selected" data-mode="solo">개인전</button>
+            <button class="count match-mode" data-mode="team">2대2 팀전</button>
+          </div>
+          <p id="mode-explain" class="mini">개인전: 2~4명 · 말 1~4개</p>
+
+          <label for="turn-seconds">한 차례 제한시간</label>
+          <select id="turn-seconds" class="select-input">
+            <option value="20">20초</option>
+            <option value="30">30초</option>
+            <option value="45" selected>45초</option>
+            <option value="60">60초</option>
+            <option value="90">90초</option>
+          </select>
+
+          <label for="piece-count">사용할 말 개수</label>
+          <div class="count-choices" id="piece-options">
+            <button class="count" data-n="1">1개</button>
+            <button class="count" data-n="2">2개</button>
+            <button class="count" data-n="3">3개</button>
+            <button class="count selected" data-n="4">4개</button>
+          </div>
+
+          <button class="primary wide" id="create">새 방 만들기 <span>↗</span></button>
+        </div>
+
+        <div class="separator">또는</div>
+        <label for="joincode">초대 코드로 참가</label>
+        <input id="joincode" maxlength="6" placeholder="6자리 방 코드" autocapitalize="characters"/>
+        <button class="outline wide" id="join">방 참가하기 →</button>
+        <p class="mini">이미 받은 초대 링크가 있다면 코드가 자동 입력됩니다.</p>
+      </div>
+    </section>
+
+    <section id="room-section" class="hidden">
+      <div class="room-head">
+        <div class="room-copy">
+          <div class="eyebrow">PRIVATE MULTIPLAYER</div>
+          <h1>친구들과 한 판!</h1>
+          <p id="room-subtitle">2명이 모이면 게임을 시작할 수 있습니다.</p>
+        </div>
+        <div class="invite panel">
+          <div class="muted">초대 코드</div>
+          <strong id="room-code">------</strong>
+          <div class="actions">
+            <button class="small-btn" id="copy-link">🔗 초대 링크 복사</button>
+            <button class="small-btn ghost" id="leave">나가기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-layout">
+        <section class="panel game-card">
+          <div class="game-top">
+            <div class="section-title">🎯 윷놀이판 <span id="game-mode">대기 중</span></div>
+            <span id="round-tip" class="muted">말을 잡으면 한 번 더!</span>
+          </div>
+
+          <div id="play-panel" class="play-panel hidden">
+            <div class="turn-bar">
+              <span id="turn-clock" class="clock">⏱ 45초</span>
+              <span id="team-label" class="mini"></span>
+            </div>
+            <div id="turn-info" class="turn-info">차례를 기다리는 중</div>
+
+            <div class="throw-row">
+              <div class="dice-area">
+                <div class="yut-arena" id="yut-arena">
+                  <div class="sticks" id="sticks">
+                    <i class="yut-stick"></i>
+                    <i class="yut-stick"></i>
+                    <i class="yut-stick"></i>
+                    <i class="yut-stick"></i>
+                  </div>
+                </div>
+                <div id="throw-result" class="throw-result">윷을 던져주세요</div>
+              </div>
+
+              <div class="throw-controls">
+                <label for="throw-power" class="mini">윷 던지기 세기 <strong id="power-label">50</strong> · 너무 약하거나 세면 낙</label>
+                <input id="throw-power" class="power-slider" type="range" min="0" max="100" value="50" aria-label="윷 던지기 세기"/>
+                <button class="primary wide" id="throw">🎲 윷 던지기</button>
+              </div>
+            </div>
+
+            <div id="moves" class="moves"></div>
+            <p id="move-hint" class="mini">윷 결과 선택 → 내 말 선택 → 빛나는 도착 칸 클릭.</p>
+            <div id="piece-buttons" class="piece-buttons"></div>
+            <div id="destination-options" class="moves"></div>
+          </div>
+
+          <div id="board-shell" class="board-shell">
+            <svg id="board" viewBox="0 0 600 600" role="img" aria-label="윷놀이판"></svg>
+            <div id="board-status" class="board-status">친구를 기다리는 중...</div>
+          </div>
+        </section>
+
+        <aside class="side">
+          <div class="panel players">
+            <div class="section-title">👥 참가자 <span id="player-count">1 / 4</span></div>
+            <div id="players"></div>
+            <div class="piece-roster-title">각 플레이어 말 현황</div>
+            <div id="roster" class="roster"></div>
+            <div id="lobby-action">
+              <p class="mini">초대 링크를 공유해 친구를 초대하세요.</p>
+              <button class="primary wide" id="start" disabled>4명 모이면 시작</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="bottom-panels">
+        <div class="panel rules">
+          <div class="section-title">📖 게임 안내</div>
+          <div>빽도 −1칸 · 도 1칸 · 개 2칸 · 걸 3칸</div>
+          <div>윷 4칸 · 모 5칸</div>
+          <div>윷/모 · 상대 말 잡기 → 추가 던지기</div>
+          <div>지름길 선택 · 업기 · 제한시간 자동 진행</div>
+          <p class="mini">빽도: 판 위 말 1칸 후퇴 · 대기 중인 말만 있으면 자동 소멸. 갈림길은 말 선택 후 원하는 도착 칸을 눌러 결정합니다.</p>
+        </div>
+
+        <div class="panel log-box">
+          <div class="section-title">📣 진행 기록</div>
+          <div id="game-log">아직 기록이 없습니다.</div>
+        </div>
+
+        <div class="panel log-box">
+          <div class="section-title">🏆 게임 랭킹</div>
+          <p class="mini">닉네임별 승리 수 · 이 서버의 저장 기록</p>
+          <div id="rankings" class="rankings">전적을 불러오는 중...</div>
+          <button id="refresh-rank" class="small-btn">새로고침</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>호돈 윷놀이 · 무료 웹게임 프로토타입 · 현금/베팅 기능 없음</footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

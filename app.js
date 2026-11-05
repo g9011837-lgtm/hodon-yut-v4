@@ -8,6 +8,7 @@ $('nickname').value=savedName;
 const requestedCode=new URLSearchParams(location.search).get('room')?.toUpperCase().replace(/[^A-Z2-9]/g,'').slice(0,6)||'';
 $('joincode').value=requestedCode;
 const COLORS=['#EF6461','#5E9EFF','#F3C763','#59CFA6'];
+const JERSEY_TEXT=['#fff8ef','#eef7ff','#3f2b00','#073126'];
 const YUT={'0':'낙','-1':'빽도',1:'도',2:'개',3:'걸',4:'윷',5:'모'};
 const XY={};
 for(let i=0;i<20;i++){
@@ -102,7 +103,7 @@ function render(){ui.landing.classList.toggle('hidden',!!state);ui.room.classLis
  $('board-status').classList.toggle('hidden',!!g);
  $('play-panel').classList.toggle('hidden',!g);
  const players=$('players');players.replaceChildren();state.players.forEach((p,i)=>{
-  const row=document.createElement('div');row.className='player'+(g?.turn===i&&g.status==='playing'?' active':'');
+  const row=document.createElement('div');row.className='player-row'+(g?.turn===i&&g.status==='playing'?' active':'');
   const d=document.createElement('div');d.className='dot';d.style.background=COLORS[i];row.append(d);
   const name=document.createElement('span');name.className='name';name.textContent=p?.name||`빈자리 ${i+1}`;row.append(name);
   const role=document.createElement('small');role.textContent=(state.matchMode==='team'?(i%2===0?'🔵 청팀 ':'🔴 홍팀 '):'')+(i===state.host?'👑 방장 ':'')+(i===seat?'(나) ':'')+(p&&!p.connected?'⚠ 오프라인':'');if(p&&!p.connected)role.className='disconnected';row.append(role);players.append(row);
@@ -120,14 +121,14 @@ function renderRoster(){
  state.players.forEach((player,p)=>{
   const panel=document.createElement('div');panel.className='roster-player'+(g?.turn===p?' turn':'');
   const title=document.createElement('div');title.className='roster-name';title.style.color=COLORS[p];
-  const pname=document.createElement('span');pname.textContent=`● ${player?.name||'대기'}`;const info=document.createElement('small');
+  const pname=document.createElement('span');pname.textContent=`⚽ ${player?.name||'대기'}`;const info=document.createElement('small');
   info.textContent=g?`${g.mode==='team'?(p%2===0?'청팀 · ':'홍팀 · '):''}완주 ${g.pieces[p].filter(x=>node(x)==='FIN').length}/${g.piecesPerPlayer}`:`입장 대기`;title.append(pname,info);panel.append(title);
   const tokens=document.createElement('div');tokens.className='roster-tokens';
   for(let i=0;i<(g?.piecesPerPlayer||state.piecesPerPlayer);i++){
    const n=g?node(g.pieces[p][i]):null;const b=document.createElement('button');b.className='token-control';
    const ready=!!g&&g.turn===seat&&seat===p&&g.moves.length>0&&n!=='FIN'&&(g.moves[selectedMove]!==-1||n!==null)&&g.status==='playing';
    if(ready)b.classList.add('ready');if(selectedPiece===i&&p===seat)b.classList.add('sel');
-   b.style.borderColor=COLORS[p];b.textContent=`${i+1} ${n==='FIN'?'✓':n===null?'○':'●'}`;b.title=n==='FIN'?'완주':n===null?'대기 중':`${n}번 칸`;
+   b.style.borderColor=COLORS[p];b.textContent=`호돈 ${i+1} ${n==='FIN'?'✓':n===null?'대기':'이동중'}`;b.title=n==='FIN'?'완주':n===null?'대기 중':`${n}번 칸`;
    b.disabled=!ready;b.addEventListener('click',()=>selectPiece(i));tokens.append(b);
   }
   panel.append(tokens);root.append(panel);
@@ -162,6 +163,19 @@ function renderPlay(){if(!state?.game)return;const g=state.game;
 const NS='http://www.w3.org/2000/svg';
 function svgEl(type,attrs={},text){const el=document.createElementNS(NS,type);for(const [key,v] of Object.entries(attrs))el.setAttribute(key,String(v));if(text!==undefined)el.textContent=text;return el}
 function pathD(ids){return ids.map((id,i)=>(i?'L':'M')+XY[id].join(' ')).join(' ')}
+function drawHodongPiece(root,{x,y,color,index,stack=1,selected=false,clickable=false,onClick}){
+ const g=svgEl('g',{transform:`translate(${x} ${y})`,class:'piece-avatar'+(selected?' selected-piece':'')});
+ if(clickable&&onClick){g.style.cursor='pointer';g.addEventListener('click',onClick)}
+ g.append(svgEl('circle',{cx:0,cy:13,r:selected?20:18,fill:'rgba(0,0,0,.12)'}));
+ g.append(svgEl('rect',{x:-17,y:4,width:34,height:21,rx:10,fill:color,stroke:'#17362c','stroke-width':2}));
+ g.append(svgEl('circle',{cx:0,cy:-9,r:16,fill:'#d89c6e',stroke:'#87562f','stroke-width':1.5}));
+ g.append(svgEl('path',{d:'M-15 -10 C-11 -25 11 -25 15 -10 L15 -5 C10 -9 5 -10 0 -10 C-5 -10 -10 -9 -15 -5 Z',fill:'#2a1f18'}));
+ g.append(svgEl('circle',{cx:-5,cy:-10,r:1.7,fill:'#1b140f'}));
+ g.append(svgEl('circle',{cx:5,cy:-10,r:1.7,fill:'#1b140f'}));
+ g.append(svgEl('path',{d:'M-4 -2 Q0 2 4 -2',fill:'none',stroke:'#6b4021','stroke-width':1.8,'stroke-linecap':'round'}));
+ g.append(svgEl('text',{x:0,y:18,'text-anchor':'middle','font-size':12,'font-weight':900,fill:JERSEY_TEXT[index%JERSEY_TEXT.length],'pointer-events':'none'},stack>1?`×${stack}`:String(index+1)));
+ root.append(g);
+}
 function drawBoard(){const root=$('board');root.replaceChildren();
  root.append(svgEl('rect',{x:20,y:20,width:560,height:560,rx:22,fill:'#f3e6c5',stroke:'#b5a175','stroke-width':5}));
  root.append(svgEl('rect',{x:43,y:43,width:514,height:514,rx:7,fill:'none',stroke:'#d2be96','stroke-width':2}));
@@ -170,7 +184,7 @@ function drawBoard(){const root=$('board');root.replaceChildren();
  Object.entries(XY).forEach(([id,[x,y]])=>{const important=[0,5,10,15,24].includes(Number(id));root.append(svgEl('circle',{cx:x,cy:y,r:important?19:13,class:'spot'+(important?' big':'')}));});
  root.append(svgEl('text',{x:300,y:312,'text-anchor':'middle',fill:'#795e3c','font-size':12,'font-weight':800},'중앙'));
  root.append(svgEl('text',{x:527,y:567,'text-anchor':'middle',fill:'#795e3c','font-size':13,'font-weight':800},'출발/도착'));
- if(!state?.game){root.append(svgEl('text',{x:300,y:400,'text-anchor':'middle',fill:'#9b815e','font-size':36,'font-weight':900},'FIELD YUT'));return;}
+ if(!state?.game){root.append(svgEl('text',{x:300,y:400,'text-anchor':'middle',fill:'#9b815e','font-size':34,'font-weight':900},'호돈 윷놀이'));return;}
  const g=state.game;const all=[];
  g.pieces.forEach((row,p)=>row.forEach((piece,i)=>{
   const n=node(piece);if(n==='FIN'||n===null)return;const center=XY[n];if(!center)return;
@@ -178,16 +192,16 @@ function drawBoard(){const root=$('board');root.replaceChildren();
  }));
  const groups=new Map();all.forEach(item=>{const key=`node-${item.n}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item)});
  for(const list of groups.values()){
-  // Stack own pieces in same spot, show number of stacked tokens; never displace to other squares.
   const bundles=new Map();list.forEach(item=>{if(!bundles.has(item.p))bundles.set(item.p,[]);bundles.get(item.p).push(item)});
   Array.from(bundles.entries()).forEach(([p,bundle],j)=>{
-   const base=bundle[0];const delta=Array.from(bundles.keys()).length===1?[0,0]:[[0,-11],[11,0],[0,11],[-11,0]][j];const x=base.x+delta[0],y=base.y+delta[1];
-   const playable=p===seat&&g.turn===seat&&g.moves.length>0;const circle=svgEl('circle',{cx:x,cy:y,r:bundle.length>1?16:13,fill:COLORS[p],class:'piece'+(playable&&selectedPiece!==null&&bundle.some(e=>e.i===selectedPiece)?' selected-piece':'')});
-   if(playable){circle.style.cursor='pointer';circle.addEventListener('click',()=>selectPiece(base.i))}root.append(circle);
-   const label=svgEl('text',{x,y:y+4,'text-anchor':'middle','font-size':11,'font-weight':900,fill:'#102921','pointer-events':'none'},bundle.length>1?`×${bundle.length}`:String(base.i+1));root.append(label);
+   const base=bundle[0];const positions=Array.from(bundles.keys()).length===1?[[0,0]]:[[0,-13],[13,0],[0,13],[-13,0]];
+   const delta=positions[j]||[0,0];const x=base.x+delta[0],y=base.y+delta[1];
+   const playable=p===seat&&g.turn===seat&&g.moves.length>0;
+   const selected=playable&&selectedPiece!==null&&bundle.some(e=>e.i===selectedPiece);
+   drawHodongPiece(root,{x,y,color:COLORS[p],index:base.i,stack:bundle.length,selected,clickable:playable,onClick:()=>selectPiece(base.i)});
   });
  }
- if(selectedPiece!==null&&moveOptions.length){moveOptions.forEach((opt,i)=>{
+ if(selectedPiece!==null&&moveOptions.length){moveOptions.forEach((opt)=>{
   const xy=opt.node===null?[530,530]:opt.node==='FIN'?[551,552]:XY[opt.node];if(!xy)return;
   const c=svgEl('circle',{cx:xy[0],cy:xy[1],r:27,class:'spot destination dest-button',tabindex:0,role:'button','aria-label':`${opt.label} ${opt.node===null?'대기':opt.node==='FIN'?'완주':opt.node+'번 칸'}`});
   const ripple=svgEl('circle',{cx:xy[0],cy:xy[1],r:31,class:'destination-pulse'});
