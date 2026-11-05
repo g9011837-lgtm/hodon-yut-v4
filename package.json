@@ -1,0 +1,10 @@
+{
+  "name": "field-yut-online",
+  "version": "4.0.0",
+  "private": true,
+  "description": "가입 없이 즐기는 2~4인 실시간 윷놀이",
+  "type": "module",
+  "scripts": {"start": "node server.js", "dev": "node --watch server.js", "test": "node --test"},
+  "dependencies": {"express": "^4.21.2", "socket.io": "^4.8.1"},
+  "engines": {"node": ">=20"}
+}
