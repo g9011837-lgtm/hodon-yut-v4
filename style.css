@@ -441,3 +441,51 @@ header{height:85px;padding:8px 6px 12px;box-shadow:0 5px 18px rgba(0,0,0,.14);bo
 .player-row .name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .piece-roster-title small{margin-left:6px;color:#9fc8ad;font-size:10px;font-weight:600}
 .shared-pool-note{margin:8px 2px 4px;color:#9bbba8;font-size:10px;line-height:1.5}
+
+/* v11: two shared team pools and the waiting room below the game */
+.team-roster{border-color:var(--team-color);border-left-width:3px}
+.team-roster .roster-name{flex-wrap:nowrap;gap:7px}
+.team-roster .roster-name:before{border-color:var(--team-color)!important}
+.team-roster .roster-label{font-size:15px;white-space:nowrap}
+.team-roster .roster-name small{font-size:10px;white-space:nowrap}
+.team-roster.turn{border-color:var(--team-color);box-shadow:0 0 12px color-mix(in srgb,var(--team-color) 25%,transparent)}
+.team-members{margin:8px 0 10px;color:#e4f5ec;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.team-member.current{font-weight:900;color:var(--team-color);text-decoration:underline;text-underline-offset:4px}
+.team-member.disconnected{opacity:.65}
+.team-roster .roster-tokens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:4px}
+.team-roster .hodon-token{min-width:0;min-height:65px;flex-direction:column;justify-content:center!important;padding:6px 2px!important}
+.team-roster .hodon-token span{font-size:10px;white-space:nowrap}
+.waiting-room{order:2;margin-top:0;padding:16px 18px}
+#room-section>.bottom-panels{order:3}
+#room-section>.room-head{order:4}
+.waiting-room-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.waiting-room-header h2{margin:0}
+.watcher-count{color:#c8efd2;font-size:12px;background:#103c29;border:1px solid #3a7250;border-radius:99px;padding:5px 11px;white-space:nowrap}
+.watcher-count strong{color:#e2f993;margin:0 3px}
+.waiting-room>.mini{margin:8px 0 12px}
+.spectator-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:8px;max-height:240px;overflow-y:auto}
+.waiting-room .spectator-row{margin:0;min-height:46px;padding:8px 10px;justify-content:flex-start;font-size:12px}
+.spectator-icon{display:grid;place-items:center;width:28px;height:28px;flex:none;background:#16402e;border-radius:50%}
+.spectator-name{min-width:0;flex:1;overflow-wrap:anywhere;font-weight:800;color:#e0f6e7}
+.spectator-status{flex:none;color:#a2e5b3;font-size:10px}
+.spectator-row.offline .spectator-status{color:#b7b7a6}
+.spectator-empty{grid-column:1/-1;margin:0;padding:16px;border:1px dashed #3a6046;border-radius:10px;text-align:center;font-size:12px;color:#97b4a3}
+
+/* v12: a token's existence must not fade with input permission. */
+.roster .token-control:disabled{opacity:1;cursor:default}
+.roster .token-control:disabled:hover{filter:none;transform:none}
+#board-pieces .piece-avatar{opacity:1;visibility:visible}
+#board-pieces .piece-avatar[display="none"]{display:none}
+
+/* Server-confirmed capture effect, independent of the persistent board layers. */
+.capture-effect{position:absolute;inset:0;pointer-events:none;z-index:1000;visibility:hidden;opacity:0;overflow:hidden;border-radius:17px}
+.capture-effect.active{visibility:visible;opacity:1}
+.capture-ring{position:absolute;left:var(--capture-x);top:var(--capture-y);width:65px;height:65px;border:5px solid #ffe578;border-radius:50%;box-shadow:0 0 25px #ffad24;opacity:0}
+.capture-effect.active .capture-ring{animation:captureRing .85s ease-out both}
+.capture-card{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:max-content;max-width:92%;text-align:center;display:grid;gap:8px}
+.capture-card strong{font-size:clamp(40px,7vw,85px);font-weight:1000;color:#fff1a2;text-shadow:0 4px 0 #a94311,0 8px 0 #4a230e,0 0 24px #ffb625}
+.capture-card span{padding:8px 14px;border:1px solid #ffe083;border-radius:99px;color:#fff9d8;background:#07291eef;font-size:clamp(11px,1.5vw,16px);font-weight:900}
+.capture-effect.active .capture-card{animation:capturePop 1.7s ease-out both}
+@keyframes captureRing{from{transform:translate(-50%,-50%) scale(.4);opacity:1}to{transform:translate(-50%,-50%) scale(3);opacity:0}}
+@keyframes capturePop{0%{opacity:0;transform:translate(-50%,-50%) scale(.5) rotate(-8deg)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(2deg)}30%,78%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-65%) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.capture-effect.active .capture-ring{animation:none;display:none}.capture-effect.active .capture-card{animation:none;opacity:1}}

@@ -65,7 +65,7 @@ export function legalMoves(game,player,pieceIndex,moveIndex){
  // Team pieces are a single shared pool. Teammates always carry together; they can never capture each other.
  return legalDestinations(piece,game.moves[moveIndex]).map(o=>({...o,action:'carry'}));
 }
-export function publicGame(g){return {status:g.status,mode:g.mode,turnSeconds:g.turnSeconds,turnDeadline:g.turnDeadline,turn:g.turn,rollCredits:g.rollCredits,moves:[...g.moves],lastThrow:g.lastThrow,piecesPerPlayer:g.piecesPerPlayer,pieces:g.pieces.map(row=>row.map(p=>p?{...p}:null)),winner:g.winner,log:g.log.slice(-12)};}
+export function publicGame(g){return {status:g.status,mode:g.mode,turnSeconds:g.turnSeconds,turnDeadline:g.turnDeadline,turn:g.turn,rollCredits:g.rollCredits,moves:[...g.moves],lastThrow:g.lastThrow,lastCapture:g.lastCapture?{...g.lastCapture}:null,piecesPerPlayer:g.piecesPerPlayer,pieces:g.pieces.map(row=>row.map(p=>p?{...p}:null)),teamPieces:g.mode==='team'?g.pieces.slice(0,2).map(row=>row.map(p=>p?{...p}:null)):null,winner:g.winner,log:g.log.slice(-12)};}
 export function discardUnplayableBackdos(game,player){
  let discarded=0;
  // Only inspect a back-do when it reaches the front of the result queue. Earlier moves may put a piece onto the board.
@@ -101,7 +101,7 @@ export function movePiece(game,player,pieceIndex,moveIndex,choiceId='0'){
   if(target===null||target==='FIN')continue;
   for(let i=0;i<pool.length;i++)if(nodeOf(pool[i])===target){pool[i]=null;captured++;}
  }
- if(captured)game.rollCredits+=1;
+ if(captured){game.rollCredits+=1;game.captureSerial=(game.captureSerial||0)+1;game.lastCapture={id:game.captureSerial,at:Date.now(),node:target,count:captured,player};}
  if(game.pieces[player].every(p=>nodeOf(p)==='FIN')){game.status='finished';game.winner=player;game.moves=[];game.rollCredits=0;}
  return {group:group.length,target,captured,route:choice.label,action:'carry',bonusThrows:captured};
 }

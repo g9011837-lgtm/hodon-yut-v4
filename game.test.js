@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {TRACKS,throwYut,throwWithPower,newGame,nodeOf,legalDestinations,legalMoves,movePiece,maybeNextTurn,discardUnplayableBackdos} from './game.js';
+import {TRACKS,throwYut,throwWithPower,newGame,nodeOf,legalDestinations,legalMoves,movePiece,maybeNextTurn,discardUnplayableBackdos,publicGame} from './game.js';
 const players=n=>Array.from({length:n},(_,i)=>({name:`P${i}`}));
 const p=(track,idx)=>({track,idx});
 
@@ -83,4 +83,23 @@ test('다음 차례는 강퇴된 빈 자리를 건너뜀',()=>{
 test('낙·윷 세기 유효성',()=>{
  assert.equal(throwWithPower(0).name,'낙');assert.equal(throwWithPower(95).steps,0);
  assert.equal(throwWithPower(50,()=>0).name,'윷');assert.throws(()=>throwWithPower(101),/올바르지/);
+});
+
+test('팀별 전송 상태는 두 공용 말 묶음이며 스냅샷은 서버 원본을 바꾸지 않는다',()=>{
+ const g=newGame(players(4),3,'team');g.turn=2;g.moves=[2];movePiece(g,2,0,0);
+ const snapshot=JSON.parse(JSON.stringify(publicGame(g)));
+ assert.equal(snapshot.teamPieces.length,2);
+ assert.deepEqual(snapshot.teamPieces,[snapshot.pieces[0],snapshot.pieces[1]]);
+ assert.deepEqual(snapshot.pieces[0],snapshot.pieces[2]);
+ snapshot.teamPieces[0][0].idx=19;
+ assert.equal(nodeOf(g.pieces[0][0]),2);
+});
+
+test('포획 효과는 실제 상대 말을 잡을 때만 발생하며 업기에는 발생하지 않는다',()=>{
+ const g=newGame(players(4),3,'team');g.moves=[1];g.rollCredits=0;
+ g.pieces[0][0]=p('outer',3);g.pieces[1][0]=p('outer',4);g.pieces[1][1]=p('outer',4);
+ movePiece(g,0,0,0);assert.equal(g.lastCapture.count,2);assert.equal(g.lastCapture.node,4);assert.equal(g.lastCapture.player,0);assert.equal(g.rollCredits,1);
+ const effect=publicGame(g).lastCapture;assert.deepEqual(effect,g.lastCapture);assert.notEqual(effect,g.lastCapture);
+ g.turn=2;g.moves=[1];g.pieces[0][1]=p('outer',5);movePiece(g,2,0,0);assert.equal(g.lastCapture.id,effect.id);
+ g.turn=1;g.moves=[1];g.pieces[1][0]=p('outer',4);movePiece(g,1,0,0);assert.equal(g.lastCapture.id,effect.id+1);assert.equal(g.lastCapture.count,2);
 });
