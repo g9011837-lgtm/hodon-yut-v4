@@ -43,7 +43,7 @@ function code() {let s;do{s=Array.from(randomBytes(6),b=>CODE_ALPHABET[b%CODE_AL
 function cleanName(input) {if(typeof input!=='string') return '';return input.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,14);}
 function failure(callback,reason) {callback?.({ok:false,error:reason});}
 function reply(callback,data={}) {callback?.({ok:true,...data});}
-function summary(room,viewer=null) {return {serverVersion:'v14.0',gameType:room.gameType||'yut',base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.badugi?.status||room.game?.status||'lobby',
+function summary(room,viewer=null) {return {serverVersion:'v15.0',gameType:room.gameType||'yut',base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.badugi?.status||room.game?.status||'lobby',
   piecesPerPlayer:room.piecesPerPlayer,playerCount:room.playerCount,matchMode:room.matchMode,turnSeconds:room.turnSeconds,players:room.players.map(p=>p?({name:p.name,connected:!!p.socketId}):null),
   spectators:(room.spectators||[]).map(p=>({name:p.name,connected:!!p.socketId,id:p.id})),
   colors:COLORS,game:room.game?publicGame(room.game):null};}
@@ -58,11 +58,13 @@ function detach(socket) {
 }
 function activeSeats(room){return room.players.map(Boolean);}
 io.on('connection',socket=>{
+  socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:'v15.0',roomProtocol:2,games:['yut','badugi']}));
   socket.on('room:create',(data={},cb)=>{data=data||{};
     if(authorization(socket)||spectatorAuthorization(socket)) return failure(cb,'이미 방에 참가 중입니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
     const playerCount=Number(data.playerCount);
     if(!Number.isInteger(playerCount)||playerCount<2||playerCount>4)return failure(cb,'참가 인원은 2~4명입니다.');
+    if(data.gameType!==undefined&&!['yut','badugi'].includes(data.gameType))return failure(cb,'게임 종류를 확인해 주세요.');
     const gameType=data.gameType==='badugi'?'badugi':'yut';
     const matchMode=gameType==='yut'&&data.matchMode==='team'?'team':'solo';
     const base=Number(data.base??100),startingChips=Number(data.startingChips??10000);
@@ -74,7 +76,7 @@ io.on('connection',socket=>{
     const id=code(), token=randomUUID();
     const room={gameType,base,startingChips,wallets:Array(playerCount).fill(startingChips),badugi:null,code:id,host:0,piecesPerPlayer:matchMode==='team'?3:count,matchMode,turnSeconds,playerCount,players:[{name,token,socketId:socket.id},...Array(playerCount-1).fill(null)],spectators:[],game:null,createdAt:Date.now()};
     rooms.set(id,room);socket.join(id);socket.data={roomCode:id,token,role:'player'};
-    reply(cb,{code:id,token,seat:0,role:'player'});broadcast(room);
+    reply(cb,{code:id,token,seat:0,role:'player',gameType:room.gameType,serverVersion:'v15.0'});broadcast(room);
   });
   socket.on('room:join',(data={},cb)=>{data=data||{};
     if(authorization(socket)||spectatorAuthorization(socket))return failure(cb,'먼저 현재 방을 나가 주세요.');
