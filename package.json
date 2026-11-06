@@ -1,8 +1,8 @@
 {
   "name": "hodon-gameroom",
-  "version": "15.0.0",
+  "version": "16.0.0",
   "private": true,
-  "description": "호돈 윷놀이와 무료 가상칩 바둑이 2~4인 실시간 게임방",
+  "description": "호돈 윷놀이 · 무료 가상칩 바둑이 · 국제 렌주 오목 실시간 게임방",
   "type": "module",
   "scripts": {
     "start": "node server.js",

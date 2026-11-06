@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Window} from 'happy-dom';import {readFileSync} from 'node:fs';import vm from 'node:vm';import {newGomoku,publicGomoku,actGomoku} from './gomoku.js';
+test('오목 탭, 시간 설정, 2명 제한, 관전, 중앙 첫 수, 흑백 선택 UI',async()=>{
+ const w=new Window({url:'http://localhost/'});w.document.write(readFileSync(new URL('./index.html',import.meta.url),'utf8'));const socket={connected:true,on(){},timeout(){return this},emit(){}};const ctx=vm.createContext({document:w.document,localStorage:w.localStorage,location:w.location,history:w.history,navigator:w.navigator,URLSearchParams,console,io:()=>socket,setTimeout:()=>0,setInterval:()=>0,clearTimeout(){},clearInterval(){},confirm:()=>false});vm.runInContext(readFileSync(new URL('./app.js',import.meta.url),'utf8'),ctx);const d=w.document;
+ d.querySelector('#tab-gomoku').click();assert.equal(d.querySelector('#gomoku-options').classList.contains('hidden'),false);assert.match(d.querySelector('#create').textContent,/오목 방/);assert.ok([...d.querySelectorAll('.player-limit')].every(b=>b.disabled));
+ const g=newGomoku(['호돈','필드왕'],{},1000),room={serverVersion:'v16.0',code:'GOMOKU',host:0,gameType:'gomoku',gomokuMinutes:5,playerCount:2,players:[{name:'호돈',connected:true},{name:'필드왕',connected:true}],spectators:[{id:'w1',name:'관전왕',connected:true}],game:null,badugi:null};
+ const render=(seat,spectator=false)=>{ctx.fixture={...room,gomoku:publicGomoku(g,1000)};vm.runInContext(`state=fixture;seat=${seat};isSpectator=${spectator};render()`,ctx)};
+ render(0);assert.equal(d.querySelectorAll('.gom-hit').length,1);assert.equal(d.querySelector('.gom-hit').dataset.intersection,'112');assert.equal(d.querySelectorAll('[data-intersection]').length,225);assert.equal(d.querySelectorAll('.gom-watcher').length,1);
+ render(null,true);assert.equal(d.querySelectorAll('.gom-hit').length,0);assert.ok(d.querySelector('#gom-start').disabled);assert.ok(d.querySelector('#gom-resign').disabled);
+ for(const i of [112,97,128])actGomoku(g,g.turn,{action:'place',i,revision:g.revision},1000);render(1);assert.equal(d.querySelectorAll('[data-color]').length,2);assert.equal(d.querySelectorAll('.gom-stone').length,3);
+ assert.equal(d.querySelector('#room-section').classList.contains('hidden'),true);assert.equal(d.querySelector('#badugi-section').classList.contains('hidden'),true);
+ await w.happyDOM.abort();
+});
