@@ -1,0 +1,7 @@
+Original HODON Kkung assets, generated 2026-11-09.
+Approved visual reference: 호돈 쿵쿵따 육개장 대결.
+Background prompt: continuous dimensional fairytale landscape, floating grassy islands, waterfalls, blue-roof castle left, giant pink mushroom house right, stone bridge, flowers, water and sunlight; no UI or characters.
+Character prompt: transparent 5×2 atlas of ten Ronaldo-inspired chibi mascots, football captain, king, chef, ninja, explorer, wizard, fisherman, astronaut, firefighter, pilot; matching approved look, no interface.
+Generated with the built-in image generation tool. Converted to optimized WebP and embedded in kkung.css.
+Runtime does not require standalone image uploads.
+Dictionary attribution and CC BY-SA 2.0 KR terms are stored in kkung-dictionary.json and shown in the rules dialog.

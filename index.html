@@ -1,97 +1,88 @@
 <!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#071d1a"/>
-  <meta name="description" content="가입 없이 친구들과 즐기는 2~4인 실시간 호돈 윷놀이"/>
-  <title>호돈 게임방 v16 — 윷놀이 · 바둑이 · 오목</title>
-  <link rel="stylesheet" href="/style.css?v=16.0"/><link rel="stylesheet" href="/badugi.css?v=16.0"/>
-<link rel="stylesheet" href="/gomoku.css?v=16.0"/></head>
-<body>
+<html data-build-version="v59.0" lang="ko" translate="no" class="notranslate"><head>
+  <meta charset="utf-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071d1a">
+  <meta name="description" content="가입 없이 친구들과 즐기는 최대 10인 실시간 호돈 윷놀이">
+  <title>호돈 게임방 v59.0 — 윷놀이 · 바둑이 · 오목 · 섯다 · 7포커 · 알까기 · 쿵쿵따</title>
+  <link rel="stylesheet" href="/style.css?v=59.0"><link rel="stylesheet" href="/badugi.css?v=59.0">
+<link rel="stylesheet" href="/gomoku.css?v=59.0"><link rel="stylesheet" href="/seotda.css?v=59.0"><link rel="stylesheet" href="/poker.css?v=59.0"><style id="hodon-lobby-style">
+/* Embedded in index.html so the lobby stays styled when a large legacy CSS upload is missed. */
+[hidden],.hidden{display:none!important}#landing{display:none!important}.lobby-dialog:not([open]){display:none!important}.lobby-sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body.public-lobby-open{background:radial-gradient(ellipse at 50% 0,#163c2a 0,#08261d 55%,#041b14 100%);color:#f6e8bb;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;margin:0;min-height:100vh}body.public-lobby-open .app{max-width:1600px;padding:14px 18px 18px;margin:auto;box-sizing:border-box}body.public-lobby-open header{display:flex;align-items:center;gap:20px;flex-wrap:wrap;min-height:77px;box-sizing:border-box;margin:0 0 16px;padding:10px 18px;border:1px solid #b3924c;border-radius:9px;background:repeating-linear-gradient(1deg,#3b2415 0,#352013 2px,#29190f 4px,#392316 6px);box-shadow:inset 0 1px #dfc28966,0 4px 15px #0005}body.public-lobby-open .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}body.public-lobby-open .brand-face{width:55px;height:55px;min-width:55px;object-fit:cover;border:2px solid #d9b366;border-radius:50%;box-shadow:0 0 0 2px #1c160c}body.public-lobby-open .brand-word{font:700 29px/1.2 Georgia,serif;letter-spacing:0;color:#f1d693;text-shadow:0 2px #1b0d05}body.public-lobby-open .brand-word small,body.public-lobby-open .brand>i,body.public-lobby-open #hub-wallet,body.public-lobby-open .top-chip{display:none}body.public-lobby-open .game-tabs{display:flex;flex:1;justify-content:center;align-items:center;gap:5px;margin:0;padding:0;border:0}body.public-lobby-open .game-tabs button{transform:none;min-width:66px;padding:10px 15px;min-height:42px;white-space:nowrap;border:1px solid transparent;border-radius:7px;background:transparent;color:#e4d8b8;font-size:16px;font-weight:750;box-shadow:none}body.public-lobby-open .game-tabs button:hover{background:#80633833;border-color:#8d703e}body.public-lobby-open .game-tabs button.selected{background:linear-gradient(#e9c66d,#a97b27);border-color:#eec979;color:#291d0a;box-shadow:inset 0 1px #fff0bb,0 2px 4px #0006}body.public-lobby-open .header-right{font-size:10px;margin-left:0;max-width:170px}body.public-lobby-open .sound-settings{margin:0;position:relative}body.public-lobby-open .sound-settings summary{border-color:#a3854d;background:#2c2318;color:#f3e1b1;font-size:12px}body.public-lobby-open main{display:block;width:100%;margin:0;padding:0}body:not(.public-lobby-open) #tab-all{display:none}
+body.public-lobby-open #public-lobby.lobby-shell{display:grid;grid-template-columns:254px minmax(0,1fr);gap:14px;background:none;border:0;box-shadow:none;border-radius:0;padding:0;min-height:650px;width:100%;box-sizing:border-box}#public-lobby .lobby-sidebar{display:flex;flex-direction:column;gap:12px;min-width:0}#public-lobby .lobby-profile,#public-lobby .lobby-chat,#public-lobby .lobby-browser{box-sizing:border-box;border:1px solid #bd994e;border-radius:9px;background:linear-gradient(115deg,#0e3022f5,#072119f5);box-shadow:inset 0 0 0 2px #071d13,0 5px 18px #0004;min-width:0}#public-lobby .lobby-profile{text-align:center;padding:16px 16px 0;display:flex;align-items:center;flex-direction:column;gap:9px}#public-lobby .lobby-eyebrow{font-size:8px;letter-spacing:3px;color:#c5af75}#lobby-profile-avatar{height:117px;display:grid;place-items:center;margin-top:2px}#lobby-profile-avatar .profile-avatar{width:112px;height:112px;min-width:112px;border:3px solid #d4af5d;box-shadow:0 0 0 3px #282311,0 5px 13px #0007;border-radius:50%;object-fit:cover}#public-lobby #lobby-profile-name{font-size:23px;line-height:1.3;margin:3px 0 2px;color:#f4e8bb;overflow-wrap:anywhere}#public-lobby button{cursor:pointer;font-family:inherit;box-sizing:border-box}#public-lobby button:disabled{cursor:default}#lobby-profile-edit,#lobby-code,#lobby-chat-send{border:1px solid #b59662;border-radius:6px;background:linear-gradient(#735838,#36271a);color:#f9edcf;box-shadow:inset 0 1px #dac7a455,0 2px 3px #0004;font-size:12px;font-weight:700;padding:9px 12px}#lobby-profile-edit{width:100%;margin:3px 0 7px}#public-lobby .lobby-current-game{align-self:stretch;display:flex;flex-direction:column;gap:6px;border-top:1px solid #856d39;padding:12px 0 15px;color:#d4c396}#public-lobby .lobby-current-game>span{font-size:10px;color:#acb194}#public-lobby .lobby-current-game>strong{font-size:22px;color:#efd48e;font-family:Georgia,serif}#public-lobby .lobby-current-game>small{font-size:11px}
+#public-lobby .lobby-chat{display:flex;flex-direction:column;flex:1;min-height:235px;overflow:hidden}#public-lobby .lobby-chat h2{font-size:15px;line-height:1.4;margin:0;padding:11px 13px;border-bottom:1px solid #8e743d;background:linear-gradient(#1b3320,#10251b);color:#efe3b6}#lobby-chat-log{flex:1;padding:10px 12px;min-height:120px;max-height:225px;overflow-y:auto;font-size:11px;line-height:1.8;scrollbar-color:#8d7845 #0c261b;overflow-wrap:anywhere}#lobby-chat-log p{margin:0 0 5px;color:#e6ddbd}#lobby-chat-log time{color:#a7ac89;font-size:9px}#lobby-chat-log strong{color:#e8cb83;font-weight:650}#lobby-chat-log .lobby-chat-empty{color:#9eae91;font-size:11px}#lobby-chat-form{display:flex;gap:5px;padding:8px;border-top:1px solid #625732}#lobby-chat-input{box-sizing:border-box;min-width:0;width:100%;height:35px;margin:0;padding:7px 8px;background:#071b14;color:#f2e8cb;border:1px solid #857449;border-radius:5px;font-size:11px}#lobby-chat-send{padding:5px 9px;min-width:49px;font-size:11px}
+#public-lobby .lobby-browser{display:flex;flex-direction:column;overflow:hidden;min-height:650px}#public-lobby .lobby-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:17px 20px;min-height:71px;border-bottom:1px solid #9e8141;margin:0}#public-lobby .lobby-heading>div{display:flex;align-items:center;gap:17px;min-width:0}#public-lobby #lobby-heading{font:700 28px/1.2 Georgia,serif;color:#efdaa0;margin:0;padding:0 17px 0 0;border-right:1px solid #9b8045;white-space:nowrap}#public-lobby #lobby-status{font-size:12px;color:#e1dabf;line-height:1.5;margin:0}#public-lobby #lobby-refresh{border:1px solid #d2b270;border-radius:6px;width:41px;height:36px;min-width:41px;display:grid;place-items:center;background:linear-gradient(#5b4829,#282319);color:#f3dca1;font-size:27px;line-height:1;padding:0;box-shadow:inset 0 1px #d8bf8344}#public-lobby .lobby-toolbar{display:flex;align-items:center;gap:11px;padding:14px 17px;min-height:76px;border-bottom:1px solid #716238;flex-wrap:wrap}#public-lobby .lobby-search{display:flex;align-items:center;gap:8px;flex:1;min-width:190px;box-sizing:border-box;border:1px solid #b49c6b;border-radius:6px;background:#061c14;padding:0 10px;height:40px;color:#e7ddb8;margin:0}#public-lobby .lobby-search>span{font-size:25px;font-family:Georgia,serif;color:#cbbb8d}#lobby-search{border:0!important;border-radius:0!important;background:none!important;color:#f0e6c8!important;box-shadow:none!important;padding:8px 0!important;min-width:0;width:100%;margin:0;font-size:12px;height:36px;outline:none}#public-lobby .lobby-open-filter{display:flex;align-items:center;gap:6px;white-space:nowrap;margin:0;font-size:11px;font-weight:600;color:#e7dfbd;cursor:pointer}#lobby-open-only{appearance:auto;width:16px;height:16px;accent-color:#c7a447;margin:0}#public-lobby #lobby-code,#public-lobby #lobby-create{height:40px;white-space:nowrap;padding:7px 13px;font-size:12px}#public-lobby .lobby-gold,.lobby-dialog .lobby-gold{background:linear-gradient(#ffe6a0,#e0b74e 60%,#b98625)!important;border:1px solid #f0ce79!important;color:#291e0a!important;border-radius:6px;font-weight:850;box-shadow:inset 0 1px #fff2c6,0 2px 4px #0006;cursor:pointer}#public-lobby .lobby-gold:hover,.lobby-dialog .lobby-gold:hover{filter:brightness(1.08)}#public-lobby .lobby-filters{display:flex;gap:4px;padding:9px 16px;overflow-x:auto;margin:0;background:#0b251a;border-bottom:1px solid #675b35}#public-lobby .lobby-filters button{font-size:10px;min-width:45px;padding:4px 10px;border:1px solid #5b6540;border-radius:4px;color:#bfc9a9;background:#102c1e;white-space:nowrap}#public-lobby .lobby-filters button.selected{color:#271f0b;background:#d2b76a;border-color:#e7cb80}#public-lobby .lobby-table-scroll{width:100%;overflow-x:auto;flex:1}#public-lobby .lobby-room-table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:620px;margin:0;font-size:12px;color:#ede3bf}#public-lobby .lobby-room-table th{height:44px;background:linear-gradient(#705233,#392b1a);border-bottom:1px solid #aa884a;text-align:center;font-size:12px;font-weight:750;padding:7px;box-sizing:border-box;white-space:nowrap}#public-lobby .lobby-room-table th:nth-child(1){width:75px}#public-lobby .lobby-room-table th:nth-child(2){width:auto;text-align:left;padding-left:15px}#public-lobby .lobby-room-table th:nth-child(3){width:88px}#public-lobby .lobby-room-table th:nth-child(4){width:95px}#public-lobby .lobby-room-table th:nth-child(5){width:90px}#public-lobby .lobby-room-table th:nth-child(6){width:134px}#public-lobby tr.lobby-room-card{display:table-row;border:0;border-radius:0;box-shadow:none;padding:0;background:#0b2a1c}#public-lobby tr.lobby-room-card:nth-child(even){background:#0a2419}#public-lobby tr.lobby-room-card:hover{background:#21452b}#public-lobby .lobby-room-card td{padding:12px 7px;height:66px;border-bottom:1px solid #89733e;box-sizing:border-box;text-align:center;vertical-align:middle;color:#eadfbc;font-size:12px}#public-lobby .lobby-room-card td:nth-child(2){text-align:left;padding-left:15px}#public-lobby .lobby-room-card td:first-child{font-weight:800;color:#f1d89b;font-size:12px;white-space:nowrap}#public-lobby .lobby-room-card h2{font-size:13px;font-weight:720;line-height:1.3;margin:0;color:#f7edcf;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#public-lobby .lobby-room-card .lobby-room-detail{display:block;font-size:9px;line-height:1.4;color:#aeb795;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#public-lobby .lobby-room-card .lobby-room-people{font-weight:700;white-space:nowrap;font-size:12px}#public-lobby .lobby-room-state{display:inline-block;border:1px solid #9b7b3c;border-radius:5px;background:#493b13;color:#f3dea6;padding:5px 7px;font-size:10px;font-weight:700;white-space:nowrap}#public-lobby .lobby-room-state.open{border-color:#638e48;background:linear-gradient(#285d2b,#164421);color:#e1f2be}#public-lobby .lobby-room-actions{display:flex;justify-content:center;align-items:center;gap:5px;margin:0;padding:0}#public-lobby .lobby-room-actions button{display:block;flex:0 0 auto;width:auto;min-width:50px;padding:7px 9px;border:1px solid #b59662;background:linear-gradient(#715338,#382a1d);color:#f9eac4;border-radius:5px;font-size:11px;font-weight:750;box-shadow:inset 0 1px #e2c49444}#public-lobby .lobby-room-actions button[data-lobby-enter]:not(:disabled){background:linear-gradient(#ffe19c,#c79736);color:#291e0c;border-color:#f3cf7f}#public-lobby .lobby-room-actions button:disabled{background:#12281c;color:#7c8d72;border-color:#3e5233;box-shadow:none;font-size:9px;padding:7px 5px;opacity:.75}#public-lobby .lobby-empty{padding:55px 20px;color:#b6c0a0;text-align:center;font-size:13px;line-height:1.8;height:220px;border:0;border-radius:0;background:none}#public-lobby .lobby-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:13px 16px;min-height:58px;border-top:1px solid #675b35;margin-top:auto;flex-wrap:wrap}#lobby-room-summary{font-size:10px;color:#acb596}#lobby-pages{display:flex;align-items:center;gap:5px}#lobby-pages button{min-width:30px;height:30px;padding:4px;border:1px solid #7a7144;background:#152d1e;border-radius:4px;color:#ddc98f;font-size:12px}#lobby-pages button[aria-current=page]{background:linear-gradient(#ddbd67,#93681e);border-color:#dbbd72;color:#211806;font-weight:900}#lobby-pages button:disabled{opacity:.35}#lobby-network{font-size:10px;color:#a8dc7e;white-space:nowrap}#lobby-network.off{color:#e4ab83}
+.lobby-dialog{box-sizing:border-box;width:min(580px,calc(100vw - 28px));max-width:calc(100vw - 28px);max-height:90vh;margin:auto;padding:0;border:2px solid #c3a45d;border-radius:12px;background:linear-gradient(130deg,#123a29,#072419);color:#f5e8be;box-shadow:0 18px 80px #000a;font-family:system-ui,-apple-system,sans-serif;overflow:auto;scrollbar-color:#a28a4e #102b1d;z-index:1700}.lobby-dialog::backdrop{background:#020a06ba;backdrop-filter:blur(2px)}.lobby-dialog .join-box{display:block;border:0;background:none;border-radius:0;box-shadow:none;padding:0;width:100%;max-width:none}.lobby-dialog-head{display:flex;justify-content:space-between;align-items:center;padding:17px 22px;border-bottom:1px solid #9f864c;background:linear-gradient(#1b422d,#0d2c1e);position:sticky;top:0;z-index:5}.lobby-dialog-head h2{font:750 25px/1.3 Georgia,serif;margin:0;color:#f5dfa2;letter-spacing:1px}.lobby-dialog-head>button{padding:0;border:0;background:none;box-shadow:none;color:#e7d6a6;font:300 31px/1 Georgia;cursor:pointer;width:32px;height:32px}.lobby-dialog-body{padding:20px 24px;display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px 14px;align-items:center}.lobby-dialog label{display:block;margin:0;color:#e9e2c8;font-size:13px;font-weight:700;line-height:1.5;grid-column:1}.lobby-dialog input:not([type=range]):not([type=checkbox]),.lobby-dialog select{display:block;box-sizing:border-box;width:100%;min-width:0;margin:0;height:40px;border:1px solid #b5a16f;border-radius:6px;background:#061f15;color:#f5edcf;font:14px/1.4 system-ui;padding:8px 10px;grid-column:2;box-shadow:inset 0 2px 3px #0004}.lobby-dialog input:focus,.lobby-dialog select:focus{outline:2px solid #c8ab5f;outline-offset:1px}.lobby-dialog input::placeholder{color:#879581}.lobby-dialog #create-controls{grid-column:1/-1;display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px 14px;align-items:center}.lobby-dialog .count-choices{display:flex;flex-wrap:wrap;gap:5px;margin:0;grid-column:2}.lobby-dialog .count-choices .count{flex:1 0 auto;min-width:37px;box-sizing:border-box;min-height:36px;padding:7px 9px;border:1px solid #8b9770;border-radius:5px;background:linear-gradient(#34513a,#183522);color:#f0e6c8;font-size:12px;line-height:1.3;font-weight:750;box-shadow:inset 0 1px #b4c09a33;cursor:pointer}.lobby-dialog .count-choices .count.selected{background:linear-gradient(#ffe6a0,#c89a36);color:#291f0c;border-color:#eac975;box-shadow:inset 0 1px #fff0c4}.lobby-dialog .count-choices .count:disabled{cursor:default}.lobby-dialog #yut-options,.lobby-dialog #badugi-options,.lobby-dialog #poker-options,.lobby-dialog #seotda-options,.lobby-dialog #gomoku-options{grid-column:1/-1;display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px 14px;align-items:center;padding:0;margin:0}.lobby-dialog .mini{grid-column:1/-1;margin:0;color:#acb99a;font-size:10px;line-height:1.5}.lobby-dialog output{grid-column:2;font-size:11px!important;color:#c9d393!important;margin:-7px 0 0!important;line-height:1.4}.lobby-dialog #create{grid-column:1/-1;margin:8px 0 0;padding:13px 15px;width:100%;min-height:47px;border:1px solid #efd18c;border-radius:7px;background:linear-gradient(#ffe6a0,#dbac46 65%,#ad7a22);color:#2b200b;font-weight:900;font-size:17px;box-shadow:inset 0 1px #fff1bf,0 2px 5px #0005;cursor:pointer}.lobby-dialog #create:disabled{opacity:.6;cursor:wait}.lobby-dialog-cancel{grid-column:1/-1;background:none;border:0;color:#c0c9aa;font-size:12px;padding:5px 10px;cursor:pointer;justify-self:center;margin:0}.lobby-dialog #profile-save{grid-column:1/-1;padding:12px;margin-top:5px;border-radius:6px;font-size:15px;width:100%}.profile-dialog .lobby-dialog-body{display:block}.profile-dialog label{margin:0 0 7px}.profile-dialog #nickname{margin-bottom:16px}.profile-dialog .avatar-picker{margin:0 0 16px;padding:0;border:0}.profile-dialog .avatar-picker legend{font-size:14px;color:#ead69e;font-weight:750;padding:0;margin:0 0 12px}.profile-dialog #avatar-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.profile-dialog .avatar-option{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;padding:7px 3px;border:1px solid #576a43;border-radius:7px;background:#153222;color:#d4dbb5;cursor:pointer}.profile-dialog .avatar-option.selected{background:#36552d;border:2px solid #d4b45e;padding:6px 2px}.profile-dialog .avatar-option .profile-avatar{width:55px;height:55px;min-width:0;max-width:100%;border-radius:50%;border:2px solid var(--avatar-color);object-fit:cover}.profile-dialog .avatar-option span{font-size:9px;line-height:1.4;text-align:center;overflow-wrap:anywhere}.profile-dialog .avatar-picker small{font-size:10px;color:#b5c09f}.profile-dialog #avatar-selection{color:#ead79d;font-size:11px}.profile-dialog .lobby-dialog-cancel{display:block;margin:10px auto 0}.join-dialog .lobby-dialog-body{display:flex;flex-direction:column;align-items:stretch}.join-dialog #joincode{text-align:center;text-transform:uppercase;font-size:24px;letter-spacing:5px;margin:3px 0 7px;height:50px}.join-dialog #join,.join-dialog #watch{padding:11px;border:1px solid #ad9459;border-radius:6px;background:linear-gradient(#edd18b,#bc8d36);color:#2b200b;font-weight:800;font-size:14px;margin:0}.join-dialog #watch{background:#153b29;color:#e2e5c0}.join-dialog .lobby-dialog-cancel{margin:auto}
+@media(min-width:1450px){body.public-lobby-open #public-lobby.lobby-shell{grid-template-columns:274px minmax(0,1fr)}#public-lobby .lobby-browser{min-height:720px}#lobby-chat-log{max-height:265px}#public-lobby .lobby-room-card td{height:70px}}
+@media(max-width:1100px){body.public-lobby-open header{gap:9px;padding:9px 12px}body.public-lobby-open .brand-word{font-size:23px}body.public-lobby-open .game-tabs button{min-width:48px;font-size:13px;padding:8px 10px}body.public-lobby-open .header-right{display:none}body.public-lobby-open #public-lobby.lobby-shell{grid-template-columns:208px minmax(0,1fr);gap:10px}#public-lobby .lobby-profile{padding:13px 11px 0}#lobby-profile-avatar{height:98px}#lobby-profile-avatar .profile-avatar{width:92px;height:92px;min-width:92px}#public-lobby .lobby-toolbar{gap:8px;padding:12px}#public-lobby .lobby-search{min-width:160px}#public-lobby .lobby-open-filter{font-size:10px}#public-lobby #lobby-code,#public-lobby #lobby-create{font-size:11px;padding:7px 10px}#public-lobby .lobby-heading{padding:15px}#public-lobby #lobby-status{font-size:10px}}
+@media(max-width:700px){body.public-lobby-open .app{padding:8px}body.public-lobby-open header{gap:8px;margin-bottom:10px;min-height:0;padding:8px 10px;border-radius:7px}body.public-lobby-open .brand-face{width:38px;height:38px;min-width:38px}body.public-lobby-open .brand-word{font-size:23px}body.public-lobby-open .brand{gap:8px}body.public-lobby-open .sound-settings{margin-left:auto}body.public-lobby-open .game-tabs{order:4;width:100%;flex-basis:100%;justify-content:space-between;gap:2px}body.public-lobby-open .game-tabs button{flex:1;min-width:0;font-size:12px;min-height:33px;padding:6px 4px;border-radius:5px}body.public-lobby-open #public-lobby.lobby-shell{display:flex;flex-direction:column;min-height:0;gap:10px}#public-lobby .lobby-sidebar{display:contents}#public-lobby .lobby-profile{order:0;display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:3px 10px;padding:10px 12px;align-items:center;text-align:left}#public-lobby .lobby-profile .lobby-eyebrow{display:none}#lobby-profile-avatar{height:49px;grid-column:1;grid-row:1/3;margin:0}#lobby-profile-avatar .profile-avatar{width:46px;height:46px;min-width:46px;border-width:2px}#public-lobby #lobby-profile-name{font-size:18px;grid-column:2;grid-row:1;margin:0}#lobby-profile-edit{grid-column:3;grid-row:1/3;width:auto;font-size:10px;padding:7px;margin:0;max-width:100px}#public-lobby .lobby-current-game{grid-column:2;grid-row:2;display:flex;flex-direction:row;align-items:center;gap:5px;padding:0;border:0}#public-lobby .lobby-current-game>span{font-size:9px}#public-lobby .lobby-current-game>strong{font-size:12px}#public-lobby .lobby-current-game>small{display:none}#public-lobby .lobby-browser{order:1;min-height:460px;max-width:100%}#public-lobby .lobby-heading{padding:12px;min-height:61px}#public-lobby #lobby-heading{font-size:23px;padding-right:12px}#public-lobby .lobby-heading>div{gap:12px}#public-lobby #lobby-status{font-size:10px;max-width:180px}#public-lobby #lobby-refresh{width:35px;min-width:35px;height:32px;font-size:24px}#public-lobby .lobby-toolbar{gap:7px;padding:10px;min-height:0}#public-lobby .lobby-search{flex-basis:100%;min-width:0;height:37px}#public-lobby .lobby-open-filter{flex:1;font-size:10px}#public-lobby #lobby-code,#public-lobby #lobby-create{height:34px;padding:6px 10px;font-size:11px}#public-lobby .lobby-filters{padding:7px 10px;gap:4px}#public-lobby .lobby-filters button{padding:4px 8px;min-width:40px;font-size:9px}#public-lobby .lobby-room-table{min-width:590px}#public-lobby .lobby-room-card td{height:62px}#public-lobby .lobby-bottom{padding:10px;min-height:50px;gap:9px}#lobby-room-summary{font-size:9px}#lobby-network{font-size:9px}#lobby-pages button{min-width:26px;height:27px;font-size:10px}#public-lobby .lobby-chat{order:2;min-height:200px}#lobby-chat-log{max-height:170px;min-height:100px}#public-lobby .lobby-chat h2{font-size:14px;padding:9px 12px}.lobby-dialog{max-height:91vh;width:calc(100vw - 20px);max-width:calc(100vw - 20px);border-radius:9px}.lobby-dialog-head{padding:13px 16px}.lobby-dialog-head h2{font-size:22px}.lobby-dialog-body,.lobby-dialog #create-controls,.lobby-dialog #yut-options,.lobby-dialog #badugi-options,.lobby-dialog #poker-options,.lobby-dialog #seotda-options,.lobby-dialog #gomoku-options{grid-template-columns:102px minmax(0,1fr);gap:9px 10px}.lobby-dialog-body{padding:15px}.lobby-dialog label{font-size:11px}.lobby-dialog input:not([type=range]):not([type=checkbox]),.lobby-dialog select{font-size:13px;padding:7px 8px;height:38px}.lobby-dialog .count-choices{gap:4px}.lobby-dialog .count-choices .count{min-width:31px;font-size:10px;padding:6px;min-height:33px}.profile-dialog .avatar-option .profile-avatar{width:46px;height:46px}.profile-dialog #avatar-options{gap:4px}.profile-dialog .avatar-option span{font-size:8px}.lobby-dialog #create{font-size:15px;min-height:44px}}
+
+/* The header tabs are the single visible game filter. */
+#public-lobby .lobby-filters{display:none}
+#public-lobby .lobby-room-actions [data-lobby-enter]:disabled{display:none}
+#public-lobby #lobby-open-only{appearance:none;position:relative;width:30px;min-width:30px;height:18px;border:1px solid #79945a;border-radius:12px;background:#28482d;cursor:pointer}
+#public-lobby #lobby-open-only:before{content:'';position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#d5e7b9;box-shadow:0 1px 3px #0005}
+#public-lobby #lobby-open-only:checked{background:#6d923c;border-color:#aaca70}#public-lobby #lobby-open-only:checked:before{left:14px}
+
+#public-lobby #lobby-chat-send{flex:0 0 49px;white-space:nowrap;padding:5px 7px}
+</style><style id="alkkagi-theme">body.alkkagi-mode:not(.public-lobby-open){background:#141009;color:#f7e7bc}body.alkkagi-mode .app{max-width:1390px;padding:10px}.alk-game{font-family:system-ui,-apple-system,sans-serif}.alk-top{display:flex;align-items:center;gap:20px;padding:8px 15px;background:linear-gradient(#805522,#3f2611);border:2px solid #c79a50;border-radius:5px 5px 0 0}.alk-top small{font-size:9px;letter-spacing:3px;color:#dfbf77}.alk-top h1{font:800 26px/1.15 Georgia,serif;margin:0;color:#fff0c2}.alk-top h1 em{font-style:normal;color:#f8d278}.alk-top>span{font-size:12px;color:#e8cf9b}.alk-top nav{margin-left:auto;display:flex;gap:5px}.alk-game button{font-family:inherit;cursor:pointer;border:1px solid #c5a56a;border-radius:4px;background:linear-gradient(#d5ba87,#a3834f);box-shadow:inset 0 1px #fff8;color:#352614;font-weight:750;padding:7px 11px}.alk-game button:disabled{cursor:default;opacity:.45}.alk-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:10px;padding:10px;background:linear-gradient(90deg,#6d461d,#c09852 48%,#6a421c);border:3px solid #c79a50;border-top:0}.alk-arena{min-width:0}.alk-stars{position:relative;border:11px ridge #bf9552;background-color:#080c0e;background-image:radial-gradient(circle at 13% 20%,#eee8 0 1px,transparent 1.4px),radial-gradient(circle at 70% 50%,#d7e8ed99 0 1px,transparent 1.5px),radial-gradient(circle at 40% 80%,#fffa 0 .65px,transparent 1.5px);background-size:57px 53px,83px 79px,33px 41px;box-shadow:inset 0 0 22px #000,0 2px 5px #0008;overflow:hidden}#alk-board{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}.alk-piece{cursor:pointer;outline:none;transition:opacity .2s}.alk-piece:focus-visible .alk-select-ring,.alk-selected .alk-select-ring{opacity:1}.alk-select-ring{opacity:0}.alk-off{opacity:0;pointer-events:none}.alk-piece:focus-visible{filter:drop-shadow(0 0 3px #baff6a)}#alk-guide[hidden]{display:none}.alk-corner{position:absolute;z-index:2;width:37px;height:37px;border:3px solid #efd18a;border-radius:50%;display:grid;place-items:center;background:radial-gradient(#3b4249,#05080e);font:800 24px/1 KaiTi,serif;color:#b9c9ec;text-shadow:1px 2px #000;box-shadow:0 1px 4px #000}.alk-corner.tl{top:-4px;left:-4px;color:#df6e58}.alk-corner.tr{top:-4px;right:-4px}.alk-corner.bl{bottom:-4px;left:-4px;color:#df6e58}.alk-corner.br{bottom:-4px;right:-4px}.alk-turn-bar{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;min-height:53px;box-sizing:border-box;padding:8px 15px 13px;border:5px ridge #d2b175;background:linear-gradient(#143f31,#0a251d);color:#f7e9c0;box-shadow:inset 0 0 12px #020f07;overflow:hidden}.alk-turn-bar strong{font-size:17px;text-align:center}.alk-turn-bar b{font-size:14px;min-width:50px;text-align:center;border-radius:13px;background:#143a26;padding:3px 7px;border:1px solid #b3c585}.alk-turn-bar.my-turn{background:linear-gradient(#528942,#214e2c);border-color:#e6c66a}.alk-turn-bar.my-turn strong{color:#fff8c6}.alk-direction{color:#c6ffad;font-size:22px}.alk-time-track{height:4px;background:#12291a;position:absolute;bottom:0;left:0;right:0}.alk-time-track i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#d4e88c,#74dc8a)}.alk-aim-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 10px;background:#362719;color:#ead8b0;border:1px solid #c19c62;font-size:11px}.alk-aim-controls>span{flex:1 0 100%;font-size:12px;color:#f6e8bf}.alk-aim-controls label{display:flex;align-items:center;gap:7px;flex:1}.alk-aim-controls input{min-width:50px;width:100%;accent-color:#9fdb86}.alk-aim-controls b{min-width:32px}.alk-aim-controls button{font-size:11px;padding:5px 10px}.alk-sidebar{display:flex;flex-direction:column;gap:9px;min-width:0}.alk-player{position:relative;background:linear-gradient(125deg,#b49b70,#7b633f);border:4px ridge #d2b784;box-shadow:0 2px 5px #38200d66;color:#fff5d9;padding:8px}.alk-player.turn-active{outline:2px solid #d9fb8e;box-shadow:0 0 0 4px #516632,0 0 14px #caff8c55}.alk-player-color{display:flex;justify-content:space-between;font-size:12px;font-weight:850;padding-bottom:7px;border-bottom:1px solid #d2b888}.alk-player.red .alk-player-color{color:#6b1b14}.alk-player.blue .alk-player-color{color:#153b6c}.alk-player-color span{font-size:10px;background:#382a19b8;color:#fff1c5;border-radius:3px;padding:2px 5px}.alk-player.turn-active .alk-player-color span{background:#28552c;color:#ebffc9}.alk-player-info{display:flex;gap:10px;align-items:center;padding:10px 0}.alk-player-info .profile-avatar{width:67px;height:67px;min-width:67px;border:3px solid #dfbd70;background:#594028;box-shadow:0 3px 5px #0005;border-radius:50%}.alk-player-info h2{font-size:16px;line-height:1.3;margin:0;overflow-wrap:anywhere}.alk-player-info p{font-size:11px;color:#e8ddc7;margin:5px 0 0}.alk-remaining{display:flex;align-items:center;gap:7px;font-size:12px;border-top:1px solid #d5b982;padding-top:4px}.alk-remaining strong{margin-left:auto;font:800 28px Georgia;color:#fff5c8}.alk-remaining small{color:#ead8b4}.alk-kick{position:absolute;bottom:9px;left:8px;font-size:9px!important;padding:2px 4px!important;transform:translateY(2px)}.alk-player:has(.alk-kick) .alk-remaining>span{visibility:hidden}.alk-action-panel,.alk-observers,#alk-help,.alk-log{background:#46371f;border:2px ridge #c0a16c;color:#eadbb6;padding:10px}.alk-action-panel{display:grid;grid-template-columns:1fr 60px;gap:7px}.alk-action-panel .alk-start{background:linear-gradient(#fff0be,#c8a95f);padding:11px 5px;font-size:15px}.alk-action-panel p{grid-column:1/-1;font-size:11px;margin:1px 0;line-height:1.6}.alk-observers h3{font-size:12px;margin:0 0 7px;color:#f4dfaa}.alk-observers p{display:flex;align-items:center;gap:7px;font-size:11px;margin:5px 0}.alk-observers .profile-avatar{height:25px;width:25px;min-width:25px}.alk-observers{max-height:140px;overflow:auto}#alk-help{font-size:11px;line-height:1.65}#alk-help summary{cursor:pointer;font-weight:800}#alk-help p{margin:6px 0}.alk-log{font-size:10px;line-height:1.5;flex:1}.alk-log p{margin:0 0 5px}.alk-wait-overlay,.alk-result{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(70%,380px);box-sizing:border-box;padding:25px 15px;background:#1c2619eb;border:2px solid #eed398;color:#fff3be;text-align:center;box-shadow:0 10px 40px #0007;border-radius:7px;display:flex;flex-direction:column;gap:8px;pointer-events:none}.alk-wait-overlay b,.alk-result strong{font-size:26px}.alk-wait-overlay span,.alk-result span{font-size:12px}.alk-result small{letter-spacing:4px;color:#d6bf83}
+@media(max-width:900px){.alk-layout{grid-template-columns:minmax(0,1fr) 200px;gap:7px;padding:7px}.alk-player-info .profile-avatar{width:48px;height:48px;min-width:48px}.alk-player-info h2{font-size:13px}.alk-player{padding:6px}.alk-top h1{font-size:21px}.alk-top{gap:12px}.alk-top button{font-size:10px;padding:6px}.alk-player-color{font-size:10px}.alk-turn-bar strong{font-size:14px}.alk-log{display:none}}
+@media(max-width:650px){body.alkkagi-mode .app{padding:5px}.alk-top{flex-wrap:wrap;padding:9px;gap:7px}.alk-top>span{font-size:10px;margin-left:auto}.alk-top nav{width:100%;justify-content:flex-end}.alk-layout{display:flex;flex-direction:column;padding:5px}.alk-stars{border-width:6px}.alk-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:7px}.alk-player-info{padding:7px 0;gap:7px}.alk-player-info .profile-avatar{width:40px;height:40px;min-width:40px}.alk-player-info h2{font-size:12px}.alk-remaining strong{font-size:22px}.alk-player-color span{font-size:9px}.alk-action-panel,.alk-observers,#alk-help{grid-column:1/-1}.alk-turn-bar{min-height:49px;border-width:4px;padding:7px 5px 11px;gap:6px}.alk-turn-bar strong{font-size:13px}.alk-turn-bar b{font-size:12px;min-width:40px}.alk-corner{width:25px;height:25px;font-size:18px;border-width:2px}.alk-wait-overlay b,.alk-result strong{font-size:21px}.alk-wait-overlay{padding:15px 9px}.alk-aim-controls{padding:7px}.alk-top h1{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.alk-piece{transition:none}}
+/* Compact desktop chrome keeps the entire board and turn bar together. */
+body.alkkagi-mode:not(.public-lobby-open) .app{max-width:min(1390px,calc((100svh - 330px)*1.25 + 280px))}body.alkkagi-mode:not(.public-lobby-open) header{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:8px 12px;margin:0 0 9px;min-height:58px;background:linear-gradient(#5d3b19,#26180e);border:1px solid #bc9454;border-radius:5px}body.alkkagi-mode .brand{flex:0 0 auto;gap:8px}body.alkkagi-mode .brand-face{width:38px;height:38px;min-width:38px}body.alkkagi-mode .brand-word{font-size:24px;line-height:1.1;white-space:nowrap;width:auto}body.alkkagi-mode .brand-word small,body.alkkagi-mode .brand>i,body.alkkagi-mode .top-chip,body.alkkagi-mode #hub-wallet{display:none}body.alkkagi-mode .game-tabs{display:flex;flex:1;flex-wrap:nowrap;gap:4px;justify-content:center;margin:0;width:auto}body.alkkagi-mode .game-tabs button{transform:none;min-width:0;padding:7px 9px;font-size:12px;min-height:32px;box-shadow:none;border-radius:4px;background:linear-gradient(#4e3b21,#2a2118);border:1px solid #a58a5a;color:#eadcb5}body.alkkagi-mode .game-tabs button.selected{background:linear-gradient(#edcf82,#a7833c);color:#2e2315;border-color:#ffdfa0}body.alkkagi-mode .sound-settings{margin:0}body.alkkagi-mode #sound-summary{font-size:10px;padding:6px 8px}body.alkkagi-mode #connection{font-size:9px;max-width:140px;white-space:nowrap}.alk-stars{box-sizing:border-box}.alk-top{min-height:57px;box-sizing:border-box}.alk-aim-controls>span{font-size:11px}.alk-remaining strong{font-variant-numeric:tabular-nums}
+@media(max-width:650px){body.alkkagi-mode:not(.public-lobby-open) .app{max-width:100%;padding:5px}body.alkkagi-mode:not(.public-lobby-open) header{padding:7px;gap:7px}body.alkkagi-mode .brand-word{font-size:21px}body.alkkagi-mode .game-tabs{order:4;flex-basis:100%;justify-content:space-between}body.alkkagi-mode .game-tabs button{flex:1;font-size:11px;padding:6px 3px}body.alkkagi-mode .sound-settings{margin-left:auto}body.alkkagi-mode #connection{max-width:115px;font-size:8px}}
+</style>
+<link rel="stylesheet" href="/lounge.css?v=59.0&scene=2">
+<link rel="stylesheet" href="/kkung.css?v=59.0">
+<link rel="stylesheet" href="/premium.css?v=59.0&theme=premium-1">
+<link rel="stylesheet" href="/studio.css?v=59.0">
+</head>
+<body translate="no">
 <div class="app">
   <header>
-    <a class="brand" href="/"><img class="brand-face" src="/hodon-face.png?v=16.0" alt="호돈 캐릭터"/><span class="brand-word">호돈 게임방<small>HODON GAME ROOM</small></span><i>♛</i></a>
-  <nav class="game-tabs" aria-label="게임 선택"><button type="button" id="tab-yut" class="selected">윷놀이</button><button type="button" id="tab-badugi">바둑이</button><button type="button" id="tab-gomoku">오목</button><span id="hub-wallet">무료 가상칩 게임</span></nav>
-    <div class="header-right">
+    <a class="brand" href="/"><img class="brand-face" src="/hodon-face.png?v=59.0" alt="호돈 캐릭터"><span class="brand-word">호돈 게임방<small>HODON GAME ROOM</small></span><i>♛</i></a>
+  <nav class="game-tabs" aria-label="게임 선택"><button type="button" id="tab-all">전체</button><button type="button" id="tab-yut" class="selected">윷놀이</button><button type="button" id="tab-badugi">바둑이</button><button type="button" id="tab-gomoku">오목</button><button type="button" id="tab-seotda">섯다</button><button type="button" id="tab-poker">7포커</button><button type="button" id="tab-alkkagi">알까기</button><button type="button" id="tab-kkung">쿵쿵따</button><button type="button" id="tab-sichuan">사천성</button><span id="hub-wallet">무료 가상칩 게임</span></nav>
+    <details class="sound-settings"><summary id="sound-summary">🔊 효과음</summary><div class="sound-popover"><button id="sound-toggle" type="button" aria-label="효과음 음소거 전환" aria-pressed="false">음소거</button><label for="sound-volume">효과음 볼륨</label><input id="sound-volume" aria-label="효과음 볼륨" type="range" min="0" max="100" value="40"><output id="sound-value" for="sound-volume">40%</output><button id="sound-test" aria-label="효과음 미리듣기" type="button">소리 미리듣기</button><button id="sound-voice-test" type="button">윷놀이 음성 미리듣기</button><button id="sound-bet-voice-test" type="button">베팅 음성 미리듣기</button><small>패 타격음과 베팅 음성을 함께 조절합니다.</small></div></details><div class="header-right">
       <span id="connection" class="status">● 연결 중</span>
-      <span class="top-chip">⚔ 실시간 2~4인 대전</span>
+      <span class="top-chip">⚔ 윷놀이 최대 10인 대전</span>
     </div>
   </header>
 
 
+  <div id="seat-entry" class="seat-entry" role="status" hidden=""></div>
+  <div id="leave-reservation" class="leave-reservation" role="status" hidden=""></div>
   <main>
-    <section id="landing" class="landing">
-      <div class="landing-copy">
-        <div class="eyebrow">KOREAN CLASSIC · ONLINE MULTIPLAYER</div>
-        <h1>친구와 함께 던지는<br/><em>호돈 윷놀이.</em></h1>
-        <p>회원가입 없이 닉네임 하나로 시작하세요.<br/>방을 만들고 친구에게 링크를 보내면 바로 입장할 수 있습니다.</p>
-        <div class="landing-stats">
-          <div><strong>2~4명</strong><span>동시 대전</span></div>
-          <div><strong>개인전/팀전</strong><span>플레이 모드</span></div>
-          <div><strong>1~4개</strong><span>말 선택</span></div>
-        </div>
-      </div>
+    <section id="public-lobby" class="public-lobby lobby-shell" aria-labelledby="lobby-heading">
+<aside class="lobby-sidebar"><section class="lobby-profile"><span class="lobby-eyebrow">FIELD × HODON</span><div id="lobby-profile-avatar"></div><h2 id="lobby-profile-name">닉네임 설정</h2><button id="lobby-profile-edit" type="button">닉네임·얼굴 변경</button><div class="lobby-current-game"><span>선택한 게임</span><strong id="lobby-current-game">윷놀이</strong><small>방을 선택해 입장하세요</small></div></section>
+<section class="lobby-chat"><h2>☷ 대기실 대화</h2><div id="lobby-chat-log" role="log" aria-label="대기실 대화" aria-live="polite"><p class="lobby-chat-empty">함께할 친구를 기다리고 있습니다.</p></div><form id="lobby-chat-form"><label class="lobby-sr-only" for="lobby-chat-input">대기실 메시지</label><input id="lobby-chat-input" maxlength="140" placeholder="메시지를 입력하세요" autocomplete="off"><button id="lobby-chat-send" type="submit">보내기</button></form></section></aside>
+<section class="lobby-browser"><div class="lobby-heading"><div><h1 id="lobby-heading" tabindex="-1">대기실</h1><span id="lobby-status" role="status">방 목록을 불러오고 있습니다.</span></div><button id="lobby-refresh" type="button" aria-label="방 목록 새로고침">↻</button></div>
+<div class="lobby-toolbar"><label class="lobby-search"><span aria-hidden="true">⌕</span><input id="lobby-search" placeholder="방 제목 또는 방장 검색" aria-label="방 제목 또는 방장 검색" maxlength="60"></label><label class="lobby-open-filter"><input id="lobby-open-only" type="checkbox"><span>입장 가능한 방</span></label><button id="lobby-code" type="button">코드로 입장</button><button id="lobby-create" type="button" class="lobby-gold">방 만들기</button></div>
+<div id="lobby-filters" class="lobby-filters" role="group" aria-label="방 목록 게임 선택"><button data-lobby-filter="all" class="selected" aria-pressed="true">전체</button><button data-lobby-filter="yut" aria-pressed="false">윷놀이</button><button data-lobby-filter="badugi" aria-pressed="false">바둑이</button><button data-lobby-filter="gomoku" aria-pressed="false">오목</button><button data-lobby-filter="seotda" aria-pressed="false">섯다</button><button data-lobby-filter="poker" aria-pressed="false">7포커</button></div>
+<div class="lobby-table-scroll"><table class="lobby-room-table"><thead><tr><th scope="col">게임</th><th scope="col">방 제목</th><th scope="col">인원</th><th scope="col">기본 판돈</th><th scope="col">상태</th><th scope="col">입장</th></tr></thead><tbody id="lobby-room-list"></tbody></table></div>
+<div class="lobby-bottom"><span id="lobby-room-summary"></span><nav id="lobby-pages" aria-label="방 목록 페이지"></nav><span id="lobby-network" role="status">● 서버 연결 중</span></div></section></section>
+    <section id="landing" class="landing hidden" hidden=""></section>
 
-      <div class="panel join-box">
-        <div class="panel-label">GAME START</div>
-        <h2>호돈 윷놀이 시작하기</h2>
-        <label for="nickname">닉네임</label>
-        <input id="nickname" maxlength="14" autocomplete="nickname" placeholder="예: 호돈"/>
-
-        <div id="create-controls">
-          <label>참가 인원</label>
-          <div class="count-choices">
-            <button class="count player-limit" data-n="2">2명</button>
-            <button class="count player-limit" data-n="3">3명</button>
-            <button class="count player-limit selected" data-n="4">4명</button>
-          </div>
-
-          <div id="yut-options"><label>대전 방식</label>
-          <div class="count-choices mode-choices">
-            <button class="count match-mode selected" data-mode="solo">개인전</button>
-            <button class="count match-mode" data-mode="team">2대2 팀전</button>
-          </div>
-          <p id="mode-explain" class="mini">개인전: 2~4명 · 말 1~4개</p>
-
-          <label for="turn-seconds">한 차례 제한시간</label>
-          <select id="turn-seconds" class="select-input">
-            <option value="20">20초</option>
-            <option value="30">30초</option>
-            <option value="45" selected>45초</option>
-            <option value="60">60초</option>
-            <option value="90">90초</option>
-          </select>
-
-          <label for="piece-count">사용할 말 개수</label>
-          <div class="count-choices" id="piece-options">
-            <button class="count" data-n="1">1개</button>
-            <button class="count" data-n="2">2개</button>
-            <button class="count" data-n="3">3개</button>
-            <button class="count selected" data-n="4">4개</button>
-          </div>
-
-          </div><div id="badugi-options" class="hidden">
-            <label for="badugi-base">기본 판돈 (가상칩)</label><input id="badugi-base" type="number" min="1" max="1000000" step="1" value="100"/>
-            <label for="badugi-chips">1인당 시작 금액 (가상칩)</label><input id="badugi-chips" type="number" min="2" max="1000000000" step="1" value="10000"/>
-            <p class="mini">시작 금액은 기본 판돈의 2배 이상 · 현금 가치 없는 방 전용 가상칩</p>
-          </div>
-          <div id="gomoku-options" class="hidden"><label for="gomoku-minutes">1인당 대국 시간</label><select id="gomoku-minutes"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option></select><p class="mini">국제 렌주 · 흑 3·3 / 4·4 / 장목 금수 · RIF 클래식 오프닝</p></div>
-          <button class="primary wide" id="create">새 방 만들기 <span>↗</span></button>
-        </div>
-
-        <div class="separator">또는</div>
-        <label for="joincode">초대 코드로 참가</label>
-        <input id="joincode" maxlength="6" placeholder="6자리 방 코드" autocapitalize="characters"/>
-        <button class="outline wide" id="join">플레이어로 참가하기 →</button>
-        <button class="small-btn wide watch-entry" id="watch">👁 관전자로 입장하기</button>
-        <p class="mini">이미 받은 초대 링크가 있다면 코드가 자동 입력됩니다.</p>
-      </div>
-    </section>
-
-    <section id="gomoku-section" class="hidden"></section>
+    <section id="sichuan-section" class="hidden"></section><section id="kkung-section" class="hidden"></section><section id="alkkagi-section" class="hidden"></section><section id="poker-section" class="hidden"></section><section id="seotda-section" class="hidden"></section><section id="gomoku-section" class="hidden"></section>
     <section id="badugi-section" class="hidden"></section>
-    <section id="room-section" class="hidden">
+    <section id="room-section" class="hidden yut-garden-room"><div class="room-head">
+        <div class="room-copy">
+          <div class="eyebrow">FIELD × HODON</div>
+          <h1>호돈 윷놀이</h1>
+          <p id="room-subtitle">2명이 모이면 게임을 시작할 수 있습니다.</p>
+        </div>
+        <div class="invite panel">
+          <div class="muted">초대 코드</div>
+          <strong id="room-code">------</strong>
+          <div class="actions">
+            <button class="small-btn" id="copy-link">🔗 초대 링크 복사</button>
+            <button class="small-btn ghost hidden" id="yut-resign" type="button">기권하기</button>
+            <button class="small-btn ghost" id="leave">나가기</button>
+          </div>
+        </div>
+      </div>
       <div class="game-layout">
         <section class="panel game-card">
           <div class="game-top">
@@ -101,13 +92,13 @@
 
           <div id="play-panel" class="play-panel hidden">
             <div class="turn-bar">
-              <span id="turn-clock" class="clock">⏱ 45초</span>
+              <span id="turn-clock" class="clock">15초</span>
               <span id="team-label" class="mini"></span>
             </div>
-            <div id="turn-info" class="turn-info">차례를 기다리는 중</div>
+            <button id="show-yut-winner" class="hidden" type="button">🏆 우승 결과 보기</button><div id="turn-info" class="turn-info">차례를 기다리는 중</div>
 
             <div class="throw-row">
-              <div class="dice-area"><div class="area-label">YUT THROW</div>
+              <div class="dice-area"><div class="yut-drum-title">윷을 던져 보세요</div><div class="area-label">FIELD × HODON</div>
                 <div class="yut-arena" id="yut-arena">
                   <div class="sticks" id="sticks">
                     <i class="yut-stick"></i>
@@ -116,41 +107,42 @@
                     <i class="yut-stick"></i>
                   </div>
                 </div>
-                <div id="throw-result" class="throw-result">윷을 던져주세요</div>
               </div>
 
               <div class="throw-controls">
-                <label for="throw-power" class="mini">윷 던지기 세기 <strong id="power-label">50</strong> · 너무 약하거나 세면 낙</label>
-                <input id="throw-power" class="power-slider" type="range" min="0" max="100" value="50" aria-label="윷 던지기 세기"/>
+                <label for="throw-power" class="mini">파워 <strong id="power-label">0%</strong></label>
+                <input id="throw-power" class="power-slider" type="range" min="0" max="100" value="50" aria-label="윷 던지기 세기">
                 <button class="primary wide" id="throw">🎲 윷 던지기</button>
               </div>
             </div>
 
+            <div id="throw-result" class="throw-result">윷을 던져주세요</div>
             <div id="moves" class="moves"></div>
-            <p id="move-hint" class="mini">윷 결과 선택 → 내 말 선택 → 빛나는 도착 칸 클릭.</p>
+            <p id="move-hint" class="mini">윷 결과를 고른 뒤 말을 선택하세요.</p>
             <div id="piece-buttons" class="piece-buttons"></div>
             <div id="destination-options" class="moves"></div>
           </div>
 
           <div id="board-shell" class="board-shell">
-            <svg id="board" viewBox="0 0 600 600" role="img" aria-label="윷놀이판"></svg>
+            <div id="yut-turn-toast" role="status" aria-live="polite"></div><svg id="board" viewBox="0 0 600 600" role="img" aria-label="윷놀이판"></svg>
             <div id="board-status" class="board-status">친구를 기다리는 중...</div><div id="roll-effect" class="roll-effect" aria-live="polite"></div>
           </div>
         </section>
 
-        <aside class="side">
-          <div class="panel players">
+        
+      </div><div class="yut-bottom"><div class="panel players">
             <div class="section-title">♟ 참가자 <span id="player-count">1 / 4</span></div>
-            <div id="players"></div>
+            
             <div class="piece-roster-title">◈ 호돈 말 현황 <small id="piece-roster-note">개인 말</small></div>
             <div id="roster" class="roster"></div>
             <div id="lobby-action">
               <p class="mini">초대 링크를 공유해 친구를 초대하세요.</p>
-              <button class="primary wide" id="start" disabled>4명 모이면 시작</button>
+              <button class="primary wide" id="start" disabled="">2명부터 바로 시작</button>
             </div>
-          </div>
-        </aside>
-      </div>
+          </div><div class="panel log-box">
+          <div class="section-title">☷ 진행 기록</div>
+          <div id="game-log">아직 기록이 없습니다.</div>
+        </div></div>
 
       <section class="panel waiting-room" aria-labelledby="waiting-room-title">
         <div class="waiting-room-header">
@@ -161,55 +153,71 @@
         <div id="spectators" class="spectator-list" aria-live="polite" aria-relevant="additions removals"></div>
       </section>
 
-      <div class="bottom-panels">
-        <div class="panel rules">
+      
+      
+
+    <details class="yut-more"><summary>참가자 관리 · 규칙 · 전적</summary><div id="players"></div><div class="panel rules">
           <div class="section-title">▤ 게임 안내</div>
           <div>빽도 −1칸 · 도 1칸 · 개 2칸 · 걸 3칸</div>
           <div>윷 4칸 · 모 5칸</div>
           <div>윷/모 · 상대 말 잡기 → 추가 던지기</div>
           <div>지름길 선택 · 업기 · 제한시간 자동 진행</div>
           <p class="mini">빽도: 판 위 말 1칸 후퇴 · 대기 중인 말만 있으면 자동 소멸. 갈림길은 말 선택 후 원하는 도착 칸을 눌러 결정합니다.</p>
-        </div>
-
-        <div class="panel log-box">
-          <div class="section-title">☷ 진행 기록</div>
-          <div id="game-log">아직 기록이 없습니다.</div>
-        </div>
-
-        <div class="panel log-box">
+        </div><div class="panel log-box">
           <div class="section-title">🏆 게임 랭킹</div>
           <p class="mini">닉네임별 승리 수 · 이 서버의 저장 기록</p>
           <div id="rankings" class="rankings">전적을 불러오는 중...</div>
           <button id="refresh-rank" class="small-btn">새로고침</button>
-        </div>
-      </div>
-      <div class="room-head">
-        <div class="room-copy">
-          <div class="eyebrow">방 정보 · 초대</div>
-          <h1>친구들과 한 판!</h1>
-          <p id="room-subtitle">2명이 모이면 게임을 시작할 수 있습니다.</p>
-        </div>
-        <div class="invite panel">
-          <div class="muted">초대 코드</div>
-          <strong id="room-code">------</strong>
-          <div class="actions">
-            <button class="small-btn" id="copy-link">🔗 초대 링크 복사</button>
-            <button class="small-btn ghost" id="leave">나가기</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
+        </div></details></section>
   </main>
 
-  <footer>호돈 게임방 · 무료 가상칩 · 현금 거래 없음</footer>
+  
 </div>
 
-<div id="victory-overlay" class="victory-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="victory-title">
+<dialog id="victory-overlay" lang="ko" translate="no" class="victory-overlay notranslate hidden" role="dialog" aria-modal="true" aria-labelledby="victory-title" aria-describedby="victory-name victory-members">
   <div id="victory-particles" class="victory-particles" aria-hidden="true"></div><div class="victory-stars" aria-hidden="true">✦　✧　✦　✧　✦</div>
-  <div class="victory-card"><img class="victory-face" src="/hodon-face.png?v=16.0" alt="호돈"/><div class="victory-crown">🏆</div><p>호돈 윷놀이</p><h2 id="victory-title">우승!</h2><strong id="victory-name">플레이어</strong><div class="victory-confetti" aria-hidden="true">🎉 🎊 ✨ 🎉</div><button type="button" id="victory-close" class="primary">게임 화면으로 돌아가기</button></div>
-</div><div id="toast" role="status" aria-live="polite"></div>
+  <div class="victory-card"><img class="victory-face" src="/hodon-face.png?v=59.0" alt="호돈"><div class="victory-crown">🏆</div><p id="victory-game">호돈 윷놀이</p><h2 id="victory-title">우승!</h2><strong id="victory-name">플레이어</strong><p id="victory-members"></p><div class="victory-confetti" aria-hidden="true">🎉 🎊 ✨ 🎉</div><div id="victory-gom-choice" class="hidden"><p>다음 대국에서 사용할 돌을 선택하세요.</p><button type="button" id="victory-gom-black">● 흑으로 연속 대국</button><button type="button" id="victory-gom-white">○ 백으로 연속 대국</button></div><button type="button" id="victory-close" class="primary">게임 화면으로 돌아가기</button></div>
+</dialog><div id="toast" role="status" aria-live="polite"></div>
+<p id="client-load-status" role="status" style="padding:12px;text-align:center;color:#ffe49c">v59.0 실행 파일을 불러오는 중입니다. 계속 보이면 hodon-client-v59.js 파일이 업로드되었는지 확인해 주세요.</p>
 <script src="/socket.io/socket.io.js"></script>
-<script type="module" src="/app.js?v=16.0"></script>
-</body>
-</html>
+<script src="/kkung-ui.js?v=59.0"></script><script src="/sound.js?v=59.0"></script><script src="/sichuan-ui.js?v=59.0"></script><script src="/room-controls.js?v=59.0"></script><script type="module" src="/hodon-client-v59.js?v=59.0"></script>
+
+
+
+
+<dialog id="create-dialog" class="lobby-dialog" aria-labelledby="create-dialog-title"><div class="join-box"><div class="lobby-dialog-head"><h2 id="create-dialog-title">방 만들기</h2><button type="button" data-dialog-close="create-dialog" aria-label="방 만들기 닫기">×</button></div><div class="lobby-dialog-body"><label for="create-game">게임 선택</label><select id="create-game"><option value="yut">윷놀이</option><option value="badugi">바둑이</option><option value="gomoku">오목</option><option value="seotda">섯다</option><option value="poker">7포커</option><option value="alkkagi">장기알까기</option><option value="kkung">쿵쿵따</option><option value="sichuan">사천성</option></select><label for="room-title">방 제목</label><input id="room-title" maxlength="32" placeholder="함께할 방 제목을 입력하세요"><div id="create-controls">
+          <label>참가 인원</label>
+          <div class="count-choices player-choices">
+            <button class="count player-limit" data-n="2">2명</button>
+            <button class="count player-limit" data-n="3">3명</button>
+            <button class="count player-limit selected" data-n="4">4명</button><button class="count player-limit" data-n="5">5명</button><button class="count player-limit" data-n="6">6명</button><button class="count player-limit" data-n="7">7명</button><button class="count player-limit" data-n="8">8명</button><button class="count player-limit" data-n="9">9명</button><button class="count player-limit" data-n="10">10명</button>
+          </div>
+
+          <div id="yut-options"><label>대전 방식</label>
+          <div class="count-choices mode-choices">
+            <button class="count match-mode selected" data-mode="solo">개인전</button>
+            <button class="count match-mode" data-mode="team">2대2 팀전</button>
+          </div>
+          <p id="mode-explain" class="mini">개인전: 2~10명 · 말 1~4개</p>
+
+          <label for="turn-seconds">한 차례 제한시간</label>
+          <select id="turn-seconds" class="select-input"><option value="15" selected="">15초</option></select>
+
+          <label for="piece-count">사용할 말 개수</label>
+          <div class="count-choices" id="piece-options">
+            <button class="count" data-n="1">1개</button>
+            <button class="count" data-n="2">2개</button>
+            <button class="count" data-n="3">3개</button>
+            <button class="count selected" data-n="4">4개</button>
+          </div>
+
+          </div><div id="badugi-options" class="hidden">
+            <label for="badugi-base">기본 판돈 (가상칩)</label><input id="badugi-base" type="number" min="1" max="1000000" step="1" value="100"><output id="badugi-base-formatted" for="badugi-base" style="display:block;font-size:12px;color:#dbc797;margin:3px 0 10px" aria-live="polite"></output>
+            <label for="badugi-chips">1인당 시작 금액 (가상칩)</label><input id="badugi-chips" type="number" min="2" max="1000000000" step="1" value="10000"><output id="badugi-chips-formatted" for="badugi-chips" style="display:block;font-size:12px;color:#dbc797;margin:3px 0 10px" aria-live="polite"></output>
+            <p class="mini">시작 금액은 기본 판돈의 2배 이상으로 설정하세요.</p>
+          </div>
+          <div id="sichuan-options" class="hidden"><label for="sichuan-mode">사천성 경기 방식</label><select id="sichuan-mode"><option value="relay">릴레이 · 마지막 한 명까지</option><option value="first">1등 · 첫 완주 시 종료</option></select><label for="sichuan-map">맵 선택</label><select id="sichuan-map"><option value="butterfly">나비 정원</option><option value="heart">하트 정원</option><option value="diamond">다이아</option><option value="bridge">구름 다리</option><option value="square">사각 정원</option><option value="flower">꽃잎 정원</option><option value="random">전체 랜덤</option></select><p class="mini">2~10명 · F1 힌트 · F2 섞기 · 막힌 판 자동 재배치</p></div><div id="poker-options" class="hidden"><label for="poker-rule">7포커 방식</label><select id="poker-rule"><option value="normal">일반 · 3장 중 1장 공개</option><option value="choice">초이스 · 4장 중 1장 버리고 1장 공개</option></select><label for="poker-base">기본 판돈</label><input id="poker-base" type="number" min="1" max="100000000000" step="1" value="1000000"><output id="poker-base-formatted"></output><label for="poker-chips">1인당 시작 보유금액</label><input id="poker-chips" type="number" min="2" max="1000000000000" step="1" value="1000000000"><output id="poker-chips-formatted"></output><p class="mini">2~5명 · 15초 · 일반 베팅 1·1·2·3회 · 공개 4장 / 히든 3장</p></div><div id="seotda-options" class="hidden"><label for="seotda-cards">게임 방식</label><select id="seotda-cards"><option value="2">2장 섯다 · 첫 패 공개</option><option value="3">3장 섯다 · 2장 받고 1장 공개</option></select><label for="seotda-base">기본 판돈 · 무료 가상칩</label><input id="seotda-base" type="number" min="1" max="1000000" value="1000"><output id="seotda-base-formatted" for="seotda-base" style="display:block;font-size:12px;color:#dbc797;margin:3px 0 10px" aria-live="polite"></output><label for="seotda-chips">1인당 시작 보유칩</label><input id="seotda-chips" type="number" min="2" max="1000000000" value="100000"><output id="seotda-chips-formatted" for="seotda-chips" style="display:block;font-size:12px;color:#dbc797;margin:3px 0 10px" aria-live="polite"></output><label for="seotda-seconds">행동 제한시간</label><select id="seotda-seconds"><option value="15" selected="">15초</option></select><p class="mini">20장 화투 · 2~5인 · 특수패 · 재경기 · 관전</p></div><div id="gomoku-options" class="hidden"><label for="gomoku-minutes">1인당 대국 시간</label><select id="gomoku-minutes"><option value="5">5분</option><option value="10">10분</option><option value="15">15분</option></select><p class="mini">국제 렌주 · 흑 3·3 / 4·4 / 장목 금수 · 각자 흑백 교대 · 승자 색 선택</p></div>
+          <button class="primary wide" id="create" type="button">새 방 만들기 <span>↗</span></button>
+        </div><button type="button" class="lobby-dialog-cancel" data-dialog-close="create-dialog">취소</button></div></div></dialog>
+<dialog id="profile-dialog" class="lobby-dialog profile-dialog" aria-labelledby="profile-dialog-title"><div class="lobby-dialog-head"><h2 id="profile-dialog-title">닉네임·얼굴 선택</h2><button type="button" data-dialog-close="profile-dialog" aria-label="프로필 설정 닫기">×</button></div><div class="lobby-dialog-body"><label for="nickname">닉네임</label><input id="nickname" maxlength="14" autocomplete="nickname" placeholder="예: 호돈"><fieldset class="avatar-picker"><legend>내 호돈 얼굴 선택</legend><div id="avatar-options" role="group" aria-label="호돈 얼굴 5종"></div><p id="avatar-selection" role="status"></p><small>선택한 얼굴은 모든 게임에서 함께 사용됩니다.</small></fieldset><button id="profile-save" class="lobby-gold wide" type="button">저장하고 계속</button><button type="button" class="lobby-dialog-cancel" data-dialog-close="profile-dialog">취소</button></div></dialog>
+<dialog id="join-dialog" class="lobby-dialog join-dialog" aria-labelledby="join-dialog-title"><div class="lobby-dialog-head"><h2 id="join-dialog-title">코드로 입장</h2><button type="button" data-dialog-close="join-dialog" aria-label="코드 입장 닫기">×</button></div><div class="lobby-dialog-body"><label for="joincode">초대 코드로 참가</label><input id="joincode" maxlength="6" placeholder="6자리 방 코드" autocapitalize="characters"><button class="outline wide" id="join">플레이어로 참가하기 →</button><button class="small-btn wide watch-entry" id="watch">👁 관전자로 입장하기</button><button type="button" class="lobby-dialog-cancel" data-dialog-close="join-dialog">취소</button></div></dialog></body></html>

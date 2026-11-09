@@ -1,0 +1,15 @@
+Korean Hwatu card artwork
+Individual SVG files: Spenĉjo
+Korean Hwatu design: Marcus Richert
+Based in part on Hanafuda artwork by Louie Mantia, Jr.
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+Original: https://commons.wikimedia.org/wiki/Category:SVG_Hwatu
+Master: https://commons.wikimedia.org/wiki/File:Hwatu_overview.svg
+Author: https://www.marcusrichert.com/images/hwatu/
+Distribution: https://github.com/itsent-lab/hwatu/tree/main/apps/web/public/cards/hwatu
+SVG artwork unchanged. Files renamed to internal IDs only.
+Individual source URLs and original file SHA-1: HWATU-SOURCES.json
+Artwork and adaptations retain CC BY-SA 4.0; game source is separate.
+
+v45: hwatu-face-0.webp through hwatu-face-19.webp are raster format conversions of the same credited SVG artwork at 206px width, with no artistic alteration. These derivatives and their embedded copies retain CC BY-SA 4.0.
