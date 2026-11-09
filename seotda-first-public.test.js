@@ -1,0 +1,13 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import{readFileSync}from'node:fs';import{Window}from'happy-dom';import{createSeotda,publicSeotda,timeoutSeotda,settleSeotda,actSeotda}from'./seotda.js';
+test('2장: 첫패 즉시 전원 공개·두번째는 상대/관전자 마스킹·내 히든만 360도 쪼기',async()=>{
+ const g=createSeotda(['A','B'],[10000,10000],{cards:2,base:100});
+ for(const viewer of [null,0,1])for(let i=0;i<2;i++){const p=publicSeotda(g,viewer).players[i];assert.equal(p.open,0);assert.equal(p.hand[0],g.players[i].hand[0]);assert.equal(p.hand.length,1)}
+ timeoutSeotda(g);timeoutSeotda(g);assert.equal(g.round,1);
+ for(const viewer of [null,0,1])for(let i=0;i<2;i++){const p=publicSeotda(g,viewer).players[i];assert.equal(p.open,0);assert.equal(p.hand[0],g.players[i].hand[0]);assert.equal(p.hand[1],viewer===i?g.players[i].hand[1]:null)}
+ const w=new Window({url:'http://localhost/'});w.document.write(readFileSync(new URL('./index.html',import.meta.url),'utf8'));const socket={connected:true,on(){},timeout(){return this},emit(){}};
+ const ctx=vm.createContext({document:w.document,window:w,localStorage:w.localStorage,location:w.location,history:w.history,navigator:w.navigator,URLSearchParams,console,io:()=>socket,setTimeout:()=>0,setInterval:()=>0,clearTimeout(){},clearInterval(){},confirm:()=>false});
+ try{vm.runInContext(readFileSync(new URL('./app.js',import.meta.url),'utf8'),ctx);ctx.fixture={code:'FIRSTX',gameType:'seotda',seotdaCards:2,host:0,playerCount:2,players:[{name:'A',connected:true},{name:'B',connected:true}],spectators:[],base:100,startingChips:10000,seotda:publicSeotda(g,0)};vm.runInContext('state=fixture;seat=0;isSpectator=false;render()',ctx);assert.equal(w.document.querySelectorAll('.seotda-seat.self .card-peek').length,1);assert.equal(w.document.querySelector('.seotda-seat.self .card-peek [data-hwatu]').dataset.hwatu,'1');assert.equal(w.document.querySelectorAll('.seotda-seat:not(.self) .card-peek').length,0);assert.match(w.document.querySelector('.seotda-deal-steps').textContent,/공개패 1장 받기.*히든 1장 받기/);ctx.fixture.seotda=publicSeotda(g,null);vm.runInContext('isSpectator=true;seat=null;render()',ctx);assert.equal(w.document.querySelectorAll('.card-peek').length,0);}finally{await w.happyDOM.abort()}
+});
+test('2장 구사 재경기: 첫 공개패부터 다시 배분하고 이월 판돈 보존',()=>{
+ const g=createSeotda(['A','B'],[1000,1000],{cards:2,base:100});g.players[0].hand=[7,16];g.players[1].hand=[0,2];settleSeotda(g,true);assert.equal(g.phase,'replay');const pot=g.pot;actSeotda(g,g.turn,{action:'replay',revision:g.revision});assert.equal(g.pot,pot);assert.equal(g.replayNo,1);for(const p of publicSeotda(g,null).players){assert.equal(p.open,0);assert.equal(p.hand.length,1);assert.ok(Number.isInteger(p.hand[0]))}
+});

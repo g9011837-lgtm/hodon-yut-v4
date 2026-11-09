@@ -1,0 +1,5 @@
+Generated panorama asset
+Mode: built-in image generation
+Source: generated_images/exec-008e4e15-a797-47a7-9d83-2f4930b001b7.png
+Project asset: yut-scenery-background.webp (also embedded in lounge.css)
+Prompt: Wide seamless Korean fantasy mountain panorama in the existing Yutnori palette; turquoise hazy layered mountains, distant traditional pavilion, sun from upper left, blue sky, clouds through the lower half, leafy outer corners. One continuous scene, quiet center for UI, no boards, square islands, tokens, text, people, interface or logos.

@@ -1,0 +1,27 @@
+호돈 게임방 v59 통합 검증
+
+전체 node --test: 323개 통과 / 실패 0 / 건너뜀 0 (32.91초)
+- 8개 게임 방 생성·게임 시작·서버 재시작 후 복구
+- nodemon 재시작 반복 재현 및 .state 저장/감시 제외 검증
+- 실제 실행 JS 파일 제공 및 화면/서버/패키지 버전 일치
+- 방 생성 오류 분류: 오프라인/응답 지연/실제 버전/프로토콜/게임 미지원
+- 기존 게임 규칙·권한·비공개 패·UI 회귀 검사
+
+사용자 본토 사이트에 이 파일을 직접 배포한 상태는 아닙니다.
+
+주요 파일 SHA-256
+index.html 4a7e16ddcda9a68e568c7808d27b5bf2ec126c743c5bff3d6b8de6822f55d832
+app.js 165570807d2241a91283bb001b05ce1cec7d5a653e1b5a1ef1ed22619b04ff92
+hodon-client-v59.js 165570807d2241a91283bb001b05ce1cec7d5a653e1b5a1ef1ed22619b04ff92
+server.js c49fe8af9f71c3733fa0cd74b3c0146f5aa3c0213c58ce056d271744dfc5bd68
+package.json b1af2dba8b9ce33abe6d1e4b54b5755f82382ae4418868d57f008a9fb1d6848e
+package-lock.json 103c0a4c7b54f9c57aed5aad3bc6adfb4cd8a379c2a24499277bcb1a48498e08
+nodemon.json e49d72cde86ebdb1cf1d9bdf085c695d321ad27d1ff290eb2f02de8361e2148d
+sichuan.js 85270c24facfa3868284847bbe69fd9b2953ea7a092b46a570be79f1b2a145fb
+
+완성 ZIP 새 폴더 설치 검증
+- npm ci --omit=dev 신규 설치 성공
+- ZIP 매니페스트의 모든 파일 바이트/해시 일치
+- HTML이 참조하는 모든 로컬 실행 파일/스타일/이미지 HTTP 200
+- 실제 패키지로 실행한 서버 v59.0 및 클라이언트 일치
+- 8개 게임 각각 참가자 2명의 방 생성/입장/게임 시작 성공

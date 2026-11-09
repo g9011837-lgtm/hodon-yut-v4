@@ -1,0 +1,6 @@
+HODON table audio v45
+Korean action/rank clips: ko-KR-InJoonNeural synthetic voice, +5% rate, -3Hz pitch; call, half, double, quarter, check, small, allin, fold, ddang, gwang, gwang38. Silence trimmed and amplitude limited. Not a commercial game voice or an imitation of a named person.
+Original material effects: filtered stochastic paper-friction bursts, dense short collision resonances, felt-table reflections; deal, squeeze, slap, cash, reveal. Generated offline and encoded MP3. No third-party game recordings.
+All 16 clips are embedded in sound.js. Loose MP3 files included as reusable assets. table-sound-preview.mp3 concatenates call, half, double and reveal for audition.
+
+Wood sound update (v46): sfx-yutthrow replaced with an original stereo modal synthesis of four wooden-stick contacts, landings and diminishing bounces. Inharmonic damped beam modes, filtered grain and short table reflections. 48 kHz, 192 kbps MP3, ~0.64 s, peak constrained below full scale. Embedded in sound.js; yut-wood.mp3 is an optional listening copy. No field-recording or commercial-game recording claim. Other audio payloads unchanged.

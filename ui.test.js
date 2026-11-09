@@ -23,6 +23,8 @@ function verify(g){
 }
 let g=newGame(players,3,'team');g.moves=[1];g.pieces[0][0]={track:'outer',idx:3};render(g);verify(g);
 const original=visible()[0],portrait=original.querySelector('image');
+original.querySelector('.piece-hit-target').dispatchEvent(new window.MouseEvent('click',{bubbles:true}));assert.equal(typeof pendingOptions,'function');pendingOptions(null,{ok:true,choices:[{id:'0',node:4,label:'기본 경로'}]});await Promise.resolve();await Promise.resolve();assert.equal(vm.runInContext('selectedPiece',ctx),0);assert.equal(d.querySelectorAll('.destination').length,1);render(g);
+
 for(let i=0;i<30;i++){g.turn=i%4;render(g);assert.ok(visible()[0]===original);assert.ok(original.querySelector('image')===portrait);verify(g);}
 console.log('PASS: team turns and 30 repeated snapshots preserve the same SVG portrait');
 g.turn=2;g.moves=[1];movePiece(g,2,0,0);render(g);verify(g);assert.ok(visible()[0]===original);assert.equal(original.dataset.node,'4');
