@@ -1,8 +1,8 @@
 {
   "name": "hodon-gameroom",
-  "version": "16.0.0",
+  "version": "59.0.0",
   "private": true,
-  "description": "호돈 윷놀이 · 무료 가상칩 바둑이 · 국제 렌주 오목 실시간 게임방",
+  "description": "호돈 윷놀이 · 바둑이 · 오목 · 섯다 · 7포커 · 장기알까기 실시간 게임방 · 쿵쿵따",
   "type": "module",
   "scripts": {
     "start": "node server.js",
@@ -17,7 +17,14 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "happy-dom": "21.0.4",
+    "happy-dom": "20.0.11",
     "socket.io-client": "^4.8.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/hodon-data/**",
+      "**/field-records.json",
+      "**/*.tmp"
+    ]
   }
 }

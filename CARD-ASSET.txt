@@ -1,0 +1,8 @@
+7 Poker card art update (v47-CARDS)
+Source: Vector Playing Cards by Byron Knoll and contributors, public domain (WTFPL fallback).
+Repository: https://github.com/notpeter/Vector-Playing-Cards
+Commit: 861b338eb931d635c442b568071e3829e552f383
+Upstream license statement: https://github.com/notpeter/Vector-Playing-Cards#license
+The standard 52 faces were rasterized to a 13-column x 4-row atlas (200 x 290 per face), encoded as high-quality WebP and embedded in poker.css. Suit row order: spade, heart, diamond, club. Rank columns: A,2,3,4,5,6,7,8,9,10,J,Q,K.
+No external runtime request or separate face-image upload is needed. Game engine card IDs and hidden/public rules are unchanged.
+Embedded atlas SHA-256: d5d4f6939df1b661d4e4cfcbedc4f058d5b73ac6894db33610dae4caf598c115

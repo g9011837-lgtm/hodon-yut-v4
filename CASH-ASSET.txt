@@ -1,0 +1,4 @@
+HODON cash pile — original game sprite
+Built-in image generation mode. Transparent RGBA asset optimized to WebP with alpha preserved.
+Prompt: Six thick paper-banknote bundles, three muted forest green and three dusty lilac, overlapping at varied angles with cream paper bands and layered paper edges; three-quarter overhead classic Korean card-game money-pile style; fictional HODON banknotes with ornamental etched borders and 10000/50000 numerals; compact pile isolated on transparent background; no table, chips, coins, hands or UI buttons; soft natural contact shadow.
+Original 1536x1024; project asset cash-pile.webp 512x341. Embedded in table-effects.js, seotda-ui.js, and app.js.

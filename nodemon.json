@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "**/hodon-data/**",
+    "**/field-records.json",
+    "**/*.tmp"
+  ]
+}

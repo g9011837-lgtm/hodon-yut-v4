@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {spawn} from 'node:child_process';import {mkdtempSync,copyFileSync,symlinkSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';import {io} from 'socket.io-client';
 test('실시간 4인+관전자: 설정 검증, 손패 격리, 중복/권한 거부, 10판, 재접속, 강퇴', {timeout:30000},async()=>{
- const dir=mkdtempSync(join(tmpdir(),'hodon-v14-'));for(const file of ['server.js','game.js','badugi.js','gomoku.js','package.json'])copyFileSync(new URL(file,import.meta.url),join(dir,file));symlinkSync(new URL('node_modules',import.meta.url).pathname,join(dir,'node_modules'),'dir');
+ const dir=mkdtempSync(join(tmpdir(),'hodon-v14-'));for(const file of ['server.js','game.js','badugi.js','gomoku.js','seotda.js','poker.js','alkkagi.js','package.json'])copyFileSync(new URL(file,import.meta.url),join(dir,file));symlinkSync(new URL('node_modules',import.meta.url).pathname,join(dir,'node_modules'),'dir');
  const child=spawn(process.execPath,['server.js'],{cwd:dir,env:{...process.env,PORT:'3194'},stdio:['ignore','pipe','pipe']});const clients=[],sessions=[];let state,lastStates;
  try{
   await new Promise((r,j)=>{child.stdout.once('data',r);child.once('error',j);child.once('exit',c=>j(Error('server '+c)));});

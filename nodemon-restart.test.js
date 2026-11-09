@@ -1,0 +1,24 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawn} from 'node:child_process';import {mkdtempSync,readdirSync,copyFileSync,symlinkSync,rmSync,readFileSync,writeFileSync,appendFileSync,existsSync} from 'node:fs';import {createRequire} from 'node:module';import {tmpdir} from 'node:os';import {join} from 'node:path';import {createServer} from 'node:net';import {io} from 'socket.io-client';
+const require=createRequire(import.meta.url);let bin=process.env.HODON_NODEMON_BIN;try{bin||=require.resolve('nodemon/bin/nodemon.js')}catch{}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));async function until(f,ms=10000){const end=Date.now()+ms;while(!f()){if(Date.now()>end)throw Error('nodemon observation timeout');await sleep(30);}}
+for(const mode of ['baseline','nodemon.json','package.json','no-config'])test('real nodemon wrapper: '+mode,{timeout:30000,skip:!bin?'Set HODON_NODEMON_BIN or install nodemon to run watcher integration':false},async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'hodon-watch-')),clients=[];let child,output='';const files=readdirSync(new URL('.',import.meta.url));for(const f of files)if((/\.(js|json)$/.test(f)&&!f.endsWith('.test.js')))copyFileSync(new URL(f,import.meta.url),join(dir,f));symlinkSync(new URL('node_modules',import.meta.url).pathname,join(dir,'node_modules'),'dir');
+ if(mode!=='nodemon.json')rmSync(join(dir,'nodemon.json'));if(mode==='baseline'||mode==='no-config'){const p=join(dir,'package.json'),j=JSON.parse(readFileSync(p));delete j.nodemonConfig;writeFileSync(p,JSON.stringify(j));}
+ if(mode==='baseline'){const p=join(dir,'server.js');writeFileSync(p,readFileSync(p,'utf8').replaceAll("'rooms.state'","'rooms.json'"));}
+ const source=join(dir,'server.js');appendFileSync(source,`\nconsole.log('FIXTURE_SERVER_PID',process.pid);\n`);
+ const probe=createServer();await new Promise(r=>probe.listen(0,'127.0.0.1',r));const port=probe.address().port;await new Promise(r=>probe.close(r));const launcher=join(dir,'launch.sh');writeFileSync(launcher,'#!/bin/bash\nexec node server.js\n');
+ const count=()=>[...output.matchAll(/HODON v59\.0: http/g)].length;
+ const req=(c,e,d={})=>c.timeout(3000).emitWithAck(e,d);async function ok(c,e,d){const r=await req(c,e,d);assert.ok(r.ok,r.error);return r;}async function connect(){const c=io('http://127.0.0.1:'+port,{reconnection:false});clients.push(c);await new Promise((r,j)=>{c.once('connect',r);c.once('connect_error',j)});return c;}
+ try{
+  child=spawn(process.execPath,[bin,'--verbose','--legacy-watch','--watch',dir,'--ext','js,mjs,cjs,json','--exec','bash',launcher],{cwd:dir,env:{...process.env,PORT:String(port),HODON_DATA_DIR:dir,NO_COLOR:'1'},detached:true,stdio:['pipe','pipe','pipe']});child.stdout.on('data',b=>output+=b);child.stderr.on('data',b=>output+=b);await until(()=>count()===1);await sleep(500);
+  const h=await connect(),first=await ok(h,'server:info'),room=await ok(h,'room:create',{gameType:mode==='baseline'?'yut':'sichuan',name:'watch test',playerCount:2,piecesPerPlayer:2});
+  if(mode==='baseline'){await until(()=>output.includes('restarting due to changes'));assert.match(output,/restarting due to changes/);console.log('Unfixed checkpoint reproduced restart loop');return;}
+  await ok(h,'sichuan:profile');const b=await connect();await ok(b,'room:join',{code:room.code,name:'second'});await ok(b,'sichuan:profile');
+  // All three persistence paths receive real or representative writes while nodemon is active.
+  for(let i=0;i<8;i++){writeFileSync(join(dir,'field-records.state.tmp'),JSON.stringify({check:i}));writeFileSync(join(dir,'field-records.state'),JSON.stringify({check:i}));if(mode!=='no-config'){writeFileSync(join(dir,'field-records.json'),JSON.stringify({legacy:i}));writeFileSync(join(dir,'hodon-data','legacy.json'),JSON.stringify({legacy:i}));}await sleep(1000);assert.equal(count(),1,output);assert.ok(h.connected);assert.ok(b.connected);}
+  assert.ok(existsSync(join(dir,'hodon-data','rooms.state')));assert.ok(existsSync(join(dir,'hodon-data','sichuan-profiles.state')));assert.equal((await ok(h,'server:info')).bootId,first.bootId);
+  // Code changes must still trigger restart, and persisted room tokens must still recover.
+  appendFileSync(join(dir,'server.js'),'\n// nodemon source edit verification\n');await until(()=>output.includes('restarting due to changes'));assert.match(output,/server.js/);
+  console.log(mode+': 8 seconds of data writes caused zero restarts; source edit triggered the watcher');
+ }catch(e){console.log(output);throw e;}finally{clients.forEach(c=>c.disconnect());if(child&&child.exitCode===null){const done=new Promise(r=>child.once('exit',r));try{process.kill(-child.pid,'SIGTERM')}catch{}await done;}for(const m of output.matchAll(/FIXTURE_SERVER_PID (\d+)/g))try{process.kill(Number(m[1]),'SIGTERM')}catch{}rmSync(dir,{recursive:true,force:true});}
+});

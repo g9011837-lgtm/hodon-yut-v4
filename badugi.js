@@ -21,7 +21,7 @@ function touch(g){g.revision++;g.deadline=Date.now()+g.turnSeconds*1000;}
 function pay(g,i,amount,round=true){const p=g.players[i];const n=Math.min(amount,p.chips);p.chips-=n;p.total+=n;if(round)p.bet+=n;g.pot+=n;return n;}
 function draw(g,n){if(g.deck.length<n){g.deck.push(...shuffle(g.discard.splice(0)));}if(g.deck.length<n)throw Error('카드가 부족합니다.');return g.deck.splice(-n,n);}
 export function createBadugi(names,balances,{base=100,turnSeconds=45,dealer=0,handNo=1}={}){
- const g={status:'playing',phase:'bet',round:0,base,turnSeconds,dealer,handNo,revision:0,deadline:0,turn:null,pot:0,current:0,lastRaise:base,raises:0,pending:[],raiseAllowed:[],deck:shuffle(Array.from({length:52},(_,i)=>i)),discard:[],log:[],showdown:false,payouts:[],players:names.map((name,i)=>({name,chips:balances[i],hand:[],folded:!name||balances[i]===0,bet:0,total:0,lastAction:'대기 중',draws:[]}))};
+ const g={status:'playing',phase:'bet',round:0,base,turnSeconds,dealer,handNo,revision:0,deadline:0,turn:null,pot:0,current:0,lastRaise:base,raises:0,pending:[],raiseAllowed:[],deck:shuffle(Array.from({length:52},(_,i)=>i)),discard:[],log:[],showdown:false,payouts:[],players:names.map((name,i)=>({name,chips:balances[i],hand:[],folded:!name||balances[i]===0,bet:0,total:0,lastAction:'대기 중',draws:[],cardVersions:[0,0,0,0]}))};
  if(live(g).length<2)throw Error('칩이 있는 참가자 2명 이상이 필요합니다.');
  for(const i of live(g)){g.players[i].hand=draw(g,4);pay(g,i,base,false);}
  log(g,`${handNo}번째 판 · 기본 판돈 ${base.toLocaleString()} · 카드 배분`);beginBet(g);return g;
@@ -60,7 +60,7 @@ export function actBadugi(g,i,data){
   const indices=data.indices;
   if(!Array.isArray(indices)||indices.length>4||new Set(indices).size!==indices.length||indices.some(n=>!Number.isInteger(n)||n<0||n>3))throw Error('교환할 카드 0~4장을 선택하세요.');
   // Draw before discarding to prevent immediately redrawing this exchange's own discards.
-  const incoming=draw(g,indices.length),old=indices.map(n=>p.hand[n]);indices.forEach((n,j)=>p.hand[n]=incoming[j]);g.discard.push(...old);p.draws.push(indices.length);p.lastAction=indices.length?`${indices.length}장 교환`:'패스';log(g,`${p.name} · ${p.lastAction}`);
+  const incoming=draw(g,indices.length),old=indices.map(n=>p.hand[n]);indices.forEach((n,j)=>{p.hand[n]=incoming[j];p.cardVersions[n]++;});g.discard.push(...old);p.draws.push(indices.length);p.lastAction=indices.length?`${indices.length}장 교환`:'패스';log(g,`${p.name} · ${p.lastAction}`);
   g.pending=g.pending.filter(n=>n!==i);if(g.pending.length){g.turn=g.pending[0];touch(g);}else{g.round++;beginBet(g);}return;
  }
  const allowed=actions(g,i),action=data.action;if(!['fold','check','call','half','double','allin'].includes(action)||!allowed[action])throw Error('현재 사용할 수 없는 베팅입니다.');
@@ -91,5 +91,5 @@ export function foldRemoved(g,i){
 export function timeoutBadugi(g){if(g.status!=='playing')return;actBadugi(g,g.turn,g.phase==='draw'?{indices:[],revision:g.revision}:{action:actions(g,g.turn).check?'check':'fold',revision:g.revision});}
 export function publicBadugi(g,viewer=null){
  if(!g)return null;
- return {status:g.status,phase:g.phase,round:g.round,base:g.base,dealer:g.dealer,handNo:g.handNo,revision:g.revision,deadline:g.deadline,turn:g.turn,pot:g.pot,potBefore:g.potBefore||0,showdown:g.showdown,payouts:[...g.payouts],pots:g.pots||[],log:g.log.slice(-12),actions:actions(g,viewer),players:g.players.map((p,i)=>({name:p.name,chips:p.chips,folded:p.folded,bet:p.bet,total:p.total,lastAction:p.lastAction,draws:[...p.draws],hand:(viewer===i||(g.showdown&&!p.folded))?[...p.hand]:p.hand.map(()=>null),label:(viewer===i||(g.showdown&&!p.folded))&&p.hand.length?evaluate(p.hand).label:null}))};
+ return {status:g.status,phase:g.phase,round:g.round,base:g.base,dealer:g.dealer,handNo:g.handNo,revision:g.revision,deadline:g.deadline,turn:g.turn,pot:g.pot,potBefore:g.potBefore||0,showdown:g.showdown,payouts:[...g.payouts],pots:g.pots||[],log:g.log.slice(-12),actions:actions(g,viewer),players:g.players.map((p,i)=>({name:p.name,chips:p.chips,folded:p.folded,bet:p.bet,total:p.total,lastAction:p.lastAction,draws:[...p.draws],cardVersions:[...p.cardVersions],hand:(viewer===i||(g.showdown&&!p.folded))?[...p.hand]:p.hand.map(()=>null),label:(viewer===i||(g.showdown&&!p.folded))&&p.hand.length?evaluate(p.hand).label:null}))};
 }
