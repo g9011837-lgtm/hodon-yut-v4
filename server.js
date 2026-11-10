@@ -317,8 +317,8 @@ io.on('connection',socket=>{
     if(authorization(socket)||spectatorAuthorization(socket)) return failure(cb,'이미 방에 참가 중입니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
     const playerCount=Number(data.playerCount);
-    const maxPlayers=['seotda','poker'].includes(data.gameType)?5:(!data.gameType||data.gameType==='yut'||data.gameType==='kkung'||data.gameType==='sichuan')?10:['gomoku','alkkagi'].includes(data.gameType)?2:4;
-    if(!Number.isInteger(playerCount)||playerCount<2||playerCount>maxPlayers)return failure(cb,'참가 인원을 확인하세요. 윷놀이 개인전은 2~10명, 팀전 4명, 섯다 2~5명, 바둑이 2~4명, 포커 2~5명, 오목 2명입니다.');
+    const maxPlayers=data.gameType==='poker'?5:(!data.gameType||['yut','seotda','kkung','sichuan'].includes(data.gameType))?10:['gomoku','alkkagi'].includes(data.gameType)?2:4;
+    if(!Number.isInteger(playerCount)||playerCount<2||playerCount>maxPlayers)return failure(cb,'참가 인원을 확인하세요. 윷놀이 2~10명, 팀전 4명, 2장 섯다 2~10명, 3장 섯다 2~6명, 바둑이 2~4명, 포커 2~5명, 오목 2명입니다.');
     if(data.gameType!==undefined&&!['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(data.gameType))return failure(cb,'게임 종류를 확인해 주세요.');
     const gameType=['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(data.gameType)?data.gameType:'yut';
     if(['gomoku','alkkagi'].includes(gameType)&&playerCount!==2)return failure(cb,'오목과 장기알까기는 대국자 2명 전용입니다.');
@@ -332,6 +332,7 @@ io.on('connection',socket=>{
     if(!Number.isInteger(count)||count<1||count>4)return failure(cb,'말 개수는 1~4개입니다.');
     const id=code(), token=randomUUID();
     const seotdaCards=Number(data.seotdaCards??2);if(gameType==='seotda'&&![2,3].includes(seotdaCards))return failure(cb,'2장 또는 3장 섯다를 선택하세요.');
+    if(gameType==='seotda'&&playerCount*seotdaCards>20)return failure(cb,'3장 섯다는 화투 20장을 중복 없이 나누기 위해 최대 6명까지 참가할 수 있습니다. 7~10명은 2장 섯다를 선택하세요.');
     const pokerRule=data.pokerRule??'normal';if(gameType==='poker'&&!['normal','choice'].includes(pokerRule))return failure(cb,'일반 또는 초이스 룰을 선택하세요.');
     const titleIn=typeof data.roomTitle==='string'?data.roomTitle.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,32):'';
     const roomTitle=titleIn||name+'의 '+({yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[gameType])+'방';

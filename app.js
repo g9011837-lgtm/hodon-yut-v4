@@ -114,6 +114,7 @@ document.querySelectorAll('.player-limit').forEach(b=>b.addEventListener('click'
  if(chosenMode==='team'&&chosenGame==='yut')return;
  chosenPlayers=Number(b.dataset.n);document.querySelectorAll('.player-limit').forEach(x=>x.classList.toggle('selected',x===b));
 }));
+$('seotda-cards').addEventListener('change',()=>{const before=chosenPlayers;renderGameHub();if(chosenGame==='seotda'&&before>chosenPlayers)notify('3장 섯다는 최대 6명입니다. 참가 정원을 6명으로 조정했습니다.');});
 document.querySelectorAll('.match-mode').forEach(b=>b.addEventListener('click',()=>{
  chosenMode=b.dataset.mode;
  document.querySelectorAll('.match-mode').forEach(x=>x.classList.toggle('selected',x===b));
@@ -652,11 +653,12 @@ function renderGameHub(){
  for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])document.body.classList.toggle(name+'-mode',!!state&&type===name);
  for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$('tab-'+name).classList.toggle('selected',name===type);
  for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$(name+'-options')?.classList.toggle('hidden',name!==type);
- const limit=type==='yut'||type==='kkung'||type==='sichuan'?10:sut||pok?5:gom||type==='alkkagi'?2:4;if(chosenPlayers>limit)chosenPlayers=limit;
+ const limit=type==='yut'||type==='kkung'||type==='sichuan'?10:sut?(Number($('seotda-cards').value)===3?6:10):pok?5:gom||type==='alkkagi'?2:4;if(chosenPlayers>limit)chosenPlayers=limit;
+ if(sut){let hint=$('seotda-capacity-hint');if(!hint){hint=document.createElement('small');hint.id='seotda-capacity-hint';hint.style.cssText='display:block;grid-column:1/-1;line-height:1.5';$('seotda-options').append(hint);}hint.textContent='화투 20장 · 2장 섯다 최대 10명 / 3장 섯다 최대 6명 · 동일 패 중복 배분 없음';}
  document.querySelectorAll('.player-limit').forEach(b=>{const n=Number(b.dataset.n);b.classList.toggle('hidden',n>limit||(type==='yut'&&chosenMode==='team'&&n>4));b.disabled=gom||type==='alkkagi'||(chosenMode==='team'&&type==='yut');b.classList.toggle('selected',n===((gom||type==='alkkagi')?2:chosenMode==='team'&&type==='yut'?4:chosenPlayers));});
  for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$(name+'-section').classList.toggle('hidden',!state||name!==type);if(bad||gom||sut||pok||type==='alkkagi'||type==='kkung'||type==='sichuan')$('room-section').classList.add('hidden');
  const name={yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[type];$('create').textContent=name+' 방 만들기 ↗';
- const heading=document.querySelector('.join-box h2');if(heading)heading.textContent='호돈 '+name+' 시작하기';const stats=document.querySelectorAll('.landing-stats strong');if(stats.length>=3){stats[0].textContent=gom?'2명':sut||pok?'2~5명':type==='yut'?'2~10명':'2~4명';stats[1].textContent=gom?'국제 렌주':pok?'일반 / 초이스':sut?'2장 / 3장':bad?'무료 가상칩':'개인전/팀전';stats[2].textContent=gom?'15×15':pok?'7장':sut?'20장 화투':bad?'4장':'1~4개';}
+ const heading=document.querySelector('.join-box h2');if(heading)heading.textContent='호돈 '+name+' 시작하기';const stats=document.querySelectorAll('.landing-stats strong');if(stats.length>=3){stats[0].textContent=gom?'2명':sut?'2~'+limit+'명':pok?'2~5명':type==='yut'?'2~10명':'2~4명';stats[1].textContent=gom?'국제 렌주':pok?'일반 / 초이스':sut?'2장 / 3장':bad?'무료 가상칩':'개인전/팀전';stats[2].textContent=gom?'15×15':pok?'7장':sut?'20장 화투':bad?'4장':'1~4개';}
  const statLabels=document.querySelectorAll('.landing-stats span');if(statLabels.length>=3)statLabels[2].textContent=sut?'사용 화투':gom?'오목판':bad||pok?'손패':'말 선택';
  const title=document.querySelector('.landing-copy h1');if(title)title.innerHTML=`친구와 함께 ${gom?'두는':type==='yut'?'던지는':'즐기는'}<br/><em>호돈 ${name}.</em>`;
  const wallet=state?.[pok?'poker':sut?'seotda':'badugi']?.players?.[seat]?.chips;$('hub-wallet').textContent=gom?'국제 렌주 · 1대1 대전':sut||bad||pok?`게임머니 ${wallet==null?'무료 가상칩':chip(wallet)}`:type==='sichuan'?'사천성 · 2~10명':type==='kkung'?'쿵쿵따 · 7초':'실시간 2~10인 윷놀이';

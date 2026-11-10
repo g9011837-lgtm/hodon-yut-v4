@@ -33,7 +33,7 @@ function touch(g){g.revision++;g.deadline=Date.now()+g.turnSeconds*1000;}
 function pay(g,i,n,round=true){const p=g.players[i],amount=Math.min(p.chips,Math.max(0,n));p.chips-=amount;p.total+=amount;if(round)p.bet+=amount;g.pot+=amount;}
 function draw(g,n){if(g.deck.length<n)throw Error('남은 패가 부족합니다.');return g.deck.splice(-n,n);}
 export function createSeotda(names,balances,{base=100,turnSeconds=45,dealer=0,handNo=1,cards=2,avatars=[],bonusPot=0}={}){
- if(names.length<2||names.length>5||![2,3].includes(cards))throw Error('섯다는 2~5명, 2장 또는 3장입니다.');
+ if(![2,3].includes(cards)||names.length<2||names.length>Math.floor(20/cards))throw Error('2장 섯다는 2~10명, 3장 섯다는 2~6명입니다. 화투 20장을 중복 없이 나눕니다.');
  const g={status:'playing',phase:'bet',round:0,base,turnSeconds,dealer,handNo,cards,avatars:[...avatars],revision:0,deadline:0,turn:null,pot:0,potBefore:0,current:0,lastRaise:base,raises:0,pending:[],raiseAllowed:[],deck:shuffled(),log:[],showdown:false,payouts:Array(names.length).fill(0),pots:[],escrow:[],replayNo:0,lastShowdown:null,players:names.map((name,i)=>({name,chips:balances[i],hand:[],chosen:null,open:null,folded:!name||balances[i]===0,bet:0,total:0,lastAction:'대기'}))};
  if(live(g).length<2)throw Error('칩이 있는 참가자 2명 이상이 필요합니다.');
  if(bonusPot>0){g.pot=bonusPot;g.escrow=[{amount:bonusPot,eligible:live(g)}];}
