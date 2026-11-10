@@ -1,0 +1,1644 @@
+{
+  "version": "61.0.0",
+  "tests": {
+    "passed": 325,
+    "failed": 0
+  },
+  "render_checks": {
+    "results": [
+      {
+        "type": "yut",
+        "players": 4,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "badugi",
+        "players": 4,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "gomoku",
+        "players": 2,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "seotda",
+        "players": 4,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "poker",
+        "players": 5,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "alkkagi",
+        "players": 2,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "kkung",
+        "players": 6,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      },
+      {
+        "type": "sichuan",
+        "players": 4,
+        "desktop": {
+          "view": 1120,
+          "width": 1105,
+          "broken": 0
+        },
+        "mobile": 375
+      }
+    ],
+    "errors": []
+  },
+  "files": [
+    {
+      "path": ".gitignore",
+      "size": 76,
+      "sha256": "bdba3fb65b28b6bf644ff29e1e8125aa168be33545cf61fa4c2c6c3d6d6de63b"
+    },
+    {
+      "path": "APPROVED-ASSETS-v61.txt",
+      "size": 479,
+      "sha256": "77480e015cad9128090cd908bdb3daeb2354402f8609733d8edcfd5ec2bf9283"
+    },
+    {
+      "path": "CARD-ASSET.txt",
+      "size": 775,
+      "sha256": "6a6b4e72d57b5f69d915f02547017035b8899e21eb88f40e94d609419c4e5d39"
+    },
+    {
+      "path": "CARD-DECK-CHECK.png",
+      "size": 375779,
+      "sha256": "dff4a4980185203c28558cf7ff69f375613f0cbf8a2c544576c6dff97057a5ea"
+    },
+    {
+      "path": "CASH-ASSET.txt",
+      "size": 689,
+      "sha256": "6bad5b71748761e2f2ac0c343ef4fde83d2879658e57483ee44e5b75ea997f6d"
+    },
+    {
+      "path": "HWATU-LICENSE.txt",
+      "size": 954,
+      "sha256": "291b09b9e788f80943aed29be6104d1531a9a2e61cdac72f65106869776973b2"
+    },
+    {
+      "path": "HWATU-SOURCES.json",
+      "size": 6623,
+      "sha256": "bd2891753c38d9f4d46088a5714c35b0826fd122c8d967a9d41c7a3bd1a8c5dd"
+    },
+    {
+      "path": "KKUNG-ASSETS.txt",
+      "size": 821,
+      "sha256": "2dd351cf22e08f1cdd2ddc0d1f0376a72aa9f4b6662dcab1b15a67304a2e0c92"
+    },
+    {
+      "path": "KKUNG-EXPANDED-LICENSES.txt",
+      "size": 15104,
+      "sha256": "febd2f874480c1a38b3f58b6a1d0f958dd583b0fa7155d536b62d6a63def5341"
+    },
+    {
+      "path": "PREMIUM-README.txt",
+      "size": 1568,
+      "sha256": "41990cb4210f67e0f9da266486c6ab66dfc6871797cc27e13d0b5ca787d13113"
+    },
+    {
+      "path": "README.md",
+      "size": 2354,
+      "sha256": "6d41023c6ce71d2ae3814ededc1ef73a25b479508776760d8ab000ae04f94cd7"
+    },
+    {
+      "path": "SCENERY-ASSET.txt",
+      "size": 548,
+      "sha256": "677ee8904e49d50df4489bc28575f336408d28d1abc54f582103e87a1b96b0dc"
+    },
+    {
+      "path": "SOUND-ASSET.txt",
+      "size": 1128,
+      "sha256": "df5c0d57dfee0cbcb4e5479318d40e287beb7c39445dbf4af66bd39ae4068349"
+    },
+    {
+      "path": "STADIUM-ASSETS.txt",
+      "size": 990,
+      "sha256": "96391ea4ff426a8980046d4d3e396f56b4e5b03c0830d211f68d78b1d1f39ee8"
+    },
+    {
+      "path": "STADIUM-FONT-LICENSE.txt",
+      "size": 4301,
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2"
+    },
+    {
+      "path": "START-HERE-v61.md",
+      "size": 2354,
+      "sha256": "6d41023c6ce71d2ae3814ededc1ef73a25b479508776760d8ab000ae04f94cd7"
+    },
+    {
+      "path": "TEST-RESULT-v59.txt",
+      "size": 1589,
+      "sha256": "848e833c7a265e14bd2ad91b9f68455dcc95ccfa1a541f4a0952aee5827186db"
+    },
+    {
+      "path": "V56-CAPTURES/alkkagi.jpg",
+      "size": 150443,
+      "sha256": "b0a18f24fe28e4bd1cc7f1a21fffde3ca21e1d6dcc67c035928da6301a429995"
+    },
+    {
+      "path": "V56-CAPTURES/gomoku.jpg",
+      "size": 136273,
+      "sha256": "432c9bd847960994743a529ab8c1fed425b3853fe0d149e89c2ffa347bca0a2e"
+    },
+    {
+      "path": "V56-CAPTURES/lobby-final.jpg",
+      "size": 113856,
+      "sha256": "ae13b8bc71b931edf991470d5606969e3118771bdaa45ccd8bc6330e03d327ef"
+    },
+    {
+      "path": "V56-CAPTURES/poker-final.jpg",
+      "size": 210750,
+      "sha256": "eeb0dec3d0a634b418e592c8b1182ebdc816d0b7d56edc86f2503728f6a1640e"
+    },
+    {
+      "path": "V56-CAPTURES/seotda-final.jpg",
+      "size": 218362,
+      "sha256": "e6632f17fecdf7fafab7be24091ebc83c33f8636eb42e4f6a358a633b807bf10"
+    },
+    {
+      "path": "WORDS-7SEC-READ-ME.txt",
+      "size": 2874,
+      "sha256": "9943cd6e6713c2f91e1d0859349e6e3c6faeb2bbd84b8d863986da956ab236a3"
+    },
+    {
+      "path": "WORDS-PROPER-READ-ME.txt",
+      "size": 3330,
+      "sha256": "9e3c79126b28ba4e4e98a0799f25fb1ac254b04dff2374b2bf9e46c34be86f91"
+    },
+    {
+      "path": "WORDS-README.txt",
+      "size": 2013,
+      "sha256": "914349e3dc914b310ef27e59c7316874bda613609e22d6652ae6afd5fd0a9f52"
+    },
+    {
+      "path": "action-limit.test.js",
+      "size": 2047,
+      "sha256": "a6d86200ae7d0d68b3045158060bdcf95c47efb3a18c0f2e80cd69559a45d10e"
+    },
+    {
+      "path": "alkkagi-network.test.js",
+      "size": 3298,
+      "sha256": "6c1bc90a10bfee4812960d59adeda41c8a74c36ec9c3c7f7a9096ffb8faec24e"
+    },
+    {
+      "path": "alkkagi-ui.js",
+      "size": 18025,
+      "sha256": "d5f87ee3af26181f325ef1691a731b487c9650759954737755208f19911bfaf6"
+    },
+    {
+      "path": "alkkagi-ui.test.js",
+      "size": 6219,
+      "sha256": "2389780762d3b4843e322facf9b49e3a7d8fafc86a44e932a61078836ee21822"
+    },
+    {
+      "path": "alkkagi.css",
+      "size": 10113,
+      "sha256": "758433a981033c23256b36e36a635f3a3799591ea50e951f3be6ac423a9c421e"
+    },
+    {
+      "path": "alkkagi.js",
+      "size": 7522,
+      "sha256": "0b1845411b40c16f5c899703cee747f76e677038886e82b227b8d3b82dfd2c58"
+    },
+    {
+      "path": "alkkagi.test.js",
+      "size": 5327,
+      "sha256": "03b802b5fea0d1bf98cf64c5c271a71c0e3d9505ff039372f6a5b36fcaeb9805"
+    },
+    {
+      "path": "app.js",
+      "size": 907067,
+      "sha256": "c708edbc232cf03bbf5841d81d5c7d08b154901e18c7ab353e9309431bef34ae"
+    },
+    {
+      "path": "approved-bust-0.svg",
+      "size": 806530,
+      "sha256": "16295283f644c2b6abe35362df123c4067a3efbc58ca6b82f1b137f048d78577"
+    },
+    {
+      "path": "approved-bust-1.svg",
+      "size": 806531,
+      "sha256": "02e255657bd8bbb0b84d22ceff6d969eb3f4fd27267c07ce356aa84e7d727d05"
+    },
+    {
+      "path": "approved-bust-2.svg",
+      "size": 806531,
+      "sha256": "458c5c70cbb4a05dbd011a1c975b166e16da6bcca8f55d6dd7b8d35fbb87353e"
+    },
+    {
+      "path": "approved-bust-3.svg",
+      "size": 806532,
+      "sha256": "f5480a882582b233df70c7236bed0f9bdc1cc406f129ebd393bd759bec3ed072"
+    },
+    {
+      "path": "approved-bust-4.svg",
+      "size": 806532,
+      "sha256": "3ef3626fd4f6265709c3e32077e36acd2c05211836d58f0ba687e1b34b677b43"
+    },
+    {
+      "path": "approved-bust-5.svg",
+      "size": 806532,
+      "sha256": "29c96af84af5e101c69a797bd556658fc13b0f3e76c52c0c74836cf289ec194b"
+    },
+    {
+      "path": "approved-bust-6.svg",
+      "size": 806533,
+      "sha256": "504b4843351701393502051cd8b5bedbd07aee3fb526a980ba1fb314cecc4114"
+    },
+    {
+      "path": "approved-bust-7.svg",
+      "size": 806533,
+      "sha256": "57f84c41433d81a8fb5d203215bfeac192ded0f1efc5eed1c629883b7e37e7a0"
+    },
+    {
+      "path": "approved-bust-8.svg",
+      "size": 806534,
+      "sha256": "0d8d518d28bfdc89b303dbe6a51fb004e90d31102771648ec05b8033d236f3c7"
+    },
+    {
+      "path": "approved-bust-9.svg",
+      "size": 806534,
+      "sha256": "61466cf50fef8187336e5b071a21200fadcb536156a5c85cdd53640258a29d69"
+    },
+    {
+      "path": "approved-busts.webp",
+      "size": 604790,
+      "sha256": "d18123154bfa98009a75019b3ce8bae94390be36cacd2589abf1c6c36f9a6bf2"
+    },
+    {
+      "path": "approved-crest.svg",
+      "size": 603710,
+      "sha256": "85d1acd5bf90c172b7b97c661799ed767ad55ab5ccc6866d2edadd571390704f"
+    },
+    {
+      "path": "approved-food.webp",
+      "size": 487218,
+      "sha256": "a33528ac3a0b12c691b955a879cc3f4b0541b8f30e728da9603de65eec2b4f57"
+    },
+    {
+      "path": "approved-hero-gomoku.webp",
+      "size": 591528,
+      "sha256": "1c39e3d534dc1be862db17bdb62a7484683fcd11cc6d84e60522c024d39da523"
+    },
+    {
+      "path": "approved-hero-kkung.webp",
+      "size": 671044,
+      "sha256": "88a1df396d5f9437b32b75a7b8a17dd94f0baa50b92a8180b63840e1490812ac"
+    },
+    {
+      "path": "approved-hero-poker.webp",
+      "size": 605110,
+      "sha256": "23afac3ed114acfb80f04d3c5686256e6ae298ea7e50dace472599bc31e1f651"
+    },
+    {
+      "path": "approved-hero-yut.webp",
+      "size": 648152,
+      "sha256": "86da20725b05e267dbad823f4eee63c7821229c179e7d9ab703344737e2f45ac"
+    },
+    {
+      "path": "approved-lobby-chrome.svg",
+      "size": 740318,
+      "sha256": "ed374d5886edd9ec70a740ee714366262a8eda32fe8a286cb4c8e856bbeda83a"
+    },
+    {
+      "path": "approved-lobby.webp",
+      "size": 555136,
+      "sha256": "256dc5bef55c47d255ea46387aa61df175ca1804fb80c5e9c6b1055c52f7d23a"
+    },
+    {
+      "path": "approved-medal.svg",
+      "size": 740320,
+      "sha256": "d02317692e0206cff2e6d0a77f7ac5c85db9af380df22a0e3b779984f84c6f39"
+    },
+    {
+      "path": "approved-tables.webp",
+      "size": 660588,
+      "sha256": "2a506391ad34e7dece4a7c81717fa00fda44ed5b8b437fd25a6aa67ceb98e122"
+    },
+    {
+      "path": "approved-tier-icons.svg",
+      "size": 740320,
+      "sha256": "330760d62995dba500ce82eb239bc81e5fcd3d7afdccd50f456afd6619b3c097"
+    },
+    {
+      "path": "approved-ui.js",
+      "size": 16674,
+      "sha256": "4684a18857e96e94418f41b0f6434a39e41360652cb7c65acf7ca805d9f898a9"
+    },
+    {
+      "path": "approved-yut-log.webp",
+      "size": 472454,
+      "sha256": "b18f08526a88338827570f5ba633a13336b046313065c58cfda8ab4a3dc256c3"
+    },
+    {
+      "path": "approved.css",
+      "size": 99091,
+      "sha256": "d9159cf75a70e88bf0ea30e78894d5175c6ff40102649500f10ea9b8a58ab714"
+    },
+    {
+      "path": "assets.test.js",
+      "size": 1909,
+      "sha256": "aceaad7d32619c9a20c523a468500e90a555b4156d87c01c8560d52ccfcc714f"
+    },
+    {
+      "path": "avatar-sheet.jpg",
+      "size": 295649,
+      "sha256": "ebf3151ff9f8b42514ab0b02381c6a4c354b834b20a707f35e2954a6986721c3"
+    },
+    {
+      "path": "avatar.test.js",
+      "size": 5377,
+      "sha256": "62940fce9a83d3ce0faff71db1dbac610a764a88d2e4cd697cb2c39d39134b73"
+    },
+    {
+      "path": "badugi-ui.test.js",
+      "size": 3239,
+      "sha256": "7ba4d0d7b4df5489399464dcaef67bc7b07e3bf22cb088c662fda36812d43952"
+    },
+    {
+      "path": "badugi.css",
+      "size": 14132,
+      "sha256": "60172ed64a0feb0ef646316f0f26d189dceae50619e26936033bf969d730ae34"
+    },
+    {
+      "path": "badugi.js",
+      "size": 8963,
+      "sha256": "9c63a8ad26861cb30407cb977143f4004f4b7d5ec40d1d7c454daaa0b9a07c6f"
+    },
+    {
+      "path": "badugi.test.js",
+      "size": 7679,
+      "sha256": "f01ff1fd26154bc94b1c69168eda162b900b700509a43bcea661959b1806dd2c"
+    },
+    {
+      "path": "bet-allin.mp3",
+      "size": 6957,
+      "sha256": "d56a55cfdc5eb279227d85633ecc114ced5e84d12e16f32a1ccaf46052e5d317"
+    },
+    {
+      "path": "bet-call.mp3",
+      "size": 5805,
+      "sha256": "76c461f4e9a444a404a65e70e001fea88b5cd92561fe0163634db421fd4001fa"
+    },
+    {
+      "path": "bet-check.mp3",
+      "size": 7725,
+      "sha256": "b1942bf09f53fa24e6436a010a7225a9a9dcb1cae728b83df36c77606e974752"
+    },
+    {
+      "path": "bet-ddang.mp3",
+      "size": 5805,
+      "sha256": "844c41da14547ba270c1a1ba2b079d82747b2bd8bea45eb65a678ab3024b3b80"
+    },
+    {
+      "path": "bet-double.mp3",
+      "size": 6573,
+      "sha256": "76e92f49f4c30f80ce7dd6d1f4e7dbaf89b094c8e228acf3a2442c8e9786b318"
+    },
+    {
+      "path": "bet-fold.mp3",
+      "size": 6189,
+      "sha256": "8ecc4945031fdd412e116d6c7da8809a16057de2918e69aeb278ed88a22f9c35"
+    },
+    {
+      "path": "bet-gwang.mp3",
+      "size": 8877,
+      "sha256": "4952544896a6951f4d5e311b8c9256546dae9d07af42c69231f4a4b9901cbbc0"
+    },
+    {
+      "path": "bet-gwang38.mp3",
+      "size": 13869,
+      "sha256": "90ab415c4c3833e53781149d443d3761add86d7f390b02d87a2202857c684030"
+    },
+    {
+      "path": "bet-half.mp3",
+      "size": 6189,
+      "sha256": "5d89b50581da8c28c9c028873aa74ae6b408ac9b32faf517dde8911d4efcc0c2"
+    },
+    {
+      "path": "bet-quarter.mp3",
+      "size": 6957,
+      "sha256": "678b751d28320ff6ccb2b5806a28a0e14129118b68c1f30d2f7197703b3784b5"
+    },
+    {
+      "path": "bet-small.mp3",
+      "size": 5037,
+      "sha256": "e9af85328127ed2e47ad75ba67fa19ad902b96fc919d76dd4f145db7e8d29fa4"
+    },
+    {
+      "path": "card-resign.test.js",
+      "size": 3735,
+      "sha256": "a7a8ce2d645d1b583b1f20398931621e641f6268341c1dec8aee107d205f6578"
+    },
+    {
+      "path": "cash-pile.webp",
+      "size": 68944,
+      "sha256": "a359414dcd8ef7ab98d2ab6171bc964268b32681e5350ac7fb4b85e81ee35716"
+    },
+    {
+      "path": "cash-settlement.test.js",
+      "size": 5285,
+      "sha256": "e1d0b852b19cf32facfcf5ca79bb58fd175755430ab4a40f6dd71c0906e9e889"
+    },
+    {
+      "path": "cash-ui.test.js",
+      "size": 1919,
+      "sha256": "54a722b04cf200424e61f267add7508e62974b7c28927dc9fa5b73c2f742c480"
+    },
+    {
+      "path": "cash-volume.test.js",
+      "size": 1570,
+      "sha256": "7b820129fb8f085f6d7e99ea047c66427f35c61ce511aab6990567b9e1fa3ab0"
+    },
+    {
+      "path": "countdown.test.js",
+      "size": 2371,
+      "sha256": "cdab89487d937fd7d8b670f2378e7c87f4368a0c9512db0f98e8257eb5f4385b"
+    },
+    {
+      "path": "deployment.test.js",
+      "size": 3198,
+      "sha256": "673a33362f620897033d55dfe280035d3707dfc5c01aebefb9729758b7502b38"
+    },
+    {
+      "path": "face-ready.test.js",
+      "size": 2636,
+      "sha256": "94320f64e06e73907023b02b7f799d4f0cd4ed610a4737b213ee15b91b1f5154"
+    },
+    {
+      "path": "game.js",
+      "size": 9230,
+      "sha256": "05281453fd1a3cf2a2debe0cf14220ab65d193f3a7c061a8c5e3a7d0ca34613a"
+    },
+    {
+      "path": "game.test.js",
+      "size": 7133,
+      "sha256": "788efda15bbce390b99200a09101822eef6e8e6da747580b7b37177fb097d8c1"
+    },
+    {
+      "path": "gomoku-multiplayer.test.js",
+      "size": 8053,
+      "sha256": "d6a6bc2fa69fb3f83b05249098d7d86f586295da273de25c7acb726c541ec577"
+    },
+    {
+      "path": "gomoku-ui.test.js",
+      "size": 3602,
+      "sha256": "bac126927ef7f1bad7190c73eb3fb4ca0253814f5f32e549eeb0d76ff5326912"
+    },
+    {
+      "path": "gomoku-victory.test.js",
+      "size": 3755,
+      "sha256": "7fd4b9a6bd6853058f73c03d68915d6488ea5e6ba69359a8aba2d39507964cbb"
+    },
+    {
+      "path": "gomoku.css",
+      "size": 6275,
+      "sha256": "2774524d3b13840455ec508ceef1192d6629ae97ab5d4f5714fd1b7bb6d10a29"
+    },
+    {
+      "path": "gomoku.js",
+      "size": 9655,
+      "sha256": "f3eaec206ed0f1a819901a0189dda0910c4e81515c6dd7e9b95b2a4068e7fda4"
+    },
+    {
+      "path": "gomoku.test.js",
+      "size": 8020,
+      "sha256": "5a4460f3796077885b308f1b2d210a1a4c993cc479e7c157c06a68018d7c2d62"
+    },
+    {
+      "path": "hand-winner.test.js",
+      "size": 4266,
+      "sha256": "a1c8a669be8bd0a98db67417ef547c49c570d5d008e554f389149e76f672e491"
+    },
+    {
+      "path": "high-hand.test.js",
+      "size": 4015,
+      "sha256": "53a7a0e5f0fa09971040dcb02411232a1a57ac1dc48f9dd0574c3d28ad79481d"
+    },
+    {
+      "path": "hodon-avatar-0.svg",
+      "size": 692165,
+      "sha256": "0df9e97300d4507a8192e0994c64c03144cd0594a660f67b015124996fb2a172"
+    },
+    {
+      "path": "hodon-avatar-1.svg",
+      "size": 692166,
+      "sha256": "f4f92e47a6650bf0e9c713443b44e7e7f4119601b6cb773d360874d000b6111c"
+    },
+    {
+      "path": "hodon-avatar-2.svg",
+      "size": 692166,
+      "sha256": "794833f5e7007f0a90e4818f03ecf786fa855eadfa30279599de77cf2c6c1446"
+    },
+    {
+      "path": "hodon-avatar-3.svg",
+      "size": 692166,
+      "sha256": "5dcbba570e378eb1a1f8d67141d2249a17fb65e833a4085e8e6311bf28e361bc"
+    },
+    {
+      "path": "hodon-avatar-4.svg",
+      "size": 692166,
+      "sha256": "7e2a4e088357374576e4cb01bc103297f28bee7260aebeb97a7015b31782a7d1"
+    },
+    {
+      "path": "hodon-avatar-5.svg",
+      "size": 692166,
+      "sha256": "b80d7870750e46b197b7d9083ee0a17c3cf0f7ea20b4aeb8a997d42b74aab38e"
+    },
+    {
+      "path": "hodon-avatar-6.svg",
+      "size": 692166,
+      "sha256": "48e6bf47ab885e44c73980ceccdb6f0b9eab374acbd63081bafb0056b72ce468"
+    },
+    {
+      "path": "hodon-avatar-7.svg",
+      "size": 692166,
+      "sha256": "713d5cf440428e2c4f4cb49cbd2e367f120f70d2cf73dcd93a2f5931d7ee07e3"
+    },
+    {
+      "path": "hodon-avatar-8.svg",
+      "size": 692166,
+      "sha256": "cd9565b18460c018ba90f6847f0969692230b6b74aa9c6571b660d481568c148"
+    },
+    {
+      "path": "hodon-avatar-9.svg",
+      "size": 692166,
+      "sha256": "b6ee635a64485ecfe9b9710e36fdb2e16db56a1595c345fc3bcbfa4ea256d64e"
+    },
+    {
+      "path": "hodon-client-v61.js",
+      "size": 907067,
+      "sha256": "c708edbc232cf03bbf5841d81d5c7d08b154901e18c7ab353e9309431bef34ae"
+    },
+    {
+      "path": "hodon-face.png",
+      "size": 126858,
+      "sha256": "67533b4283a5a9d65851c2f948466ebedc656c5e8ec1778627329d887d101452"
+    },
+    {
+      "path": "hodon-piece-0.svg",
+      "size": 692340,
+      "sha256": "1eea3187fe2ac83d7f46adfdc8fa50418f42112c80f4ce72c75e94861b74a366"
+    },
+    {
+      "path": "hodon-piece-1.svg",
+      "size": 692369,
+      "sha256": "03cdde30b9fc1641b527d6d7b8fa3a2c8d918f77ce169e8c459ae213339f0955"
+    },
+    {
+      "path": "hodon-piece-2.svg",
+      "size": 692385,
+      "sha256": "f26d0e0e7d691ef75de2ffbca8d828a037c9e5ab004f653b4a47bedb3cdb1dbe"
+    },
+    {
+      "path": "hodon-piece-3.svg",
+      "size": 692389,
+      "sha256": "8abae1ace1fe132c838399326d72a975f7b69bf2359c79cca012a61cef971754"
+    },
+    {
+      "path": "hodon-piece-4.svg",
+      "size": 692376,
+      "sha256": "d3c945e606c41e36e47e5bb1af5b7d7ff1bf02c414e07b08341554f89479241c"
+    },
+    {
+      "path": "hodon-piece-5.svg",
+      "size": 692400,
+      "sha256": "9371651abd9bf42cfb812a38d310426cc51ef0802a839226cfd2c18937ff7000"
+    },
+    {
+      "path": "hodon-piece-6.svg",
+      "size": 692440,
+      "sha256": "f82fafbc43fdf68b930bc37ed9006685ba1dacca8c2919999b2254c0bedc4c57"
+    },
+    {
+      "path": "hodon-piece-7.svg",
+      "size": 692407,
+      "sha256": "19e32285b2fa7f36e8e04f6bafb4b4c276d0a5e6d2a7fdf0dcd0e88e5d1bcff4"
+    },
+    {
+      "path": "hodon-piece-8.svg",
+      "size": 692371,
+      "sha256": "834f4ddc0f17c1f3713b2e0294278d248f2dfc760e5ae1ba1e31bbfba811f900"
+    },
+    {
+      "path": "hodon-piece-9.svg",
+      "size": 692424,
+      "sha256": "746a003b7258f93d91fe01b0a6f15a22516b7e6bc6a01825558fb2c60d871532"
+    },
+    {
+      "path": "hwatu-0.svg",
+      "size": 49718,
+      "sha256": "9d65f503cff73db7b8591de7af4ddb5ba732f305a4367fd9567cb8a83a5493f2"
+    },
+    {
+      "path": "hwatu-1.svg",
+      "size": 37315,
+      "sha256": "e48641a2c973fe3c32b6c3c70fbd3e997114cc5d723c33b7fda1066e0012f02a"
+    },
+    {
+      "path": "hwatu-10.svg",
+      "size": 95473,
+      "sha256": "031de817207f869268fcb2646dbd744fc871d39d6372aeeecae5a47a92d9cd4f"
+    },
+    {
+      "path": "hwatu-11.svg",
+      "size": 49198,
+      "sha256": "9dbcf6d84c6c50eafee14633a60666e1089a8b558e1bf528b627287824291d09"
+    },
+    {
+      "path": "hwatu-12.svg",
+      "size": 104906,
+      "sha256": "73cbd74ead1400345b593b54a425e2b70b771b9eee697d19ae1bc64dcbeddbca"
+    },
+    {
+      "path": "hwatu-13.svg",
+      "size": 50686,
+      "sha256": "c48899368fd9daf8b6be30e921d138f01baf5ab29f8822b78acb050b7a2f88de"
+    },
+    {
+      "path": "hwatu-14.svg",
+      "size": 6309,
+      "sha256": "a2e138e36504cb082b4b00ff72752a439dfcecb5230927c8b43df24cd2296bce"
+    },
+    {
+      "path": "hwatu-15.svg",
+      "size": 51562,
+      "sha256": "f6aa41b60c5a1ba6273c00714b6ad1287910e5c4ccfb64a1d513f240356131fe"
+    },
+    {
+      "path": "hwatu-16.svg",
+      "size": 95249,
+      "sha256": "e825e22e44420b1d080b0030de7142698f4934e77c60c863798f16ef32eb5e4d"
+    },
+    {
+      "path": "hwatu-17.svg",
+      "size": 69279,
+      "sha256": "8e885e7129faa08a7cc05e5b6e227790fcb6dfe484726e189cbc5d08763077cc"
+    },
+    {
+      "path": "hwatu-18.svg",
+      "size": 106014,
+      "sha256": "6aa3849e8bdc33e505abc5104142af007e53368001d4de45267a01da39f7f69d"
+    },
+    {
+      "path": "hwatu-19.svg",
+      "size": 60343,
+      "sha256": "6e36c2791673cde665bcfd461487c19f4f38f517376c9f9689c409da5f117960"
+    },
+    {
+      "path": "hwatu-2.svg",
+      "size": 67575,
+      "sha256": "3c354b77932ba1006dcebf530eba1542f6b031b0f32fc3a009a3ddefc2c3207f"
+    },
+    {
+      "path": "hwatu-3.svg",
+      "size": 57750,
+      "sha256": "2ffc43dcd01fbd12d1425d1028791d1a65707f5391eac013b2dda65e4b1c389b"
+    },
+    {
+      "path": "hwatu-4.svg",
+      "size": 127927,
+      "sha256": "e39002639c4aa083f557c431b90c46a3cb937798b790cb4db4e3565119d47ac4"
+    },
+    {
+      "path": "hwatu-5.svg",
+      "size": 105638,
+      "sha256": "6aca2c4bdef68490ea12e21f590d7417cb7ce9fed87f3324e8f55072b268483a"
+    },
+    {
+      "path": "hwatu-6.svg",
+      "size": 64170,
+      "sha256": "9a3767d84b6d30356ad344e7a76e15416f5e50cf83e36d1adfbf23a6dc4dcf98"
+    },
+    {
+      "path": "hwatu-7.svg",
+      "size": 53481,
+      "sha256": "f15a7830573bc1cc4111e49af691f96f0a745093c56dca8945da544b9550b954"
+    },
+    {
+      "path": "hwatu-8.svg",
+      "size": 52533,
+      "sha256": "999b89958f4131bd411293e3dd1e57286a5ce8b7b6365a052962f996af211084"
+    },
+    {
+      "path": "hwatu-9.svg",
+      "size": 38333,
+      "sha256": "3ffa3fedb4b3d13155989321c33403b2ce390d766bff1bc4ea668e087155000a"
+    },
+    {
+      "path": "hwatu-face-0.webp",
+      "size": 11608,
+      "sha256": "efa31f28856a1fcf721299d2535c9210c713cc6e274fbac9a9e077f3b9babdf4"
+    },
+    {
+      "path": "hwatu-face-1.webp",
+      "size": 8550,
+      "sha256": "47575a1b1fc1cfe47873f1620c38320b2384fa41dc5b4fb98abc7b2897ffab6e"
+    },
+    {
+      "path": "hwatu-face-10.webp",
+      "size": 17152,
+      "sha256": "e14efec34dab7700ada394ea6fb8c841eb8ef0a627f80923b6abd53aa64129f3"
+    },
+    {
+      "path": "hwatu-face-11.webp",
+      "size": 12056,
+      "sha256": "6f1b737e36b5935d4c034ef2fe89c3d2b55c34c4713ea013ceb33bd012017263"
+    },
+    {
+      "path": "hwatu-face-12.webp",
+      "size": 20578,
+      "sha256": "95234ebb6ec5f6227dc2737c3f2dab3ded1793955020d35b1d8e8670a27f816c"
+    },
+    {
+      "path": "hwatu-face-13.webp",
+      "size": 14420,
+      "sha256": "491e1db6f0c71f16941aa01881ac334512955999ee3d48c076b574bba23f6152"
+    },
+    {
+      "path": "hwatu-face-14.webp",
+      "size": 5898,
+      "sha256": "b994ddb12db4846c741eada77bfff96a550571ec5b390ddea4ce68e22e9261ba"
+    },
+    {
+      "path": "hwatu-face-15.webp",
+      "size": 8660,
+      "sha256": "603b61e2824386b9a436e8c340550d11b39ec1b9fbb454159f4812da13e9cb0f"
+    },
+    {
+      "path": "hwatu-face-16.webp",
+      "size": 15822,
+      "sha256": "b8259da43552362ad565ed56d3c87df0b592ee726162770be8d40edf674a1ebe"
+    },
+    {
+      "path": "hwatu-face-17.webp",
+      "size": 13106,
+      "sha256": "46371e081d717a442e354f62211ed11ae261235265b447438f3d46398dc31c24"
+    },
+    {
+      "path": "hwatu-face-18.webp",
+      "size": 21856,
+      "sha256": "f82e39e84dd4eb55ae0bb8d4ad84c277da58c7e8e5b81060852752340f00123e"
+    },
+    {
+      "path": "hwatu-face-19.webp",
+      "size": 15002,
+      "sha256": "f364df3ae397fb5bef7330762bc501c1ed0b13bca517a729b29195e298c63a24"
+    },
+    {
+      "path": "hwatu-face-2.webp",
+      "size": 15688,
+      "sha256": "0275c2bed2a2160bc80cb918d5b7f8baf14bffcbe6c55bc062b053f8e1736104"
+    },
+    {
+      "path": "hwatu-face-3.webp",
+      "size": 14030,
+      "sha256": "3b0912d9a6e65cc48fce40d6a58b6cbff75456c4b0d8e8e1f1793dabbcf592b2"
+    },
+    {
+      "path": "hwatu-face-4.webp",
+      "size": 19562,
+      "sha256": "b0aa7a3f2dcf4d244cc4763953271a303c22f01f1220d7cf8bfe0438f8192cce"
+    },
+    {
+      "path": "hwatu-face-5.webp",
+      "size": 16056,
+      "sha256": "82a8f329ac5e1ecdd85b95dee8b08ad52115a8f7cdfc58de0bbcd73c09bcee71"
+    },
+    {
+      "path": "hwatu-face-6.webp",
+      "size": 17270,
+      "sha256": "89744d47d30c09984c61586ff4ef260bc93a649cc5cd297300a21610baaae911"
+    },
+    {
+      "path": "hwatu-face-7.webp",
+      "size": 11836,
+      "sha256": "a25f188b4d2ebaa42d9d67c32cdf7aa9bd0c271ea11a631d6140ef9ac271caf9"
+    },
+    {
+      "path": "hwatu-face-8.webp",
+      "size": 16826,
+      "sha256": "8f53c7a44325dd7763e395964e10a2e0e2d604721b13e323c04a77b2bbd72874"
+    },
+    {
+      "path": "hwatu-face-9.webp",
+      "size": 10818,
+      "sha256": "5d1f84ef76127fa1284ca823f1616c944870ce98f108e1252bb1c89d0ec0bfd7"
+    },
+    {
+      "path": "hwatu-provenance.test.js",
+      "size": 1007,
+      "sha256": "d477757217d6ef3208cee437380320cd2be512398b22ed9dce95b8157f0602b6"
+    },
+    {
+      "path": "index.html",
+      "size": 55319,
+      "sha256": "dee58cbea23209053316b60b63726711746616bbc89ec369fea0068737e2a46f"
+    },
+    {
+      "path": "kkung-dictionary.json",
+      "size": 389655,
+      "sha256": "42715da788bd32cd3f84e788c96d6b54f8bf328356249d72be2c6cf5194707cf"
+    },
+    {
+      "path": "kkung-expanded.test.js",
+      "size": 2986,
+      "sha256": "bdfa38598c6aa96cf07673381570c128da609af483c9a74f5d3f1397ba2a44d3"
+    },
+    {
+      "path": "kkung-extra-1.json",
+      "size": 480266,
+      "sha256": "368e25b3f7cad2375e9b01a4728947d774138df40129995557fcfc364e6a62ae"
+    },
+    {
+      "path": "kkung-extra-2.json",
+      "size": 462098,
+      "sha256": "3717d355e4a3c007d0eba3115f2d56a572ef846a00242ddbe1dd7fd8b0109f04"
+    },
+    {
+      "path": "kkung-extra-3.json",
+      "size": 120135,
+      "sha256": "cec84308760273e2ba723de2fdfa9aa78660d0a311bfd4a2ffefbd9c7036fd5c"
+    },
+    {
+      "path": "kkung-extra-4.json",
+      "size": 735500,
+      "sha256": "f344e8c92486869ff2beafeeffb37c6c6b3978bfa8265249b53e25688732ff82"
+    },
+    {
+      "path": "kkung-multiplayer.test.js",
+      "size": 5128,
+      "sha256": "ed8d1078dc40fd934a965719da0e59f8c0c6f77b6c7f1a33e670dbff935a2b9c"
+    },
+    {
+      "path": "kkung-proper.test.js",
+      "size": 5216,
+      "sha256": "de5af2268dc86ff5fdb1c73ae9a7e3e7634a1f01864a88356004aa6c89b2b48b"
+    },
+    {
+      "path": "kkung-ui.js",
+      "size": 17017,
+      "sha256": "b2d598c30cf864ea16409adaabf24a63c84030acec6295a83425ed3cf233834c"
+    },
+    {
+      "path": "kkung-ui.test.js",
+      "size": 9490,
+      "sha256": "968a1fa24d82a9eb91cc31ab88a5c17fde27e5e7c10935453a885f01fdaf5b98"
+    },
+    {
+      "path": "kkung.css",
+      "size": 945845,
+      "sha256": "e311cde2f4907f446ebff9d6be0fa00b9be557eb35cbeff8f8bf0ba45f0771cf"
+    },
+    {
+      "path": "kkung.js",
+      "size": 7120,
+      "sha256": "442e7e5927e72688f4fd58e86e34a6453be88e064a02ccfed8d5db78c96ebc65"
+    },
+    {
+      "path": "kkung.test.js",
+      "size": 6953,
+      "sha256": "77ddbcad063b38daf352ad79a11bf83ee6bb40499797c922fa310a1a6b656ebd"
+    },
+    {
+      "path": "lobby-leave.test.js",
+      "size": 7544,
+      "sha256": "e2a84b927d9b4610e2d6787ba9f73c3ab20b6cb7fc79a3306a0291973a8ea87a"
+    },
+    {
+      "path": "lobby-ui.js",
+      "size": 11688,
+      "sha256": "aaa1064f5a60910698939fcb9a7820ebdd8070f40c31812de5da3c8a59f105b5"
+    },
+    {
+      "path": "lobby-ui.test.js",
+      "size": 4345,
+      "sha256": "7e5290b6bbc62d37a88f186e0baeb8163d5302b8977ba5e5d1a8fad3043210b5"
+    },
+    {
+      "path": "lobby.css",
+      "size": 23039,
+      "sha256": "5aa0c2ce78ca4a9cba797fd61568099d1aeae12e67f606f213b32f09e1adc12c"
+    },
+    {
+      "path": "lobby48-network.test.js",
+      "size": 3046,
+      "sha256": "96d011eebed458c16496ac98f630ec89d160f69e53d3a59317f1f2c1e22beb1a"
+    },
+    {
+      "path": "lobby48-ui.test.js",
+      "size": 7305,
+      "sha256": "b80774dac70056c71be7ab3fff3a76828c97259d701e53569d17f175201851f6"
+    },
+    {
+      "path": "lounge.css",
+      "size": 275649,
+      "sha256": "a8e9b0de2beba30082b5edf5b9027ae782e1632c4b46825dc5f29b708f3f128d"
+    },
+    {
+      "path": "money-ui.test.js",
+      "size": 2466,
+      "sha256": "c0f595f5757f6d3b8362d9d846a624f7cb70af58e45059f4c8d1b87e5e3ebed8"
+    },
+    {
+      "path": "money-units.test.js",
+      "size": 1895,
+      "sha256": "e20b064849b55de7f8f44e185fff0f11e0be19989138c5ad579da7747778d5e6"
+    },
+    {
+      "path": "multiplayer.test.js",
+      "size": 5942,
+      "sha256": "14d7777712b584ad6c53f0e3c7ec275e1fddd990fea39a461b95b95813ffd44f"
+    },
+    {
+      "path": "nodemon-restart.test.js",
+      "size": 4862,
+      "sha256": "cc2414c466b780f796ee77da65c60340dc2a42e0ebc9adc81ab08ee97b33f43f"
+    },
+    {
+      "path": "nodemon.json",
+      "size": 90,
+      "sha256": "e49d72cde86ebdb1cf1d9bdf085c695d321ad27d1ff290eb2f02de8361e2148d"
+    },
+    {
+      "path": "package-lock.json",
+      "size": 26301,
+      "sha256": "1421c3e852a702975031ba2d816f2b93efb5d924d40cf597ca902032d57ed554"
+    },
+    {
+      "path": "package.json",
+      "size": 667,
+      "sha256": "d275e6a83488c0ed48afc26d5609c62677f57e12f2be9ea9ebca922d487dddb2"
+    },
+    {
+      "path": "partial-room-multiplayer.test.js",
+      "size": 4257,
+      "sha256": "f914b6719789664d021b40d78e049ee2623bf8e8c71989ecd73b5cd9a6653e8d"
+    },
+    {
+      "path": "partial-room-ui.test.js",
+      "size": 2168,
+      "sha256": "f7293565ae8ba19840914bda8fc139099d347de03cd1201e28f4a84ea7c9ecc8"
+    },
+    {
+      "path": "partial-room.test.js",
+      "size": 1635,
+      "sha256": "f9802fe23834b2c3a35ff75197c2674cb33e2896a12f5af9832f9fed722abbf6"
+    },
+    {
+      "path": "peek-360.test.js",
+      "size": 4095,
+      "sha256": "f554b44cdb47a35032e817aeb80db2d3998e5e92383c0f845cea8f4f8cbdf4a6"
+    },
+    {
+      "path": "poker-multiplayer.test.js",
+      "size": 4224,
+      "sha256": "4a09bac41a0d6197cbe653d835c36153d44362800ceab342aac16701373c920d"
+    },
+    {
+      "path": "poker-ui.js",
+      "size": 10321,
+      "sha256": "642cfd55c1aa51683eafaeeb8482ad61120b6d7f148fc6d2b8cda8eb8ca44451"
+    },
+    {
+      "path": "poker-ui.test.js",
+      "size": 3633,
+      "sha256": "947cbda48a385790fa47f74ab23058ac949f119208a476951c8644ab072a6931"
+    },
+    {
+      "path": "poker.css",
+      "size": 784584,
+      "sha256": "47eabb176d435d105d84952c2fe87dfd178ed49c4eaa7fe134e3594b351d49d6"
+    },
+    {
+      "path": "poker.js",
+      "size": 12175,
+      "sha256": "20363621ed9e249c733b5a8dc2f976b89771b2d3e6119907249812d908cad692"
+    },
+    {
+      "path": "poker.test.js",
+      "size": 5746,
+      "sha256": "490611632be7f12d9eba0b6bef42bee0676492d09a82f6bf4e0f7f4a287374c9"
+    },
+    {
+      "path": "premium-room.webp",
+      "size": 147728,
+      "sha256": "3a5fb9e90c55d190916b889476d4e1cda3e98900569b22db061caec748377112"
+    },
+    {
+      "path": "premium.css",
+      "size": 225281,
+      "sha256": "40423d7b0da8458177deed6d8d957518dedf7c55b0f6bca3647733ac65de557b"
+    },
+    {
+      "path": "presentation-styles.test.js",
+      "size": 10083,
+      "sha256": "6ca70c99f96e32ac058efe6141a0491b8e2a770a6f1692cd2affbff62664b049"
+    },
+    {
+      "path": "preview/01-yut-badugi.html",
+      "size": 950,
+      "sha256": "60e9f24eab93c4bfb8eeff368dac8e884c461eff40893e72b54366750c85f3ce"
+    },
+    {
+      "path": "preview/02-gomoku-seotda.html",
+      "size": 935,
+      "sha256": "704f5aa6ff543d36358e02674741d201c94cb55b42ae128171643fed154d31b9"
+    },
+    {
+      "path": "preview/03-poker-alkkagi.html",
+      "size": 947,
+      "sha256": "46b64954fba67c0381fc37d8bfca1e5ee688d8b431339a0b4fe0e86618e1ec9e"
+    },
+    {
+      "path": "preview/04-kkung-sichuan.html",
+      "size": 953,
+      "sha256": "7ef45d01b785760edf74b8bb34be23b466908d1150e1ba623f4eace566c0affb"
+    },
+    {
+      "path": "preview/alkkagi-mobile.webp",
+      "size": 82308,
+      "sha256": "56ee9ff426a120513e1b718c21e3392e823cc94f613fdb74c6b109085ca4ea9a"
+    },
+    {
+      "path": "preview/alkkagi.webp",
+      "size": 184040,
+      "sha256": "ef39fd95d365da1f1f152d01775bd65c8c091dff6e5f0fc7f6371e81204111d9"
+    },
+    {
+      "path": "preview/avatar-picker.webp",
+      "size": 57190,
+      "sha256": "121bb00878742260e75a02f6e29c0d638ec671ce34c2fc3e1ccacb9fbd769e3b"
+    },
+    {
+      "path": "preview/badugi-mobile.webp",
+      "size": 91436,
+      "sha256": "36c7476aa808f3fb6ad3182f575bf5aca29073faf217b4e679ac84eb77c6661e"
+    },
+    {
+      "path": "preview/badugi.webp",
+      "size": 265966,
+      "sha256": "e2e440ea1cde89ba7b3bacbf8e873cd1a4ae24963b869e1bca53c5de5c23cba7"
+    },
+    {
+      "path": "preview/gomoku-mobile.webp",
+      "size": 73994,
+      "sha256": "0c6a48d9e63c44c8a59984b172f793a4fca08de8314fed6aac969070bd84fca3"
+    },
+    {
+      "path": "preview/gomoku.webp",
+      "size": 158000,
+      "sha256": "ab5254f4aa0fa6188fb06d5b2f579c473f5f0c6f502def5f894b442d54f7199b"
+    },
+    {
+      "path": "preview/index.html",
+      "size": 1943,
+      "sha256": "42b5c59bac759b49fba7c5b3d8eabc5ad5f48cb0f190a1e6cddc5269520c2f6e"
+    },
+    {
+      "path": "preview/kkung-mobile.webp",
+      "size": 96604,
+      "sha256": "5f899ff349c434b7890768bcbdcffbad98b27737fb0a65c7f55a677d86aca6f7"
+    },
+    {
+      "path": "preview/kkung.webp",
+      "size": 240200,
+      "sha256": "f2456b8eb78ec9b46b2b41e78f8c51c656f1b99a1e6608a5e04689cda7469f69"
+    },
+    {
+      "path": "preview/lobby-comparison.html",
+      "size": 1213,
+      "sha256": "25c1bcd6db510d81a9dd1d8f3e6c06d310b70e867420cc20ca8f4117b268f865"
+    },
+    {
+      "path": "preview/lobby-mobile.webp",
+      "size": 63982,
+      "sha256": "567e84cbc25a5791111dfa85d3da8049ff9928d8da3e38ac52e686fee9e44266"
+    },
+    {
+      "path": "preview/lobby.webp",
+      "size": 196038,
+      "sha256": "5754bcf9f0ef4a6f1ea491b50c12c1ca257013fc66ac23dadf86d4de83991683"
+    },
+    {
+      "path": "preview/poker-mobile.webp",
+      "size": 92306,
+      "sha256": "aa1da341ad5ae2379c0b5fab2af8676951398e483e5ec63693e0d6165a1178c1"
+    },
+    {
+      "path": "preview/poker.webp",
+      "size": 255760,
+      "sha256": "9b88bc16ef1ed7912113dc6c92664a2fb2acb12a194c72c02cdb4ab3e76ce176"
+    },
+    {
+      "path": "preview/seotda-mobile.webp",
+      "size": 86164,
+      "sha256": "c0894fd2664a146b6f382a3487bbd549b6584803c0a5fb10ccfe5a134e134ca9"
+    },
+    {
+      "path": "preview/seotda.webp",
+      "size": 254558,
+      "sha256": "6e8caa2e7a53aa1c25a807e97bb9820d730761811a873dd8725456bb03741ff1"
+    },
+    {
+      "path": "preview/sichuan-mobile.webp",
+      "size": 72010,
+      "sha256": "d4f209c2a06dcefece605b115f0be3121450cf69df6d12d14f7c5786e84ac01c"
+    },
+    {
+      "path": "preview/sichuan-waiting.webp",
+      "size": 156380,
+      "sha256": "cebf5a1bab8e5cab67e3610daa088ffdf6aa4edf77715ceb9520984c39d4201e"
+    },
+    {
+      "path": "preview/sichuan.webp",
+      "size": 223702,
+      "sha256": "b02994fbec6ba736aeaf08113c89678a9bcbc4b6b62d367924e0d2d7aa50e75c"
+    },
+    {
+      "path": "preview/yut-mobile.webp",
+      "size": 82632,
+      "sha256": "8f0c1a52514fb1306cf348f3ee3fbec033558a13986dc528250cc52fca5c292f"
+    },
+    {
+      "path": "preview/yut.webp",
+      "size": 295162,
+      "sha256": "92837603560a8aeb3f24d09cb1a9b0a5187cc9ee81eb2bda4362b4cbfa2c5e03"
+    },
+    {
+      "path": "reconnect.test.js",
+      "size": 7232,
+      "sha256": "3c005302c71d81a48d6c262a9812c5b826339510f7eb05b3395cbeab9ccfd89c"
+    },
+    {
+      "path": "render.yaml",
+      "size": 143,
+      "sha256": "c52c5bdb36d0c4deeb6743ea9bb3522aac8bcc9e127338d6d087514d4c99732c"
+    },
+    {
+      "path": "room-controls.js",
+      "size": 6525,
+      "sha256": "b2288f57a04faa4328380e78960139252f0eea328fb7654414bff82f7ea2075b"
+    },
+    {
+      "path": "room-controls.test.js",
+      "size": 4812,
+      "sha256": "ceb19c914a2ad7b3d07af5f4566d111e0e815cd4d80e0981f4716e542a6bcce1"
+    },
+    {
+      "path": "room-creation.test.js",
+      "size": 5468,
+      "sha256": "f1db7210f41af2889ad5070d0a8881a871b1c81d42b676c991f45a85f7acabff"
+    },
+    {
+      "path": "seotda-betting-multiplayer.test.js",
+      "size": 3118,
+      "sha256": "b6f03cb3225c901790a23b65990624d6628682c52ead6f03eb551ce66920bc37"
+    },
+    {
+      "path": "seotda-betting.test.js",
+      "size": 4494,
+      "sha256": "4f5fe866aaf90d3fe7296c09582bd67b2077362eaed58988dd4fca50dea7e409"
+    },
+    {
+      "path": "seotda-compact-ui.test.js",
+      "size": 4293,
+      "sha256": "e80624a00a8b044f7ef4a4ff28db53900d7852a69e70559535f2b08cecbe3f04"
+    },
+    {
+      "path": "seotda-first-public.test.js",
+      "size": 2874,
+      "sha256": "ebca09cb8e3b3909fd4b1b03e8a2b8f3a3f451411327aec08ad3d09b48e57a9c"
+    },
+    {
+      "path": "seotda-mat.test.js",
+      "size": 2087,
+      "sha256": "3f2e3b5c8243a66d291dfbe767edebeda4ad014aa5dcec67a7ca890c58dec6b6"
+    },
+    {
+      "path": "seotda-multiplayer.test.js",
+      "size": 4704,
+      "sha256": "376913cdbcc126a7eacbae420319afab8ce3e5c7d5196a68881ca301e5074dcb"
+    },
+    {
+      "path": "seotda-open-network.test.js",
+      "size": 3743,
+      "sha256": "0f97d2c686cd11b0208e6a769a226ca5b2237949e68955ed4919e0e1ab717d07"
+    },
+    {
+      "path": "seotda-open-replay.test.js",
+      "size": 857,
+      "sha256": "40a2f5070c99c2291589192ecce3d2fa159da8608dbe98f0f6efbabb679373c1"
+    },
+    {
+      "path": "seotda-relay-multiplayer.test.js",
+      "size": 3654,
+      "sha256": "7a8a23469f3710b3bdfe55b5a0a0aa84b9224668a7555ffd860781ae16fdb865"
+    },
+    {
+      "path": "seotda-relay-ui.test.js",
+      "size": 2725,
+      "sha256": "801498ba341ed738eb57d1e68b9300bb8d6160a1e0d32be1444e837c2f37562d"
+    },
+    {
+      "path": "seotda-relay.test.js",
+      "size": 2926,
+      "sha256": "8984622bb5d68a62f273ec074eec8408bc14c68d74cc08a5d1b3dc06c84ffdcc"
+    },
+    {
+      "path": "seotda-restart.test.js",
+      "size": 3294,
+      "sha256": "d023036925b8346329121e35c7a5b5c5983e1783101eb7a45f5308e87e0cb13d"
+    },
+    {
+      "path": "seotda-staged-multiplayer.test.js",
+      "size": 3332,
+      "sha256": "d6aeaa34f4beab45c1107713c8b0f038c71121c440de7ea8d26dcb4372c21962"
+    },
+    {
+      "path": "seotda-staged.test.js",
+      "size": 3006,
+      "sha256": "15f1373f9c5a2ff970ac2649957b575bc1c1e3184a490acd010730ef94102246"
+    },
+    {
+      "path": "seotda-three-wallet.test.js",
+      "size": 6378,
+      "sha256": "f7b7eba5a5c01b3190c606f8bcf5f2020bc8acb6f9ad000232f67abb538ab3b8"
+    },
+    {
+      "path": "seotda-ui.js",
+      "size": 586917,
+      "sha256": "6dc5ee1479ea78c0f73f9357ccd6e970e17d0aaad39152e4f0fd7eb3af93f80e"
+    },
+    {
+      "path": "seotda-ui.test.js",
+      "size": 4186,
+      "sha256": "341b394155da0e5874e8cba4939b3fd04b60ef1659f3b9519a3d8315fb69297c"
+    },
+    {
+      "path": "seotda.css",
+      "size": 577805,
+      "sha256": "193ab62b610683cb0be97c8fe83788a99a4d3e4fad31016c12f1d79f195cec4a"
+    },
+    {
+      "path": "seotda.js",
+      "size": 16134,
+      "sha256": "80454e94aab1c934fcd69c2bdea18f01837bb06ddd3eb836542d8b93059c2db0"
+    },
+    {
+      "path": "seotda.test.js",
+      "size": 8550,
+      "sha256": "97ba0828ab9e4244e3e8daf297e2c688042b3481771108d7c70e1e7422568195"
+    },
+    {
+      "path": "server.js",
+      "size": 61508,
+      "sha256": "4342af44b091c9211f49bd84e09032026629acd71e45dd89ce7840b9df403e77"
+    },
+    {
+      "path": "sfx-cash.mp3",
+      "size": 8403,
+      "sha256": "801d1be795dfb55b54b0ca043387c169e68bee5ca87e63c346f8f2ab8971d89a"
+    },
+    {
+      "path": "sfx-deal.mp3",
+      "size": 5059,
+      "sha256": "a34478cb0a6a8f2593ab58b2377ecbdd988faf4d1d2ab6518ae6fa3b2aad81da"
+    },
+    {
+      "path": "sfx-reveal.mp3",
+      "size": 11328,
+      "sha256": "ebd1c753c1cbe7be76ed23f687a1dfb1a6d64d2d12591778deca2a0c75cfc139"
+    },
+    {
+      "path": "sfx-slap.mp3",
+      "size": 6731,
+      "sha256": "211675f01fdd423bade86e3d7179c8e326a54f0ca66dd9bb8f90e45c849c2a99"
+    },
+    {
+      "path": "sfx-squeeze.mp3",
+      "size": 7149,
+      "sha256": "b0f649bd5f2ddfc8f2a01f8c6f2909f41a831c0040ff797b989908ebd1ade821"
+    },
+    {
+      "path": "sichuan-art.webp",
+      "size": 270654,
+      "sha256": "bbcdf48f7f1bbc179989acc2d17cf301149d2725234034908daa44cec74963b5"
+    },
+    {
+      "path": "sichuan-network.test.js",
+      "size": 8175,
+      "sha256": "401ca69ae8917fa1c2698c538e7d2dfaea4eab8c33ca827508895643c90e6849"
+    },
+    {
+      "path": "sichuan-tiles.webp",
+      "size": 448856,
+      "sha256": "0b1e62d44c460afca52eaa8734482feaee6de9b7eb1e3ed8dbc1dcb702c7b21c"
+    },
+    {
+      "path": "sichuan-ui.js",
+      "size": 379895,
+      "sha256": "971bb3344ebd8fff735f3d78061ca70442923784ea06ba10f8a8f7ca641c11fe"
+    },
+    {
+      "path": "sichuan-ui.test.js",
+      "size": 10197,
+      "sha256": "e2ed7af27db3e98a40a1037b2af16ab5cc447272a5fc5971b05bbc5683c578d4"
+    },
+    {
+      "path": "sichuan.js",
+      "size": 15004,
+      "sha256": "ac12edcff944b8daa1edf9d9964b3586958101b85f794c36d737f147721b11dd"
+    },
+    {
+      "path": "sichuan.test.js",
+      "size": 9485,
+      "sha256": "92ccfd44ffe3b560d4ee81df8137be7dfbea77edcfac16841905119bbfbde283"
+    },
+    {
+      "path": "sound.js",
+      "size": 279689,
+      "sha256": "0c46fcc58b3e83151dc63a3b911f9229b02ffb42ee1175bc874adf9890d5e2d6"
+    },
+    {
+      "path": "sound.test.js",
+      "size": 4463,
+      "sha256": "d37c3e23af031ee7eb50012a126fcfb24f8138b0ced4649d6768f33c61ebab89"
+    },
+    {
+      "path": "spectator-seat-ui.test.js",
+      "size": 2690,
+      "sha256": "f251f985150cab274f1bcf1095a389a01ddebbc0cb19dddcdc5e7382d83b1dce"
+    },
+    {
+      "path": "spectator-seat.test.js",
+      "size": 6466,
+      "sha256": "d0c456dc8acc0a3e31f2ef525fe8feea39a54f9441fa6acf8eef8b9f5fbf724b"
+    },
+    {
+      "path": "stadium-banner.webp",
+      "size": 452682,
+      "sha256": "2d51e55f5c0c5e0d896b393003f614746a3ddbb73eb45acd77934b03972e9580"
+    },
+    {
+      "path": "stadium-hanja.woff2",
+      "size": 4012,
+      "sha256": "df9e2d177450a3dd1d6286b3d30da095d3977ef7a8296d1baf8e8ce455f896fd"
+    },
+    {
+      "path": "stadium-scene.webp",
+      "size": 424898,
+      "sha256": "5eaa15ba075933f7b69ff566f9cb59846e52e29954bbe281cd39414da94f1498"
+    },
+    {
+      "path": "stadium-ui.js",
+      "size": 8983,
+      "sha256": "e092930bfc76a9d9747289ab923f2c6b6247922e01282e8b16cad263ca7a8ef2"
+    },
+    {
+      "path": "stadium-ui.woff",
+      "size": 224100,
+      "sha256": "483548fcb66ae0c96741abf837e10938d41f784dfe5468cc409b9d7326c51c46"
+    },
+    {
+      "path": "stadium.css",
+      "size": 50108,
+      "sha256": "36f3106686e1bd8d5b65e0fc2c40b509c80cf8af3556943f9150ed7d190ba36c"
+    },
+    {
+      "path": "stadium.svg",
+      "size": 1097,
+      "sha256": "5c3011f67f082eb2cecfbdfe8a4d2590893f68ac1984e67de31853f2899a51bd"
+    },
+    {
+      "path": "stadium.test.js",
+      "size": 3108,
+      "sha256": "7ef8ecb96c16deac45cbc45b29427f0a00ee4d28caec14b00ce456b2838732af"
+    },
+    {
+      "path": "steady-clock.test.js",
+      "size": 1916,
+      "sha256": "720fd6f65f95f4d7367d467426130263c9ecd0ebc58458d5fb10d1a906ca2130"
+    },
+    {
+      "path": "storage-migration.test.js",
+      "size": 1584,
+      "sha256": "0366198c84dc5316ad06e2235ff6fff45a27ce8604540fb8be0f90ac215c3f88"
+    },
+    {
+      "path": "studio-blue.webp",
+      "size": 85414,
+      "sha256": "fd2342831c523c78b2d7ef052b363cfca11f3dac44b7231b10ab67394d263bf2"
+    },
+    {
+      "path": "studio-green.webp",
+      "size": 91682,
+      "sha256": "675086d9808fcdf738586daaf0c18ab14827af83a9523e6b3071598c6302a9fe"
+    },
+    {
+      "path": "studio-lounge.webp",
+      "size": 91010,
+      "sha256": "5ab06ad0a735c3c66e2e51d3b3f4be267c6872851864cb4ba7167fe83b0559ae"
+    },
+    {
+      "path": "studio-mat.webp",
+      "size": 121988,
+      "sha256": "d0e14ef5b88ddbce741c0c6594374ff68a02c0fd7faed58667d4d088659e66d1"
+    },
+    {
+      "path": "studio.css",
+      "size": 566376,
+      "sha256": "380f88e64717b56d91fbb5bf5ddb693511dc7a0297ae371817edd0998bc428f6"
+    },
+    {
+      "path": "style.css",
+      "size": 505357,
+      "sha256": "9be723c60f86baeee07648849b1eebf6af4ec922863e900758bf1748d7f065d4"
+    },
+    {
+      "path": "table-audio.test.js",
+      "size": 4089,
+      "sha256": "b32d762111eda04d33341cd24ed31ea88dc6231cb744a3ba1e5c3d80ea7931ac"
+    },
+    {
+      "path": "table-effects.js",
+      "size": 570823,
+      "sha256": "cce057ca085087ea70b3bc6c0782ab41d02841b8119f614ba3f9c403d9834892"
+    },
+    {
+      "path": "table-effects.test.js",
+      "size": 11285,
+      "sha256": "e342835171d41ab06ad7dc00516094a541cb74cf13018bbc8c401a31d02bdca1"
+    },
+    {
+      "path": "table-sound-preview.mp3",
+      "size": 19166,
+      "sha256": "b6ec955097c5f158115f6ea0ead8b1ea7bcb5328e2ffbf96448edaafca3de67a"
+    },
+    {
+      "path": "ui.test.js",
+      "size": 7438,
+      "sha256": "b5fc316db1de1a208817f12886e0e2a4b158045f8a61297c0d1e86d9a8bc81e9"
+    },
+    {
+      "path": "version.test.js",
+      "size": 5320,
+      "sha256": "c2f840d8fcb8dfc0d946b3cadb3a063a3f2a1c7acf71b002bd4e580a04565a42"
+    },
+    {
+      "path": "victory-ui.test.js",
+      "size": 6065,
+      "sha256": "d08a542f5430461d2422a7c74334a6c0e38b81e758a2eab18e28e6a1151240c0"
+    },
+    {
+      "path": "voice-backdo.mp3",
+      "size": 11232,
+      "sha256": "30fa1cfc7ae746a0db67d2d8543eb538b6f977d70a70adca9c2978b12275cdd4"
+    },
+    {
+      "path": "voice-do.mp3",
+      "size": 11232,
+      "sha256": "931c2a6959f76d0a2818a94bb793a29a05b751e46767a542c4d0d55927dce718"
+    },
+    {
+      "path": "voice-gae.mp3",
+      "size": 11232,
+      "sha256": "edd0589139ae5c45735b96bcfd79fe02f4e22cdd0368b2992c0cb660f44f3735"
+    },
+    {
+      "path": "voice-geol.mp3",
+      "size": 11232,
+      "sha256": "9ee4d9c2be1370e83513503f8518d21953d5f1d19bed931ca6ed823e8dbb5d85"
+    },
+    {
+      "path": "voice-mo.mp3",
+      "size": 11232,
+      "sha256": "df15957ed138ca39dcd0927576a6f679682f85b29eba0a6b8a63c109e09523b1"
+    },
+    {
+      "path": "voice-yut.mp3",
+      "size": 11232,
+      "sha256": "fac0317005b26ddd46d93feab6d1a561df3b1db90508cd57abb0c639150f0597"
+    },
+    {
+      "path": "welcome.mp3",
+      "size": 56730,
+      "sha256": "1e4edb3dd2034c97ef06ceece5f7847929993bec77bbdbd5aa32fd648140134f"
+    },
+    {
+      "path": "yut-characters-v53.webp",
+      "size": 287668,
+      "sha256": "5e53917af7e9fe9e10513aafa7d43831b797b9c352dd811f9821e0eab08f4f1c"
+    },
+    {
+      "path": "yut-characters.webp",
+      "size": 287668,
+      "sha256": "5e53917af7e9fe9e10513aafa7d43831b797b9c352dd811f9821e0eab08f4f1c"
+    },
+    {
+      "path": "yut-garden.webp",
+      "size": 250278,
+      "sha256": "74533ad2b6fe95b5d852fc76b8ad9ef9bcc1fdfa53d2a84b2efbb03cbb0a6e9a"
+    },
+    {
+      "path": "yut-hold.test.js",
+      "size": 5091,
+      "sha256": "0dbcfe04593705af96961db5852b42e744abd28278ed4e1557a23dd6391c4649"
+    },
+    {
+      "path": "yut-placements.test.js",
+      "size": 3941,
+      "sha256": "0710413961ac47573b9d43bcbc4bd5752c6d134ebcdf8860291d043d5577840d"
+    },
+    {
+      "path": "yut-race-multiplayer.test.js",
+      "size": 3582,
+      "sha256": "d5e64951e74dc1210eaa3ff7bf34dd61fbe4f6c7344c6333cda34c65438e4c1a"
+    },
+    {
+      "path": "yut-resign-reconnect.test.js",
+      "size": 3554,
+      "sha256": "152c559ce59d61bef0b3d4e5686a62647211fd256a7cd69aec575a0eac1fd650"
+    },
+    {
+      "path": "yut-scenery-background.webp",
+      "size": 107288,
+      "sha256": "b35c534a6272e764be41c856c19c681dcee1f565f4ff1d2d0baf6a92d75725dd"
+    },
+    {
+      "path": "yut-ten-multiplayer.test.js",
+      "size": 3962,
+      "sha256": "5e7966daae78feb0813f35dbb3ccc01237b82984d6d2d1707289a436333eddd0"
+    },
+    {
+      "path": "yut-ten-ui.test.js",
+      "size": 3952,
+      "sha256": "688ec2f37d0e6f3e83590a9dd5cb7dffefe639ef7376202e8cc4a6d114960ae4"
+    },
+    {
+      "path": "yut-tray-wood.webp",
+      "size": 68770,
+      "sha256": "bd1db7722f9bb3004c89fc9dc6cc8d6674db3889fa890b463f81c7b03e875394"
+    },
+    {
+      "path": "yut-turn-marker.test.js",
+      "size": 3320,
+      "sha256": "c63ef0624f0a5790daaa2ba1064c9e29469d02930bbb93cf31e56c512a6f3d54"
+    },
+    {
+      "path": "yut-wood-panel.webp",
+      "size": 109420,
+      "sha256": "1aeda7b0490e425265c239c5bd6735b72b748d6a35c8575ea2b754c38bca2f7f"
+    },
+    {
+      "path": "yut-wood.mp3",
+      "size": 16749,
+      "sha256": "3b23032658d3c02bba7ad306e6236d689f625bfcafbb2ca0f1830013ec56f22b"
+    }
+  ]
+}

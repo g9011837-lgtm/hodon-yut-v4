@@ -72,4 +72,4 @@ export function resignKkung(g,seat,now=Date.now()){
  if(alive(g).length<=1)finish(g);
  else if(g.turn===seat){g.turn=nextSeat(g,seat);g.deadline=now+7000;}
 }
-export function publicKkung(g){if(!g)return null;const {used,...publicState}=g;return structuredClone({...publicState,heads:acceptedHeads(g.word.at(-1))});}
+export function publicKkung(g){if(!g)return null;const {used,rankRoster,rankMatchId,rankAwarded,...publicState}=g;return structuredClone({...publicState,heads:acceptedHeads(g.word.at(-1))});}
