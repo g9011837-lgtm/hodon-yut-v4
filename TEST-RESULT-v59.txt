@@ -12,7 +12,7 @@
 주요 파일 SHA-256
 index.html 4a7e16ddcda9a68e568c7808d27b5bf2ec126c743c5bff3d6b8de6822f55d832
 app.js 165570807d2241a91283bb001b05ce1cec7d5a653e1b5a1ef1ed22619b04ff92
-hodon-client-v59.js 165570807d2241a91283bb001b05ce1cec7d5a653e1b5a1ef1ed22619b04ff92
+hodon-client-v61.js 165570807d2241a91283bb001b05ce1cec7d5a653e1b5a1ef1ed22619b04ff92
 server.js c49fe8af9f71c3733fa0cd74b3c0146f5aa3c0213c58ce056d271744dfc5bd68
 package.json b1af2dba8b9ce33abe6d1e4b54b5755f82382ae4418868d57f008a9fb1d6848e
 package-lock.json 103c0a4c7b54f9c57aed5aad3bc6adfb4cd8a379c2a24499277bcb1a48498e08
@@ -23,5 +23,5 @@ sichuan.js 85270c24facfa3868284847bbe69fd9b2953ea7a092b46a570be79f1b2a145fb
 - npm ci --omit=dev 신규 설치 성공
 - ZIP 매니페스트의 모든 파일 바이트/해시 일치
 - HTML이 참조하는 모든 로컬 실행 파일/스타일/이미지 HTTP 200
-- 실제 패키지로 실행한 서버 v59.0 및 클라이언트 일치
+- 실제 패키지로 실행한 서버 v61.0 및 클라이언트 일치
 - 8개 게임 각각 참가자 2명의 방 생성/입장/게임 시작 성공

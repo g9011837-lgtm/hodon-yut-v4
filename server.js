@@ -22,19 +22,22 @@ app.get('/version.json',(req,res)=>res.set({'Cache-Control':'no-store, max-age=0
 // Bonto: HTML/CSS/JS assets reside alongside server.js at application root.
 app.get('/',(req,res)=>res.sendFile(join(ROOT,'index.html')));
 app.get('/index.html',(req,res)=>res.sendFile(join(ROOT,'index.html')));
+for(const name of ['stadium-banner.webp','stadium-hanja.woff2','stadium-ui.woff','stadium.css','stadium-ui.js','stadium-scene.webp',...Array.from({length:10},(_,i)=>`hodon-avatar-${i}.svg`),...Array.from({length:10},(_,i)=>`hodon-piece-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
+for(const name of ["approved.css", "approved-ui.js", "approved-busts.webp", "approved-tables.webp", "approved-food.webp", "approved-lobby.webp", "approved-lobby-chrome.svg", "approved-crest.svg","approved-yut-log.webp",...["approved-hero-yut.webp", "approved-hero-gomoku.webp", "approved-hero-poker.webp", "approved-hero-kkung.webp"],"approved-medal.svg","approved-tier-icons.svg",...Array.from({length:10},(_,i)=>`approved-bust-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 const voiceFiles=new Set(['do','gae','geol','yut','mo','backdo']);
 app.get('/voice/:clip.mp3',(req,res)=>voiceFiles.has(req.params.clip)?res.sendFile(join(ROOT,`voice-${req.params.clip}.mp3`)):res.sendStatus(404));
 app.get('/hwatu/:card.svg',(req,res)=>/^(?:[0-9]|1[0-9])$/.test(req.params.card)?res.sendFile(join(ROOT,`hwatu-${req.params.card}.svg`)):res.sendStatus(404));
 app.get('/HWATU-SOURCES.json',(req,res)=>res.sendFile(join(ROOT,'HWATU-SOURCES.json')));
 app.get('/HWATU-LICENSE.txt',(req,res)=>res.sendFile(join(ROOT,'HWATU-LICENSE.txt')));
 app.get('/app.js',(req,res)=>res.sendFile(join(ROOT,'app.js')));
-app.get('/hodon-client-v58.js',(req,res)=>{const source=readFileSync(join(ROOT,'app.js'),'utf8');if(!source.startsWith("const BUILD_VERSION='v59.0'"))return res.status(503).type('text/plain').send('v59 통합본의 실행 파일과 서버를 함께 적용해 주세요.');res.type('application/javascript').send(source);});
-app.get('/hodon-client-v59.js',(req,res)=>res.sendFile(join(ROOT,'hodon-client-v59.js')));
+app.get('/hodon-client-v58.js',(req,res)=>{const source=readFileSync(join(ROOT,'app.js'),'utf8');if(!source.startsWith("const BUILD_VERSION='v61.0'"))return res.status(503).type('text/plain').send('v61 통합본의 실행 파일과 서버를 함께 적용해 주세요.');res.type('application/javascript').send(source);});
+app.get('/hodon-client-v61.js',(req,res)=>res.sendFile(join(ROOT,'hodon-client-v61.js')));
 app.get('/style.css',(req,res)=>res.sendFile(join(ROOT,'style.css')));
 for(const asset of ['yut-garden.webp','yut-characters-v53.webp','yut-characters.webp','yut-wood-panel.webp'])app.get('/'+asset,(req,res)=>res.sendFile(join(ROOT,asset)));
 let avatarData=null;
 app.get('/avatars/:avatarId.svg',(req,res)=>{
- if(!/^[0-4]$/.test(req.params.avatarId))return res.sendStatus(404);
+ if(!/^[0-9]$/.test(req.params.avatarId))return res.sendStatus(404);
+ return res.sendFile(join(ROOT,`hodon-avatar-${req.params.avatarId}.svg`));
  const id=Number(req.params.avatarId);
  if(!avatarData)avatarData=readFileSync(join(ROOT,'avatar-sheet.jpg')).toString('base64');
  res.type('image/svg+xml').set('Cache-Control','public, max-age=86400').send(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="${id%3*512} ${Math.floor(id/3)*512} 512 512"><image width="1536" height="1024" href="data:image/jpeg;base64,${avatarData}"/></svg>`);
@@ -115,14 +118,14 @@ function rankList(){return Object.values(stats).sort((a,b)=>b.wins-a.wins||b.pla
 
 const CODE_ALPHABET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function code() {let s;do{s=Array.from(randomBytes(6),b=>CODE_ALPHABET[b%CODE_ALPHABET.length]).join('')}while(rooms.has(s));return s;}
-function validAvatar(data){return data.avatarId===undefined||(Number.isInteger(data.avatarId)&&data.avatarId>=0&&data.avatarId<5);}
+function validAvatar(data){return data.avatarId===undefined||(Number.isInteger(data.avatarId)&&data.avatarId>=0&&data.avatarId<10);}
 function cleanName(input) {if(typeof input!=='string') return '';return input.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,14);}
 function failure(callback,reason,code) {if(typeof callback==='function')callback({ok:false,error:reason,...(code?{code}:{})});}
 function reply(callback,data={}) {if(typeof callback==='function')callback({ok:true,...data});}
 function seotdaStarters(room){const seats=new Set([room.host]);const g=room.seotda;if(g?.status==='finished')for(const pot of g.pots||[])if(!pot.refund)for(const i of pot.winners||[])if(room.players[i]&&room.seotdaTokens?.[i]===room.players[i].token)seats.add(i);return [...seats].filter(i=>room.players[i]);}
 function seotdaHandParticipants(room){return room.players.map((p,i)=>!!p&&!!room.seotda?.players[i]?.name&&room.seotdaTokens?.[i]===p.token);}
 function seotdaNeedsReset(room){return room.seotdaRelay?.status==='finished'||!!room.seotda&&room.wallets.filter((n,i)=>room.players[i]&&n>0).length<2;}
-function summary(room,viewer=null) {return {serverNow:Date.now(),sichuan:scEngine?.publicSichuan(room.sichuan,viewer!==null&&room.sichuanTokens?.[viewer]===room.players[viewer]?.token?viewer:null)||null,sichuanMap:room.sichuanMap,sichuanMode:room.sichuanMode,sichuanChat:room.sichuanChat||[],sichuanProfiles:room.players.map(p=>p?.profileId?scStore?.row(p.profileId):null),sichuanGod:scStore?.leaders().find(p=>p.god)||null,sichuanSaveError:!!room.sichuan?.recordError,kkung:room.kkung?kkEngine.publicKkung(room.kkung):null,kkungChat:room.kkungChat||[],roomTitle:room.roomTitle,alkkagi:publicAlkkagi(room.alkkagi),leavePending:room.players.flatMap((p,i)=>p?.leaveRequested?[i]:[]),seatEntryBlocked:seatEntryBlocked(room),seatRequests:room.spectators.filter(w=>Number.isInteger(w.requestedSeat)).map(w=>({id:w.id,seat:w.requestedSeat,name:w.name})),seotdaRelay:room.seotdaRelay?{...room.seotdaRelay,eliminated:[...room.seotdaRelay.eliminated],retired:[...room.seotdaRelay.retired]}:null,seotdaStarters:seotdaStarters(room),seotdaParticipants:seotdaHandParticipants(room),seotdaNeedsReset:seotdaNeedsReset(room),poker:publicPoker(room.poker,viewer!==null&&room.pokerTokens?.[viewer]===room.players[viewer]?.token?viewer:null),wallets:[...room.wallets],serverVersion:SERVER_VERSION,gameType:room.gameType||'yut',pokerRule:room.pokerRule,seotdaCards:room.seotdaCards,seotda:publicSeotda(room.seotda,viewer!==null&&room.seotdaTokens?.[viewer]===room.players[viewer]?.token?viewer:null),gomoku:publicGomoku(room.gomoku),gomokuSamePlayers:!!room.gomokuTokens?.every((t,i)=>t===room.players[i]?.token),gomokuMinutes:room.gomokuMinutes,base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.sichuan?.status||room.kkung?.status||room.alkkagi?.status||room.poker?.status||room.seotda?.status||room.gomoku?.status||room.badugi?.status||room.game?.status||'lobby',
+function summary(room,viewer=null) {return {myRecords:viewer!==null&&room.players[viewer]?.profileId?scStore?.records(room.players[viewer].profileId):null,serverNow:Date.now(),sichuan:scEngine?.publicSichuan(room.sichuan,viewer!==null&&room.sichuanTokens?.[viewer]===room.players[viewer]?.token?viewer:null)||null,sichuanMap:room.sichuanMap,sichuanMode:room.sichuanMode,sichuanChat:room.sichuanChat||[],sichuanProfiles:room.players.map(p=>p?.profileId?scStore?.row(p.profileId):null),sichuanGod:scStore?.leaders().find(p=>p.god)||null,sichuanSaveError:!!room.sichuan?.recordError,kkung:room.kkung?kkEngine.publicKkung(room.kkung):null,kkungChat:room.kkungChat||[],roomTitle:room.roomTitle,alkkagi:publicAlkkagi(room.alkkagi),leavePending:room.players.flatMap((p,i)=>p?.leaveRequested?[i]:[]),seatEntryBlocked:seatEntryBlocked(room),seatRequests:room.spectators.filter(w=>Number.isInteger(w.requestedSeat)).map(w=>({id:w.id,seat:w.requestedSeat,name:w.name})),seotdaRelay:room.seotdaRelay?{...room.seotdaRelay,eliminated:[...room.seotdaRelay.eliminated],retired:[...room.seotdaRelay.retired]}:null,seotdaStarters:seotdaStarters(room),seotdaParticipants:seotdaHandParticipants(room),seotdaNeedsReset:seotdaNeedsReset(room),poker:publicPoker(room.poker,viewer!==null&&room.pokerTokens?.[viewer]===room.players[viewer]?.token?viewer:null),wallets:[...room.wallets],serverVersion:SERVER_VERSION,gameType:room.gameType||'yut',pokerRule:room.pokerRule,seotdaCards:room.seotdaCards,seotda:publicSeotda(room.seotda,viewer!==null&&room.seotdaTokens?.[viewer]===room.players[viewer]?.token?viewer:null),gomoku:publicGomoku(room.gomoku),gomokuSamePlayers:!!room.gomokuTokens?.every((t,i)=>t===room.players[i]?.token),gomokuMinutes:room.gomokuMinutes,base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.sichuan?.status||room.kkung?.status||room.alkkagi?.status||room.poker?.status||room.seotda?.status||room.gomoku?.status||room.badugi?.status||room.game?.status||'lobby',
   piecesPerPlayer:room.piecesPerPlayer,playerCount:room.playerCount,matchMode:room.matchMode,turnSeconds:room.turnSeconds,players:room.players.map(p=>p?({name:p.name,avatarId:p.avatarId??0,connected:!!p.socketId}):null),
   spectators:(room.spectators||[]).map(p=>({name:p.name,avatarId:p.avatarId??0,connected:!!p.socketId,id:p.id})),
   colors:COLORS,game:room.game?publicGame(room.game):null};}
@@ -150,10 +153,10 @@ function availableSeat(room){return room.players.findIndex((p,i)=>!p&&!room.spec
 function promoteWatcher(room,watcher,seat){
  const client=io.sockets.sockets.get(watcher.socketId);if(!client||room.players[seat])return null;
  room.spectators.splice(room.spectators.indexOf(watcher),1);
- room.players[seat]={name:watcher.name,avatarId:watcher.avatarId,token:watcher.token,socketId:client.id};
+ room.players[seat]={name:watcher.name,avatarId:watcher.avatarId,...(client.data.account||{}),token:watcher.token,socketId:client.id};
  if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
  if(!room.players[room.host])room.host=seat;
- client.data={roomCode:room.code,token:watcher.token,role:'player'};
+ client.data={account:client.data.account,roomCode:room.code,token:watcher.token,role:'player'};
  const session={code:room.code,token:watcher.token,seat,role:'player'};client.emit('room:role',session);return session;
 }
 function promoteWaitingWatchers(room){if(seatEntryBlocked(room))return;for(const w of [...room.spectators])if(Number.isInteger(w.requestedSeat)&&!room.players[w.requestedSeat])promoteWatcher(room,w,w.requestedSeat);}
@@ -167,7 +170,7 @@ function removeRoomPlayer(room,seat,notify=false){
  const player=room.players[seat];if(!player)return;
  if(room.seotdaRelay?.status==='playing'){forfeitSeotdaRelay(room.seotdaRelay,room.seotda,seat);room.wallets[seat]=0;}
  room.players[seat]=null;
- const client=io.sockets.sockets.get(player.socketId);if(client){client.leave(room.code);client.data={};if(notify)client.emit('room:left',{code:room.code,reason:'reserved'});}
+ const client=io.sockets.sockets.get(player.socketId);if(client){client.leave(room.code);client.data={account:client.data.account,};if(notify)client.emit('room:left',{code:room.code,reason:'reserved'});}
  if(room.host===seat||!room.players[room.host]){room.host=room.players.findIndex(p=>p?.socketId);if(room.host<0)room.host=room.players.findIndex(Boolean);}
  if(!room.players.some(Boolean)&&!room.spectators.length)rooms.delete(room.code);
 }
@@ -189,6 +192,18 @@ function publicRooms(){return [...rooms.values()].filter(r=>r.players.some(p=>p?
  });}
 function broadcastLobby(){checkpointRooms();const list=publicRooms(),snapshot=JSON.stringify(list);if(snapshot===lastLobbySnapshot)return;lastLobbySnapshot=snapshot;io.to(LOBBY_CHANNEL).emit('lobby:state',{rooms:list});}
 function broadcast(room){
+ const type=room.gameType||'yut',g=room[type==='yut'?'game':type];
+ if(g&&type!=='sichuan'&&scStore){
+  g.rankMatchId??=randomUUID();
+  if(!g.rankRoster)g.rankRoster=room.players.map((p,i)=>p&&g.participants?.[i]!==false&&room[type+'Participants']?.[i]!==false&&(!g.players||g.players[i]?.name)?{profileId:p.profileId}:null);
+  if(g.status==='finished'&&!g.rankAwarded){try{
+   let winners=Number.isInteger(g.winner)?[g.winner]:[];
+   if(type==='yut'&&g.mode==='team')winners=g.rankRoster.flatMap((p,i)=>p&&i%2===g.winner?[i]:[]);
+   if(['badugi','seotda','poker'].includes(type))winners=[...new Set((g.pots||[]).filter(p=>!p.refund&&!p.replay).flatMap(p=>p.winners||[]))];
+   scStore.awardGame(type,g.rankMatchId,g.rankRoster,winners);g.rankAwarded=true;
+  }catch(e){console.error('Game records:',e.message);}}
+ }
+
  if(room.sichuan?.status==='finished'&&!room.sichuan.awarded){try{scStore.award(room.sichuan);room.sichuan.recordError=false;}catch(e){room.sichuan.recordError=true;console.error('Sichuan records:',e.message);}}
  syncFinishedWallets(room);processLeaveRequests(room);
  if(!rooms.has(room.code)){broadcastLobby();return;}
@@ -206,6 +221,17 @@ function detach(socket) {
 }
 function activeSeats(room){return room.players.map(Boolean);}
 io.on('connection',socket=>{
+  socket.on('player:profile',async(data={},cb)=>{
+   try{await getSichuan();const name=cleanName(data.name)||'호돈',a=authorization(socket);
+    const credential=data.credential||a?.player.profileCredential||socket.data.account?.profileCredential;
+    if(a&&currentHandPlaying(a.room,a.seat)&&credential&&credential!==a.player.profileCredential)throw Error('경기 중에는 기록을 변경할 수 없습니다.');
+    const result=scStore.ensure(credential,name);
+    socket.data.account={profileId:result.profile.id,profileCredential:result.credential};
+    if(a){Object.assign(a.player,socket.data.account);}
+    reply(cb,{...result,records:scStore.records(result.profile.id)});
+   }catch(e){failure(cb,e.message);}
+  });
+
   socket.on('lobby:watch',(_,cb)=>{socket.join(LOBBY_CHANNEL);socket.data.lobbyWatching=true;reply(cb,{rooms:publicRooms(),chats:lobbyChats.slice(-80)});});
   socket.on('lobby:list',(_,cb)=>reply(cb,{rooms:publicRooms()}));
   socket.on('lobby:chat',(data={},cb)=>{
@@ -220,7 +246,7 @@ io.on('connection',socket=>{
 
 
   socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:SERVER_VERSION,roomProtocol:2,bootId:BOOT_ID,uptimeMs:Date.now()-BOOT_AT,roomRecovery:!recoverySaveFailed,games:['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan']}));
-  socket.on('room:create',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'얼굴을 5개 중에서 선택해 주세요.');
+  socket.on('room:create',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'캐릭터를 10종 중에서 선택해 주세요.');
     if(authorization(socket)||spectatorAuthorization(socket)) return failure(cb,'이미 방에 참가 중입니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
     const playerCount=Number(data.playerCount);
@@ -243,11 +269,11 @@ io.on('connection',socket=>{
     const titleIn=typeof data.roomTitle==='string'?data.roomTitle.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,32):'';
     const roomTitle=titleIn||name+'의 '+({yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[gameType])+'방';
     const sichuanMap=['butterfly','heart','diamond','bridge','square','flower','random'].includes(data.sichuanMap)?data.sichuanMap:'butterfly',sichuanMode=data.sichuanMode==='first'?'first':'relay';
-    const room={sichuan:null,sichuanMap,sichuanMode,sichuanChat:[],kkung:null,kkungChat:[],roomTitle,alkkagi:null,poker:null,pokerRule,seotda:null,seotdaCards,gomoku:null,gomokuMinutes,gameType,base,startingChips,wallets:Array(playerCount).fill(startingChips),badugi:null,code:id,host:0,piecesPerPlayer:matchMode==='team'?3:count,matchMode,turnSeconds,playerCount,players:[{name,avatarId:data.avatarId??0,token,socketId:socket.id},...Array(playerCount-1).fill(null)],spectators:[],game:null,createdAt:Date.now()};
-    rooms.set(id,room);checkpointRooms(true);socket.join(id);socket.data={roomCode:id,token,role:'player'};
+    const room={sichuan:null,sichuanMap,sichuanMode,sichuanChat:[],kkung:null,kkungChat:[],roomTitle,alkkagi:null,poker:null,pokerRule,seotda:null,seotdaCards,gomoku:null,gomokuMinutes,gameType,base,startingChips,wallets:Array(playerCount).fill(startingChips),badugi:null,code:id,host:0,piecesPerPlayer:matchMode==='team'?3:count,matchMode,turnSeconds,playerCount,players:[{name,avatarId:data.avatarId??0,...(socket.data.account||{}),token,socketId:socket.id},...Array(playerCount-1).fill(null)],spectators:[],game:null,createdAt:Date.now()};
+    rooms.set(id,room);checkpointRooms(true);socket.join(id);socket.data={account:socket.data.account,roomCode:id,token,role:'player'};
     reply(cb,{code:id,token,seat:0,role:'player',gameType:room.gameType,serverVersion:SERVER_VERSION});broadcast(room);
   });
-  socket.on('room:join',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'얼굴을 5개 중에서 선택해 주세요.');
+  socket.on('room:join',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'캐릭터를 10종 중에서 선택해 주세요.');
     const current=authorization(socket),watching=spectatorAuthorization(socket);
     if(current||watching){const r=current?.room||watching.room;if(r.code===String(data.code||'').trim().toUpperCase()&&socket.data.token===data.token){reply(cb,{code:r.code,token:socket.data.token,seat:current?.seat??null,role:current?'player':'spectator'});broadcast(r);return;}return failure(cb,'먼저 현재 방을 나가 주세요.');}
     const id=String(data.code||'').trim().toUpperCase();const room=rooms.get(id);
@@ -257,7 +283,7 @@ io.on('connection',socket=>{
     if(seat>=0){
       const former=room.players[seat].socketId;
       if(former&&former!==socket.id){const old=io.sockets.sockets.get(former);if(old){old.data={};old.leave(id);old.emit('session:replaced');}}
-      room.players[seat].socketId=socket.id;socket.data={roomCode:id,token:tokenIn,role:'player'};socket.join(id);
+      room.players[seat].socketId=socket.id;socket.data={account:socket.data.account,roomCode:id,token:tokenIn,role:'player'};socket.join(id);
       reply(cb,{code:id,token:tokenIn,seat,role:'player'});broadcast(room);return;
     }
     let spectatorIndex=(room.spectators||[]).findIndex(p=>p.token===tokenIn&&tokenIn);
@@ -269,17 +295,17 @@ io.on('connection',socket=>{
         watcher.socketId=socket.id;
       }else{
         const name=cleanName(data.name);if(!name)return failure(cb,'관전할 닉네임을 입력해 주세요.');
-        const watcher={id:randomUUID(),name,avatarId:data.avatarId??0,token:randomUUID(),socketId:socket.id};room.spectators.push(watcher);spectatorIndex=room.spectators.length-1;
+        const watcher={id:randomUUID(),name,avatarId:data.avatarId??0,...(socket.data.account||{}),token:randomUUID(),socketId:socket.id};room.spectators.push(watcher);spectatorIndex=room.spectators.length-1;
       }
-      const watcher=room.spectators[spectatorIndex];socket.data={roomCode:id,token:watcher.token,role:'spectator'};socket.join(id);
+      const watcher=room.spectators[spectatorIndex];socket.data={account:socket.data.account,roomCode:id,token:watcher.token,role:'spectator'};socket.join(id);
       socket.emit('room:spectator-identity',{id:watcher.id});reply(cb,{code:id,token:watcher.token,seat:null,role:'spectator'});broadcast(room);return;
     }
     if(room.game?.status==='playing')return failure(cb,'게임이 진행 중입니다. 관전 입장 버튼을 이용해 주세요.');
     seat=availableSeat(room);
     if(seat<0)return failure(cb,'방이 가득 찼습니다. 관전으로 입장할 수 있습니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
-    const newToken=randomUUID();room.players[seat]={name,avatarId:data.avatarId??0,token:newToken,socketId:socket.id};if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
-    if(!room.players[room.host])room.host=seat;socket.data={roomCode:id,token:newToken,role:'player'};socket.join(id);
+    const newToken=randomUUID();room.players[seat]={name,avatarId:data.avatarId??0,...(socket.data.account||{}),token:newToken,socketId:socket.id};if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
+    if(!room.players[room.host])room.host=seat;socket.data={account:socket.data.account,roomCode:id,token:newToken,role:'player'};socket.join(id);
     reply(cb,{code:id,token:newToken,seat,role:'player'});broadcast(room);
   });
   socket.on('room:take-seat',(_,cb)=>{
@@ -297,7 +323,7 @@ io.on('connection',socket=>{
   });
   socket.on('room:leave',(_,cb)=>{
     const watch=spectatorAuthorization(socket);
-    if(watch){const {room,index}=watch;room.spectators.splice(index,1);socket.leave(room.code);socket.data={};if(!room.players.some(Boolean)&&!room.spectators.length)rooms.delete(room.code);else broadcast(room);reply(cb,{left:true});broadcastLobby();return;}
+    if(watch){const {room,index}=watch;room.spectators.splice(index,1);socket.leave(room.code);socket.data={account:socket.data.account,};if(!room.players.some(Boolean)&&!room.spectators.length)rooms.delete(room.code);else broadcast(room);reply(cb,{left:true});broadcastLobby();return;}
     const a=authorization(socket);if(!a)return failure(cb,'방에 참가 중이 아닙니다.');
     const {room,seat,player}=a;
     if(currentHandPlaying(room,seat)){player.leaveRequested=true;reply(cb,{pending:true});broadcast(room);return;}
@@ -313,7 +339,7 @@ io.on('connection',socket=>{
     if(data.seat!==undefined&&data.seat!==null&&Number.isInteger(Number(data.seat))){
       const target=Number(data.seat);if(target<0||target>=room.players.length||target===seat||!room.players[target])return failure(cb,'강퇴할 참가자를 확인해 주세요.');
       const kicked=room.players[target],oldSocket=kicked.socketId;room.players[target]=null;
-      if(oldSocket){const client=io.sockets.sockets.get(oldSocket);if(client){client.data={};client.leave(room.code);client.emit('session:kicked');}}
+      if(oldSocket){const client=io.sockets.sockets.get(oldSocket);if(client){client.data={account:client.data.account,};client.leave(room.code);client.emit('session:kicked');}}
       if(scActive(room)&&room.sichuan.players[target]?.status==='playing')scEngine.resignSichuan(room.sichuan,target);
       if(room.kkung?.status==='playing'&&room.kkung.players[target]?.lives)kkEngine.resignKkung(room.kkung,target);
       if(room.alkkagi?.status==='playing')resignAlkkagi(room.alkkagi,target);
@@ -324,11 +350,11 @@ io.on('connection',socket=>{
       if(room.game?.status==='playing'){removeYutPlayer(room.game,target);if(room.game.status==='finished')recordWin(room);}
       if(room.game?.status==='playing'&&room.game.turn===target){room.game.moves=[];room.game.rollCredits=0;maybeNextTurn(room.game,activeSeats(room));say(room,`${kicked.name} 님이 강퇴되어 차례를 넘겼습니다.`);}
       else say(room,`${kicked.name} 님이 방장에 의해 강퇴되었습니다.`);
-      socket.data={roomCode:room.code,token:a.player.token,role:'player'};reply(cb);broadcast(room);return;
+      socket.data={account:socket.data.account,roomCode:room.code,token:a.player.token,role:'player'};reply(cb);broadcast(room);return;
     }
     const targetId=String(data.spectatorId||'');const index=room.spectators.findIndex(p=>p.id===targetId);
     if(index<0)return failure(cb,'강퇴할 관전자를 찾을 수 없습니다.');
-    const [watcher]=room.spectators.splice(index,1);if(watcher.socketId){const client=io.sockets.sockets.get(watcher.socketId);if(client){client.data={};client.leave(room.code);client.emit('session:kicked');}}
+    const [watcher]=room.spectators.splice(index,1);if(watcher.socketId){const client=io.sockets.sockets.get(watcher.socketId);if(client){client.data={account:client.data.account,};client.leave(room.code);client.emit('session:kicked');}}
     say(room,`${watcher.name} 님이 관전방에서 강퇴되었습니다.`);reply(cb);broadcast(room);
   });
   socket.on('game:start',async(data={},cb)=>{data=data||{};
@@ -447,7 +473,7 @@ io.on('connection',socket=>{
     try{await getSichuan();if(authorization(socket)?.player!==a.player)throw Error('입장 상태가 바뀌었습니다.');
       if(scActive(a.room))throw Error('경기 중에는 기록을 변경할 수 없습니다.');
       const credential=data?.credential||a.player.profileCredential||null;
-      const res=scStore.ensure(credential,a.player.name);a.player.profileId=res.profile.id;a.player.profileCredential=res.credential;reply(cb,res);broadcast(a.room);
+      const res=scStore.ensure(credential,a.player.name);a.player.profileId=res.profile.id;a.player.profileCredential=res.credential;socket.data.account={profileId:res.profile.id,profileCredential:res.credential};reply(cb,res);broadcast(a.room);
     }catch(e){failure(cb,e.message);}
   });
   socket.on('sichuan:settings',(data={},cb)=>{const a=authorization(socket);if(!a||a.room.gameType!=='sichuan'||a.seat!==a.room.host||scActive(a.room)||a.room.sichuanStarting)return failure(cb,'대기 중인 방장만 설정할 수 있습니다.');

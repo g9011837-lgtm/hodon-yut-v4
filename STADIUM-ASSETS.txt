@@ -1,0 +1,16 @@
+HODON Stadium v60 assets
+
+hodon-avatar-0.svg .. hodon-avatar-9.svg / hodon-piece-0.svg .. hodon-piece-9.svg:
+User-supplied image(20261109-183949).png, preserved as an embedded PNG with native SVG viewport/polygon clipping. No replacement characters generated.
+
+stadium-scene.webp:
+AI-generated production stadium environment, converted to WebP. No baked-in game UI, player statistics, or board pieces.
+
+stadium-banner.webp:
+User-approved generated stadium mockup, converted to WebP and displayed through a CSS viewport showing only the top stadium/mascot banner. Dynamic current game title overlays the original category label. The mockup's gameplay UI is outside the visible viewport.
+
+stadium-ui.woff:
+Same HodonUI font already embedded in the original Sichuan view, reused for consistent Korean UI rendering.
+
+stadium-hanja.woff2:
+Noto Sans SC bold subset for 車馬象士漢楚包兵卒, served locally. Downloaded via Google Fonts. SIL Open Font License, see STADIUM-FONT-LICENSE.txt.
