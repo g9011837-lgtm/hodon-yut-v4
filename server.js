@@ -14,7 +14,7 @@ import { newGame, removeYutPlayer, throwYut, throwWithPower, movePiece, maybeNex
 
 const app=express();
 app.disable('x-powered-by');
-app.use((req,res,next)=>{if(req.path==='/'||req.path==='/welcome.mp3'||/\.(js|css|html)$/.test(req.path))res.set({'Cache-Control':'no-store, no-cache, must-revalidate, max-age=0','Pragma':'no-cache','Expires':'0'});next();});
+app.use((req,res,next)=>{if(req.path==='/'||req.path==='/welcome.mp3'||/\.(js|css|html|svg)$/.test(req.path))res.set({'Cache-Control':'no-store, no-cache, must-revalidate, max-age=0','Pragma':'no-cache','Expires':'0'});next();});
 const ROOT=dirname(fileURLToPath(import.meta.url));
 const PACKAGE_VERSION=JSON.parse(readFileSync(join(ROOT,'package.json'),'utf8')).version;
 const SERVER_VERSION='v'+PACKAGE_VERSION.split('.').slice(0,2).join('.');
@@ -22,7 +22,7 @@ app.get('/version.json',(req,res)=>res.set({'Cache-Control':'no-store, max-age=0
 // Bonto: HTML/CSS/JS assets reside alongside server.js at application root.
 app.get('/',(req,res)=>res.sendFile(join(ROOT,'index.html')));
 app.get('/index.html',(req,res)=>res.sendFile(join(ROOT,'index.html')));
-for(const name of ['stadium-banner.webp','stadium-hanja.woff2','stadium-ui.woff','hodon-round.woff','stadium.css','stadium-ui.js','stadium-scene.webp',...Array.from({length:10},(_,i)=>`hodon-avatar-${i}.svg`),...Array.from({length:10},(_,i)=>`hodon-piece-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
+for(const name of ['stadium-banner.webp','stadium-hanja.woff2','hodon-korean.woff','stadium-ui.woff','hodon-round.woff','stadium.css','stadium-ui.js','stadium-scene.webp',...Array.from({length:10},(_,i)=>`hodon-avatar-${i}.svg`),...Array.from({length:10},(_,i)=>`hodon-piece-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 for(const name of ["sculpted.css","sculpted-ui.js","sculpted-yut-stick.svg","sculpted-yut-stick.webp","approved.css", "approved-ui.js", "approved-busts.webp", "approved-tables.webp", "approved-food.webp", "approved-lobby.webp", "approved-lobby-chrome.svg", "approved-crest.svg","approved-yut-log.webp","approved-yut-drum.webp",...["approved-hero-yut.webp", "approved-hero-gomoku.webp", "approved-hero-poker.webp", "approved-hero-kkung.webp"],"approved-medal.svg","approved-tier-icons.svg",...Array.from({length:10},(_,i)=>`approved-bust-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 const voiceFiles=new Set(['do','gae','geol','yut','mo','backdo']);
 app.get('/voice/:clip.mp3',(req,res)=>voiceFiles.has(req.params.clip)?res.sendFile(join(ROOT,`voice-${req.params.clip}.mp3`)):res.sendStatus(404));
