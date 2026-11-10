@@ -1,7 +1,7 @@
 // Server-authoritative wooden-piece flick game. All positions are public.
 export const ALK_BOARD={width:900,height:720,left:42,right:858,top:38,bottom:682};
 export const ALK_BARRIERS=[{x1:155,x2:250,y:360,r:7},{x1:650,x2:745,y:360,r:7}];
-export const ALK_PHYSICS=Object.freeze({version:'wood-3',maxLaunchSpeed:360,powerExponent:1.1,slidingDeceleration:300,pieceRestitution:.34,barrierRestitution:.28,impactFriction:.22});
+export const ALK_PHYSICS=Object.freeze({version:'wood-4',maxLaunchSpeed:1080,powerExponent:1.1,slidingDeceleration:300,pieceRestitution:.34,barrierRestitution:.28,impactFriction:.22});
 export function alkLaunchSpeed(power,mass){if(!Number.isFinite(power)||power<0||power>1||!Number.isFinite(mass)||mass<=0)throw Error('올바른 힘과 질량이 필요합니다.');return ALK_PHYSICS.maxLaunchSpeed*Math.pow(power,ALK_PHYSICS.powerExponent)/Math.sqrt(mass);}
 // Contact friction is limited by the normal impulse, preserving momentum while dissipating energy.
 export function resolveAlkkagiImpact(a,b,nx,ny){const invA=1/a.mass,invB=1/b.mass,denom=invA+invB,relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(relative>=0)return 0;const impulse=-(1+ALK_PHYSICS.pieceRestitution)*relative/denom;a.vx-=impulse*nx*invA;a.vy-=impulse*ny*invA;b.vx+=impulse*nx*invB;b.vy+=impulse*ny*invB;const tx=-ny,ty=nx,tangent=(b.vx-a.vx)*tx+(b.vy-a.vy)*ty,limit=impulse*ALK_PHYSICS.impactFriction,jt=Math.max(-limit,Math.min(limit,-tangent/denom));a.vx-=jt*tx*invA;a.vy-=jt*ty*invA;b.vx+=jt*tx*invB;b.vy+=jt*ty*invB;return -relative;}

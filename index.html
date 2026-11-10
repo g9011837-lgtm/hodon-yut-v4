@@ -1,13 +1,13 @@
 <!doctype html>
-<html data-build-version="v61.1" lang="ko" translate="no" class="notranslate"><head>
+<html data-build-version="v61.2" lang="ko" translate="no" class="notranslate"><head>
   <meta charset="utf-8">
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#071d1a">
   <meta name="description" content="가입 없이 친구들과 즐기는 최대 10인 실시간 호돈 윷놀이">
-  <title>호돈 게임방 v61.1 — 윷놀이 · 바둑이 · 오목 · 섯다 · 7포커 · 알까기 · 쿵쿵따</title>
-  <link rel="stylesheet" href="/style.css?v=61.1"><link rel="stylesheet" href="/badugi.css?v=61.1">
-<link rel="stylesheet" href="/gomoku.css?v=61.1"><link rel="stylesheet" href="/seotda.css?v=61.1"><link rel="stylesheet" href="/poker.css?v=61.1"><style id="hodon-lobby-style">
+  <title>호돈 게임방 v61.2 — 윷놀이 · 바둑이 · 오목 · 섯다 · 7포커 · 알까기 · 쿵쿵따</title>
+  <link rel="stylesheet" href="/style.css?v=61.2"><link rel="stylesheet" href="/badugi.css?v=61.2">
+<link rel="stylesheet" href="/gomoku.css?v=61.2"><link rel="stylesheet" href="/seotda.css?v=61.2"><link rel="stylesheet" href="/poker.css?v=61.2"><style id="hodon-lobby-style">
 /* Embedded in index.html so the lobby stays styled when a large legacy CSS upload is missed. */
 [hidden],.hidden{display:none!important}#landing{display:none!important}.lobby-dialog:not([open]){display:none!important}.lobby-sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 body.public-lobby-open{background:radial-gradient(ellipse at 50% 0,#163c2a 0,#08261d 55%,#041b14 100%);color:#f6e8bb;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;margin:0;min-height:100vh}body.public-lobby-open .app{max-width:1600px;padding:14px 18px 18px;margin:auto;box-sizing:border-box}body.public-lobby-open header{display:flex;align-items:center;gap:20px;flex-wrap:wrap;min-height:77px;box-sizing:border-box;margin:0 0 16px;padding:10px 18px;border:1px solid #b3924c;border-radius:9px;background:repeating-linear-gradient(1deg,#3b2415 0,#352013 2px,#29190f 4px,#392316 6px);box-shadow:inset 0 1px #dfc28966,0 4px 15px #0005}body.public-lobby-open .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}body.public-lobby-open .brand-face{width:55px;height:55px;min-width:55px;object-fit:cover;border:2px solid #d9b366;border-radius:50%;box-shadow:0 0 0 2px #1c160c}body.public-lobby-open .brand-word{font:700 29px/1.2 Georgia,serif;letter-spacing:0;color:#f1d693;text-shadow:0 2px #1b0d05}body.public-lobby-open .brand-word small,body.public-lobby-open .brand>i,body.public-lobby-open #hub-wallet,body.public-lobby-open .top-chip{display:none}body.public-lobby-open .game-tabs{display:flex;flex:1;justify-content:center;align-items:center;gap:5px;margin:0;padding:0;border:0}body.public-lobby-open .game-tabs button{transform:none;min-width:66px;padding:10px 15px;min-height:42px;white-space:nowrap;border:1px solid transparent;border-radius:7px;background:transparent;color:#e4d8b8;font-size:16px;font-weight:750;box-shadow:none}body.public-lobby-open .game-tabs button:hover{background:#80633833;border-color:#8d703e}body.public-lobby-open .game-tabs button.selected{background:linear-gradient(#e9c66d,#a97b27);border-color:#eec979;color:#291d0a;box-shadow:inset 0 1px #fff0bb,0 2px 4px #0006}body.public-lobby-open .header-right{font-size:10px;margin-left:0;max-width:170px}body.public-lobby-open .sound-settings{margin:0;position:relative}body.public-lobby-open .sound-settings summary{border-color:#a3854d;background:#2c2318;color:#f3e1b1;font-size:12px}body.public-lobby-open main{display:block;width:100%;margin:0;padding:0}body:not(.public-lobby-open) #tab-all{display:none}
@@ -35,15 +35,15 @@ body.public-lobby-open #public-lobby.lobby-shell{display:grid;grid-template-colu
 body.alkkagi-mode:not(.public-lobby-open) .app{max-width:min(1390px,calc((100svh - 330px)*1.25 + 280px))}body.alkkagi-mode:not(.public-lobby-open) header{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:8px 12px;margin:0 0 9px;min-height:58px;background:linear-gradient(#5d3b19,#26180e);border:1px solid #bc9454;border-radius:5px}body.alkkagi-mode .brand{flex:0 0 auto;gap:8px}body.alkkagi-mode .brand-face{width:38px;height:38px;min-width:38px}body.alkkagi-mode .brand-word{font-size:24px;line-height:1.1;white-space:nowrap;width:auto}body.alkkagi-mode .brand-word small,body.alkkagi-mode .brand>i,body.alkkagi-mode .top-chip,body.alkkagi-mode #hub-wallet{display:none}body.alkkagi-mode .game-tabs{display:flex;flex:1;flex-wrap:nowrap;gap:4px;justify-content:center;margin:0;width:auto}body.alkkagi-mode .game-tabs button{transform:none;min-width:0;padding:7px 9px;font-size:12px;min-height:32px;box-shadow:none;border-radius:4px;background:linear-gradient(#4e3b21,#2a2118);border:1px solid #a58a5a;color:#eadcb5}body.alkkagi-mode .game-tabs button.selected{background:linear-gradient(#edcf82,#a7833c);color:#2e2315;border-color:#ffdfa0}body.alkkagi-mode .sound-settings{margin:0}body.alkkagi-mode #sound-summary{font-size:10px;padding:6px 8px}body.alkkagi-mode #connection{font-size:9px;max-width:140px;white-space:nowrap}.alk-stars{box-sizing:border-box}.alk-top{min-height:57px;box-sizing:border-box}.alk-aim-controls>span{font-size:11px}.alk-remaining strong{font-variant-numeric:tabular-nums}
 @media(max-width:650px){body.alkkagi-mode:not(.public-lobby-open) .app{max-width:100%;padding:5px}body.alkkagi-mode:not(.public-lobby-open) header{padding:7px;gap:7px}body.alkkagi-mode .brand-word{font-size:21px}body.alkkagi-mode .game-tabs{order:4;flex-basis:100%;justify-content:space-between}body.alkkagi-mode .game-tabs button{flex:1;font-size:11px;padding:6px 3px}body.alkkagi-mode .sound-settings{margin-left:auto}body.alkkagi-mode #connection{max-width:115px;font-size:8px}}
 </style>
-<link rel="stylesheet" href="/lounge.css?v=61.1&scene=2">
-<link rel="stylesheet" href="/kkung.css?v=61.1">
-<link rel="stylesheet" href="/premium.css?v=61.1&theme=premium-1">
-<link rel="stylesheet" href="/studio.css?v=61.1">
-<link rel="stylesheet" href="/approved.css?v=61.1"></head>
+<link rel="stylesheet" href="/lounge.css?v=61.2&scene=2">
+<link rel="stylesheet" href="/kkung.css?v=61.2">
+<link rel="stylesheet" href="/premium.css?v=61.2&theme=premium-1">
+<link rel="stylesheet" href="/studio.css?v=61.2">
+<link rel="stylesheet" href="/approved.css?v=61.2"></head>
 <body translate="no" class="stadium-theme">
 <div class="app">
   <header>
-    <a class="brand" href="/"><img class="brand-face" src="/hodon-face.png?v=61.1" alt="호돈 캐릭터"><span class="brand-word">호돈 게임방<small>HODON GAME ROOM</small></span><i>♛</i></a>
+    <a class="brand" href="/"><img class="brand-face" src="/hodon-face.png?v=61.2" alt="호돈 캐릭터"><span class="brand-word">호돈 게임방<small>HODON GAME ROOM</small></span><i>♛</i></a>
   <nav class="game-tabs" aria-label="게임 선택"><button type="button" id="tab-all">전체</button><button type="button" id="tab-yut" class="selected">윷놀이</button><button type="button" id="tab-badugi">바둑이</button><button type="button" id="tab-gomoku">오목</button><button type="button" id="tab-seotda">섯다</button><button type="button" id="tab-poker">7포커</button><button type="button" id="tab-alkkagi">알까기</button><button type="button" id="tab-kkung">쿵쿵따</button><button type="button" id="tab-sichuan">사천성</button><span id="hub-wallet">무료 가상칩 게임</span></nav>
     <details class="sound-settings"><summary id="sound-summary">🔊 효과음</summary><div class="sound-popover"><button id="sound-toggle" type="button" aria-label="효과음 음소거 전환" aria-pressed="false">음소거</button><label for="sound-volume">효과음 볼륨</label><input id="sound-volume" aria-label="효과음 볼륨" type="range" min="0" max="100" value="40"><output id="sound-value" for="sound-volume">40%</output><button id="sound-test" aria-label="효과음 미리듣기" type="button">소리 미리듣기</button><button id="sound-voice-test" type="button">윷놀이 음성 미리듣기</button><button id="sound-bet-voice-test" type="button">베팅 음성 미리듣기</button><small>패 타격음과 베팅 음성을 함께 조절합니다.</small></div></details><div class="header-right">
       <span id="connection" class="status">● 연결 중</span>
@@ -176,11 +176,11 @@ body.alkkagi-mode:not(.public-lobby-open) .app{max-width:min(1390px,calc((100svh
 
 <dialog id="victory-overlay" lang="ko" translate="no" class="victory-overlay notranslate hidden" role="dialog" aria-modal="true" aria-labelledby="victory-title" aria-describedby="victory-name victory-members">
   <div id="victory-particles" class="victory-particles" aria-hidden="true"></div><div class="victory-stars" aria-hidden="true">✦　✧　✦　✧　✦</div>
-  <div class="victory-card"><img class="victory-face" src="/hodon-face.png?v=61.1" alt="호돈"><div class="victory-crown">🏆</div><p id="victory-game">호돈 윷놀이</p><h2 id="victory-title">우승!</h2><strong id="victory-name">플레이어</strong><p id="victory-members"></p><div class="victory-confetti" aria-hidden="true">🎉 🎊 ✨ 🎉</div><div id="victory-gom-choice" class="hidden"><p>다음 대국에서 사용할 돌을 선택하세요.</p><button type="button" id="victory-gom-black">● 흑으로 연속 대국</button><button type="button" id="victory-gom-white">○ 백으로 연속 대국</button></div><button type="button" id="victory-close" class="primary">게임 화면으로 돌아가기</button></div>
+  <div class="victory-card"><img class="victory-face" src="/hodon-face.png?v=61.2" alt="호돈"><div class="victory-crown">🏆</div><p id="victory-game">호돈 윷놀이</p><h2 id="victory-title">우승!</h2><strong id="victory-name">플레이어</strong><p id="victory-members"></p><div class="victory-confetti" aria-hidden="true">🎉 🎊 ✨ 🎉</div><div id="victory-gom-choice" class="hidden"><p>다음 대국에서 사용할 돌을 선택하세요.</p><button type="button" id="victory-gom-black">● 흑으로 연속 대국</button><button type="button" id="victory-gom-white">○ 백으로 연속 대국</button></div><button type="button" id="victory-close" class="primary">게임 화면으로 돌아가기</button></div>
 </dialog><div id="toast" role="status" aria-live="polite"></div>
-<p id="client-load-status" role="status" style="padding:12px;text-align:center;color:#ffe49c">v61.1 실행 파일을 불러오는 중입니다. 계속 보이면 hodon-client-v61.js 파일이 업로드되었는지 확인해 주세요.</p>
+<p id="client-load-status" role="status" style="padding:12px;text-align:center;color:#ffe49c">v61.2 실행 파일을 불러오는 중입니다. 계속 보이면 hodon-client-v61.js 파일이 업로드되었는지 확인해 주세요.</p>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/kkung-ui.js?v=61.1"></script><script src="/sound.js?v=61.1"></script><script src="/sichuan-ui.js?v=61.1"></script><script src="/room-controls.js?v=61.1"></script><script src="/approved-ui.js?v=61.1"></script><script type="module" src="/hodon-client-v61.js?v=61.1"></script>
+<script src="/kkung-ui.js?v=61.2"></script><script src="/sound.js?v=61.2"></script><script src="/sichuan-ui.js?v=61.2"></script><script src="/room-controls.js?v=61.2"></script><script src="/approved-ui.js?v=61.2"></script><script type="module" src="/hodon-client-v61.js?v=61.2"></script>
 
 
 

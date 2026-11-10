@@ -1,4 +1,4 @@
-const BUILD_VERSION='v61.1';
+const BUILD_VERSION='v61.2';
 document.getElementById('client-load-status')?.remove();
 document.documentElement.dataset.uiRelease='v54-yut';
 function roomReady(s){if(s.seotdaRelay?.status==='playing')return true;const n=s.players.filter(p=>p?.connected).length;return s.gameType==='gomoku'||s.matchMode==='team'?n===(s.gameType==='gomoku'?2:4):n>=2;}
@@ -11,7 +11,7 @@ let rollEffectTimer=null, lastWinnerKey='', lastRollId=null, lastEffectAt=0, fir
 const $=id=>document.getElementById(id);
 const AVATARS=[{"name": "브라질 유니폼", "color": "#e6ba27"}, {"name": "스트릿", "color": "#8b50ce"}, {"name": "감독", "color": "#1a9b64"}, {"name": "골키퍼", "color": "#52aeed"}, {"name": "캡틴", "color": "#ef4e54"}, {"name": "볼러", "color": "#3f5ba0"}, {"name": "챔피언", "color": "#e3b631"}, {"name": "스피드", "color": "#319b73"}, {"name": "헤드기어", "color": "#e07c30"}, {"name": "응원단장", "color": "#52bd49"}];
 const avatarIndex=p=>Number.isInteger(p?.avatarId)&&p.avatarId>=0&&p.avatarId<10?p.avatarId:0;
-const avatarUrl=p=>`/hodon-avatar-${avatarIndex(p)}.svg?v=61.1`;
+const avatarUrl=p=>`/hodon-avatar-${avatarIndex(p)}.svg?v=61.2`;
 function avatarNode(p){const img=document.createElement('img');img.className='profile-avatar';img.src=avatarUrl(p);img.alt=AVATARS[avatarIndex(p)].name+' 호돈';img.style.borderColor=AVATARS[avatarIndex(p)].color;return img;}
 function avatarHtml(p){return `<img class="profile-avatar" src="${avatarUrl(p)}" alt="${AVATARS[avatarIndex(p)].name} 호돈" style="border-color:${AVATARS[avatarIndex(p)].color}"/>`;}
 let selectedAvatar=Number(localStorage.getItem('hodon:avatar')||0);if(!Number.isInteger(selectedAvatar)||selectedAvatar<0||selectedAvatar>9)selectedAvatar=0;
@@ -183,7 +183,7 @@ $('throw').addEventListener('click',e=>{
 });
 async function submitYutThrow(power){
  if(!canChargeYut())return;
- animating=true;$('throw').disabled=true;const arena=$('yut-arena');arena.classList.remove('throwing');void arena.offsetWidth;arena.classList.add('throwing');
+ animating=true;$('throw').disabled=true;const arena=$('yut-arena');arena.classList.remove('throwing','nak');delete arena.dataset.resultSteps;void arena.offsetWidth;arena.classList.add('throwing');
  try{const r=await action('game:throw',{power});if(r){selectedMove=0;clearSelection();if(r.result)showRollEffect(r.result);else if(state?.game?.lastThrow)showRollEffect(state.game.lastThrow);}}
  finally{setTimeout(()=>{arena.classList.remove('throwing');animating=false;renderPlay();},920);}
 }
@@ -273,6 +273,7 @@ function showRollEffect(result){
  // to share a single visual effect without double playback.
  const effectKey=result.id||[result.name,result.steps,(result.sticks||[]).join('')].join(':');
  if(effectKey===lastRollId && Date.now()-lastEffectAt<2200)return;
+ const tray=$('yut-arena');if(tray){tray.dataset.resultGame=state?.game?.id||'';tray.dataset.resultSteps=String(result.steps);tray.classList.remove('nak');if(result.steps===0){void tray.offsetWidth;tray.classList.add('nak');}}
  lastRollId=effectKey;lastEffectAt=Date.now();sound('throw','throw:'+effectKey);if(typeof HodonSound!=='undefined')HodonSound.announceYut(result.steps,effectKey);
  const el=$('roll-effect');clearTimeout(rollEffectTimer);
  el.classList.remove('active','back','nak');void el.offsetWidth;
@@ -342,7 +343,8 @@ socket.on('game:roll-effect',showRollEffect);
 socket.on('session:replaced',()=>{notify('다른 브라우저에서 같은 참가자 계정으로 접속했습니다.');forgetSession()});
 socket.on('session:kicked',()=>{notify('방장에 의해 방에서 강퇴되었습니다.');forgetSession()});
 let yutNoticeKey='',yutNoticeTimer=null;
-function render(){globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
+function render(){try{return renderCore();}finally{globalThis.HodonStadium?.flush?.();}}
+function renderCore(){globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
  const g=state.game;document.body.classList.toggle('yut-large-room',(state.playerCount||state.players.length)>4);
  $('show-yut-winner').classList.toggle('hidden',g?.status!=='finished'&&!g?.placements?.length);
  if(socket.connected)showConnectionVersion(state.serverVersion);
@@ -441,9 +443,11 @@ function renderPlay(){if(!state?.game){cancelYutCharge();return;}const g=state.g
  if(selectedMove>=g.moves.length)selectedMove=0;
  const own=!isSpectator&&!movePending&&g.turn===seat,active=g.status==='playing';
  $('turn-info').textContent=g.status==='finished'?`🏆 ${g.mode==='team'?(g.winner%2===0?'청팀':'홍팀'):state.players[g.winner]?.name+' 님'} 승리!`:isSpectator?`👁 관전 중 · ${state.players[g.turn]?.name||'상대방'} 님 차례`:own?`🟢 내 차례 · 남은 던지기 ${g.rollCredits}회`:`⏳ ${state.players[g.turn]?.name||'상대방'} 님 차례`;
+ const arena=$('yut-arena');if(arena.dataset.resultGame!==g.id){arena.dataset.resultGame=g.id;delete arena.dataset.resultSteps;}if(g.lastThrow)arena.dataset.resultSteps=String(g.lastThrow.steps);arena.classList.toggle('nak',arena.dataset.resultSteps==='0');
  const els=Array.from($('sticks').children);
  els.forEach((el,i)=>{const back=!!g.lastThrow?.sticks[i];el.classList.toggle('back',back);el.classList.toggle('marked',i===0);el.style.setProperty('--face',back?'180deg':'0deg');el.style.setProperty('--angle',`${[-34,61,24,82][i]}deg`)});
- $('throw-result').textContent=g.lastThrow?`${g.lastThrow.name} · ${g.lastThrow.steps===0?'이번 던지기 소멸':g.lastThrow.steps===-1?'뒤로 1칸':`${g.lastThrow.steps}칸`}`:'윷을 던져주세요';
+ const displayThrow=g.lastThrow||(arena.dataset.resultSteps==='0'?{name:'낙',steps:0}:null);
+ $('throw-result').textContent=displayThrow?`${displayThrow.name} · ${displayThrow.steps===0?'판 밖으로 떨어졌습니다':displayThrow.steps===-1?'뒤로 1칸':`${displayThrow.steps}칸`}`:'윷을 던져주세요';
  $('throw').disabled=!own||g.rollCredits===0||!active||animating;
  $('throw').textContent=!active?'게임 종료':!own?'상대 차례':g.rollCredits===0?'말을 이동하세요':yutCharge.active?'놓으면 던집니다':'윷 던지기';
  $('moves').replaceChildren();g.moves.forEach((step,i)=>{const b=document.createElement('button');b.className='move-chip'+(selectedMove===i?' active':'');b.textContent=`${YUT[step]} · ${step===-1?'뒤로 1칸':`${step}칸`}`;b.addEventListener('click',()=>chooseMove(i));$('moves').append(b)});
@@ -1301,11 +1305,11 @@ function decorateStudio(type){
  if(table&&controls&&controls.parentElement===table){table.after(controls);controls.classList.add('studio-controls-dock');}
  if(type==='badugi'){const original=$('badugi-start');if(original&&state.badugi?.status!=='playing'&&!root.querySelector('#studio-badugi-start')){const b=document.createElement('button');b.id='studio-badugi-start';b.type='button';b.className='studio-start';b.textContent=original.textContent;b.disabled=original.disabled;b.onclick=()=>original.click();root.querySelector('.bet-bar').after(b);}}
 }
-function renderBadugi(){renderBadugiBase();decorateStudio('badugi');}
-function renderGomoku(){renderGomokuBase();decorateStudio('gomoku');}
-function renderSeotda(){renderSeotdaBase();decorateStudio('seotda');}
-function renderPoker(){renderPokerBase();decorateStudio('poker');}
-function renderAlkkagi(){renderAlkkagiBase();decorateStudio('alkkagi');}
+function renderBadugi(){renderBadugiBase();decorateStudio('badugi');globalThis.HodonStadium?.flush?.();}
+function renderGomoku(){renderGomokuBase();decorateStudio('gomoku');globalThis.HodonStadium?.flush?.();}
+function renderSeotda(){renderSeotdaBase();decorateStudio('seotda');globalThis.HodonStadium?.flush?.();}
+function renderPoker(){renderPokerBase();decorateStudio('poker');globalThis.HodonStadium?.flush?.();}
+function renderAlkkagi(){renderAlkkagiBase();decorateStudio('alkkagi');globalThis.HodonStadium?.flush?.();}
 
 // An incomplete upload must never silently look like the previous design again.
 if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('load',()=>{

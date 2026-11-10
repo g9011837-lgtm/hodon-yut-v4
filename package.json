@@ -1,6 +1,6 @@
 {
   "name": "hodon-gameroom",
-  "version": "61.1.0",
+  "version": "61.2.0",
   "private": true,
   "description": "호돈 윷놀이 · 바둑이 · 오목 · 섯다 · 7포커 · 장기알까기 실시간 게임방 · 쿵쿵따",
   "type": "module",

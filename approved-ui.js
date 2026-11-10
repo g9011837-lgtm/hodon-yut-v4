@@ -71,7 +71,7 @@ globalThis.HodonStadium=(()=>{
  }
  function render(c){ctx=c;mount();document.body.classList.add('approved-theme');document.body.classList.remove('stadium-theme');if(!c.socket)return;if(socketHook!==c.socket){socketHook=c.socket;c.socket.on('connect',()=>{lastFetch=0;void ensureProfile(c.socket,ctx?.name);});}
   if(c.state?.myRecords&&lastRecords!==c.state.myRecords){records=c.state.myRecords;lastRecords=records;lastFetch=Date.now();}if(c.socket.connected&&!busy&&Date.now()-lastFetch>20000){lastFetch=Date.now();void ensureProfile(c.socket,c.name);}
-  document.querySelectorAll('[data-approved-game]').forEach(b=>{const active=b.dataset.approvedGame===c.chosenGame;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));});paintRank();globalThis.requestAnimationFrame?.(paintArena);
+  document.querySelectorAll('[data-approved-game]').forEach(b=>{const active=b.dataset.approvedGame===c.chosenGame;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));});paintRank();if(!c.state)paintArena();
  }
- return{render,ensureProfile};
+ return{render,ensureProfile,flush:paintArena};
 })();
