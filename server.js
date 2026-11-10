@@ -7,6 +7,7 @@ import express from 'express';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
+import { BlockList, isIP } from 'node:net';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, renameSync, mkdirSync, openSync, fsyncSync, closeSync } from 'node:fs';
 import { Server } from 'socket.io';
@@ -48,6 +49,71 @@ app.get('/welcome.mp3',(req,res)=>res.type('audio/mpeg').sendFile(join(ROOT,'wel
 for(const name of ['sichuan-art.webp','sichuan-tiles.webp'])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 const server=createServer(app);
 const io=new Server(server,{maxHttpBufferSize:50_000,pingInterval:20000,pingTimeout:60000,cors:{origin:false}});
+// BEGIN SINGLE-IP POLICY: all game and lobby access passes this Socket.IO gate.
+const SINGLE_IP_ENABLED=process.env.HODON_SINGLE_IP_LIMIT!=='0';
+const IP_ACCESS_MESSAGE='같은 IP에서 이미 접속 중입니다. 기존 게임 창을 닫은 뒤 다시 연결해 주세요.';
+const ipConnections=new Map();
+const cloudflareProxies=['173.245.48.0/20','103.21.244.0/22','103.22.200.0/22','103.31.4.0/22','141.101.64.0/18','108.162.192.0/18','190.93.240.0/20','188.114.96.0/20','197.234.240.0/22','198.41.128.0/17','162.158.0.0/15','104.16.0.0/13','104.24.0.0/14','172.64.0.0/13','131.0.72.0/22','2400:cb00::/32','2606:4700::/32','2803:f800::/32','2405:b500::/32','2405:8100::/32','2a06:98c0::/29','2c0f:f248::/32'];
+function normalizedIp(value){
+ if(typeof value!=='string'||value.length>128)return null;
+ let ip=value.trim();if(ip.startsWith('[')){const m=ip.match(/^\[([^\]]+)\](?::\d+)?$/);if(!m)return null;ip=m[1];}
+ else if(/^\d+\.\d+\.\d+\.\d+:\d+$/.test(ip))ip=ip.slice(0,ip.lastIndexOf(':'));
+ const version=isIP(ip);if(version===4)return ip;if(version!==6||ip.includes('%'))return null;
+ const canonical=new URL('http://['+ip+']/').hostname.slice(1,-1);
+ const mapped=canonical.match(/^::ffff:([a-f\d]{1,4}):([a-f\d]{1,4})$/i);
+ if(mapped){const a=parseInt(mapped[1],16),b=parseInt(mapped[2],16);return[a>>8,a&255,b>>8,b&255].join('.');}
+ return canonical;
+}
+function proxyRanges(entries){const list=new BlockList();for(const entry of entries){const[address,bits]=entry.split('/'),ip=normalizedIp(address);if(!ip)throw Error('Invalid trusted proxy range');const kind=isIP(ip)===4?'ipv4':'ipv6';if(bits===undefined)list.addAddress(ip,kind);else list.addSubnet(ip,Number(bits),kind);}return list;}
+const localProxies=proxyRanges(['127.0.0.0/8','::1/128','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16','169.254.0.0/16','fc00::/7','fe80::/10']);
+const cfProxies=proxyRanges(cloudflareProxies);
+const extraProxies=proxyRanges((process.env.HODON_TRUSTED_PROXIES||'').split(',').map(s=>s.trim()).filter(Boolean));
+const inRange=(ranges,ip)=>ranges.check(ip,isIP(ip)===4?'ipv4':'ipv6');
+const trustedProxy=ip=>inRange(localProxies,ip)||inRange(cfProxies,ip)||inRange(extraProxies,ip);
+function connectionIp(request){
+ const remote=normalizedIp(request?.socket?.remoteAddress);if(!remote)return null;
+ // Public direct clients cannot choose their own identity using forwarding headers.
+ if(!trustedProxy(remote))return remote;
+ const headers=request.headers||{},raw=headers['x-forwarded-for'];
+ if(raw!==undefined){
+  if(typeof raw!=='string'||raw.length>2048)return null;
+  const chain=raw.split(',');if(!chain.length||chain.length>32)return null;
+  // The nearest untrusted hop is authoritative; ignore client-supplied leftmost prefixes.
+  let cloudflareHop=inRange(cfProxies,remote);
+  for(let i=chain.length-1;i>=0;i--){const ip=normalizedIp(chain[i]);if(!ip)return null;if(!trustedProxy(ip))return ip;if(inRange(cfProxies,ip))cloudflareHop=true;}
+  // Some gateways retain only the verified Cloudflare hop in XFF. Its original
+  // visitor header is usable only after that trusted hop was established.
+  if(cloudflareHop){const client=normalizedIp(headers['cf-connecting-ip']);if(client&&!trustedProxy(client))return client;}
+  // A chain containing only infrastructure addresses is not a visitor identity.
+  return null;
+ }
+ if(inRange(cfProxies,remote))return normalizedIp(headers['cf-connecting-ip']);
+ // A local direct connection is useful for development; a private gateway without
+ // visitor headers must fail clearly instead of treating every visitor as one IP.
+ if(remote.startsWith('127.')||remote==='::1')return remote;
+ return null;
+}
+function ipAccessError(code,message){const error=new Error(message);error.data={code};return error;}
+io.use((socket,next)=>{
+ if(!SINGLE_IP_ENABLED)return next();
+ const ip=connectionIp(socket.request);if(!ip)return next(ipAccessError('IP_UNAVAILABLE','접속 IP를 확인할 수 없습니다. 서버의 실제 IP 전달 설정을 확인해 주세요.'));
+ let current=ipConnections.get(ip);
+ if(current?.socket.conn.readyState==='closed'){ipConnections.delete(ip);current=null;}
+ if(current){
+  const token=socket.handshake.auth?.ipResumeToken;
+  if(typeof token!=='string'||token!==current.token)return next(ipAccessError('DUPLICATE_IP',IP_ACCESS_MESSAGE));
+  // Only the server-issued secret from this tab can resume across a refresh.
+  // Disconnect first, then admit: even a copied secret cannot create parallel access.
+  current.socket.emit('session:replaced',{code:'SESSION_REPLACED'});
+  current.socket.disconnect(true);
+ }
+ const claim={socket,token:randomBytes(32).toString('hex')};ipConnections.set(ip,claim);
+ socket.data.ipResumeToken=claim.token;
+ const release=()=>{if(ipConnections.get(ip)===claim)ipConnections.delete(ip);};
+ socket.once('disconnect',release);socket.conn.once('close',release);
+ next();
+});
+// END SINGLE-IP POLICY
 const cliPortIndex=process.argv.indexOf('--port');
 const PORT=Number(process.env.PORT)||(cliPortIndex>=0?Number(process.argv[cliPortIndex+1]):0)||3000;
 let scEngine=null,scStore=null,scPromise=null;
@@ -221,6 +287,7 @@ function detach(socket) {
 }
 function activeSeats(room){return room.players.map(Boolean);}
 io.on('connection',socket=>{
+  if(SINGLE_IP_ENABLED)socket.emit('session:ready',{ipResumeToken:socket.data.ipResumeToken});
   socket.on('player:profile',async(data={},cb)=>{
    try{await getSichuan();const name=cleanName(data.name)||'호돈',a=authorization(socket);
     const credential=data.credential||a?.player.profileCredential||socket.data.account?.profileCredential;
@@ -245,7 +312,7 @@ io.on('connection',socket=>{
   });
 
 
-  socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:SERVER_VERSION,roomProtocol:2,bootId:BOOT_ID,uptimeMs:Date.now()-BOOT_AT,roomRecovery:!recoverySaveFailed,games:['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan']}));
+  socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:SERVER_VERSION,roomProtocol:2,singleIpLimit:SINGLE_IP_ENABLED,bootId:BOOT_ID,uptimeMs:Date.now()-BOOT_AT,roomRecovery:!recoverySaveFailed,games:['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan']}));
   socket.on('room:create',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'캐릭터를 10종 중에서 선택해 주세요.');
     if(authorization(socket)||spectatorAuthorization(socket)) return failure(cb,'이미 방에 참가 중입니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
