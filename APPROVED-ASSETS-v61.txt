@@ -1,0 +1,7 @@
+v61 approved.css + approved-ui.js are loaded from index.html.
+Original approved presentation artwork: approved-lobby.webp, approved-hero-*.webp.
+Production empty furniture: approved-tables.webp, approved-yut-log.webp.
+10 separate bust assets: approved-bust-0.svg through approved-bust-9.svg.
+Food icon atlas: approved-food.webp (4 by 4).
+Full-body tokens and head avatars retain the same 10 identities.
+All live cards, tokens, scores, names, ranks and controls remain native UI.

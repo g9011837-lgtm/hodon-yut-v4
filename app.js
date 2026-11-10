@@ -1,4 +1,4 @@
-const BUILD_VERSION='v59.0';
+const BUILD_VERSION='v61.0';
 document.getElementById('client-load-status')?.remove();
 document.documentElement.dataset.uiRelease='v54-yut';
 function roomReady(s){if(s.seotdaRelay?.status==='playing')return true;const n=s.players.filter(p=>p?.connected).length;return s.gameType==='gomoku'||s.matchMode==='team'?n===(s.gameType==='gomoku'?2:4):n>=2;}
@@ -9,14 +9,14 @@ let captureTimer=null,lastCaptureKey='',rosterKey='';
 let victoryFocus=null;
 let rollEffectTimer=null, lastWinnerKey='', lastRollId=null, lastEffectAt=0, fireworksTimer=null;
 const $=id=>document.getElementById(id);
-const AVATARS=[{name:'파랑 · 미소',color:'#4b9cff'},{name:'빨강 · 승부',color:'#ff625f'},{name:'금색 · 웃음',color:'#f6c64d'},{name:'초록 · 윙크',color:'#61d68d'},{name:'보라 · 선글라스',color:'#b88aff'}];
-const avatarIndex=p=>Number.isInteger(p?.avatarId)&&p.avatarId>=0&&p.avatarId<5?p.avatarId:0;
-const avatarUrl=p=>`/avatars/${avatarIndex(p)}.svg?v=53.0`;
+const AVATARS=[{"name": "브라질 유니폼", "color": "#e6ba27"}, {"name": "스트릿", "color": "#8b50ce"}, {"name": "감독", "color": "#1a9b64"}, {"name": "골키퍼", "color": "#52aeed"}, {"name": "캡틴", "color": "#ef4e54"}, {"name": "볼러", "color": "#3f5ba0"}, {"name": "챔피언", "color": "#e3b631"}, {"name": "스피드", "color": "#319b73"}, {"name": "헤드기어", "color": "#e07c30"}, {"name": "응원단장", "color": "#52bd49"}];
+const avatarIndex=p=>Number.isInteger(p?.avatarId)&&p.avatarId>=0&&p.avatarId<10?p.avatarId:0;
+const avatarUrl=p=>`/hodon-avatar-${avatarIndex(p)}.svg?v=61.0`;
 function avatarNode(p){const img=document.createElement('img');img.className='profile-avatar';img.src=avatarUrl(p);img.alt=AVATARS[avatarIndex(p)].name+' 호돈';img.style.borderColor=AVATARS[avatarIndex(p)].color;return img;}
 function avatarHtml(p){return `<img class="profile-avatar" src="${avatarUrl(p)}" alt="${AVATARS[avatarIndex(p)].name} 호돈" style="border-color:${AVATARS[avatarIndex(p)].color}"/>`;}
-let selectedAvatar=Number(localStorage.getItem('hodon:avatar')||0);if(!Number.isInteger(selectedAvatar)||selectedAvatar<0||selectedAvatar>4)selectedAvatar=0;
+let selectedAvatar=Number(localStorage.getItem('hodon:avatar')||0);if(!Number.isInteger(selectedAvatar)||selectedAvatar<0||selectedAvatar>9)selectedAvatar=0;
 function renderAvatarPicker(){
- const root=$('avatar-options');root.replaceChildren();AVATARS.forEach((a,i)=>{const button=document.createElement('button');button.type='button';button.dataset.avatar=String(i);button.className='avatar-option'+(i===selectedAvatar?' selected':'');button.style.setProperty('--avatar-color',a.color);button.setAttribute('aria-pressed',String(i===selectedAvatar));button.setAttribute('aria-label',a.name+' 호돈 선택');const name=document.createElement('span');name.textContent=a.name;button.append(avatarNode({avatarId:i}),name);button.onclick=()=>{sound('select');selectedAvatar=i;localStorage.setItem('hodon:avatar',String(i));renderAvatarPicker()};root.append(button)});$('avatar-selection').textContent='선택한 얼굴: '+AVATARS[selectedAvatar].name;
+ const root=$('avatar-options');root.replaceChildren();AVATARS.forEach((a,i)=>{const button=document.createElement('button');button.type='button';button.dataset.avatar=String(i);button.className='avatar-option'+(i===selectedAvatar?' selected':'');button.style.setProperty('--avatar-color',a.color);button.setAttribute('aria-pressed',String(i===selectedAvatar));button.setAttribute('aria-label',a.name+' 호돈 선택');const name=document.createElement('span');name.textContent=a.name;button.append(avatarNode({avatarId:i}),name);button.onclick=()=>{sound('select');selectedAvatar=i;localStorage.setItem('hodon:avatar',String(i));renderAvatarPicker()};root.append(button)});$('avatar-selection').textContent='선택한 캐릭터: '+AVATARS[selectedAvatar].name;
 }
 renderAvatarPicker();
 function setVictoryAvatar(id){const img=document.querySelector('.victory-face');const person={avatarId:id};img.src=avatarUrl(person);img.style.borderColor=AVATARS[avatarIndex(person)].color;}
@@ -78,6 +78,7 @@ async function create(){
   if(info.roomProtocol!==2){notify(`서버 연결 방식이 일치하지 않습니다. 프로토콜: ${info.roomProtocol??'미확인'}`);return;}
   if(info.serverVersion!==BUILD_VERSION){showConnectionVersion(info.serverVersion);notify(`화면 ${BUILD_VERSION} · 실행 서버 ${info.serverVersion||'미확인'}. 같은 통합본으로 저장 후 서버를 재시작해 주세요.`);return;}
   if(!info.games?.includes(requestedGame)){notify('실행 중인 서버가 선택한 게임을 지원하지 않습니다. 통합본의 서버 파일을 확인해 주세요.');return;}
+  await globalThis.HodonStadium?.ensureProfile(socket,name);
   const res=await action('room:create',{roomTitle:$('room-title').value.trim(),gameType:requestedGame,sichuanMap:$('sichuan-map').value,sichuanMode:$('sichuan-mode').value,pokerRule:$('poker-rule').value,seotdaCards:Number($('seotda-cards').value),gomokuMinutes:Number($('gomoku-minutes').value),base:Number($(requestedGame==='poker'?'poker-base':requestedGame==='seotda'?'seotda-base':'badugi-base')?.value||100),startingChips:Number($(requestedGame==='poker'?'poker-chips':requestedGame==='seotda'?'seotda-chips':'badugi-chips')?.value||10000),name,avatarId:selectedAvatar,piecesPerPlayer:chosenCount,playerCount:['gomoku','alkkagi'].includes(requestedGame)?2:requestedGame==='yut'&&chosenMode==='team'?4:chosenPlayers,matchMode:chosenMode,turnSeconds:requestedGame==='seotda'?Number($('seotda-seconds').value):turnSeconds});
   if(!res)return;
   if(res.gameType!==requestedGame){await action('room:leave');state=null;render();notify('선택한 게임과 서버의 방 종류가 다릅니다. 서버 파일을 교체하고 재시작해 주세요.');return;}
@@ -88,6 +89,7 @@ async function create(){
 async function join(roomCode,spectator=false){const code=String(roomCode||'').toUpperCase().trim();if(code.length!==6){notify('6자리 초대 코드를 입력해 주세요.');return;}
   const existing=localStorage.getItem(`field-yut:session:${code}`);
   const name=validName();if(!name)return;
+  await globalThis.HodonStadium?.ensureProfile(socket,name);
   const res=await action('room:join',{code,name,avatarId:selectedAvatar,token:existing||undefined,spectator});
   if(res)saveSession(res.code,res.token,res.seat,res.role||'player');
 }
@@ -340,7 +342,7 @@ socket.on('game:roll-effect',showRollEffect);
 socket.on('session:replaced',()=>{notify('다른 브라우저에서 같은 참가자 계정으로 접속했습니다.');forgetSession()});
 socket.on('session:kicked',()=>{notify('방장에 의해 방에서 강퇴되었습니다.');forgetSession()});
 let yutNoticeKey='',yutNoticeTimer=null;
-function render(){if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
+function render(){globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
  const g=state.game;document.body.classList.toggle('yut-large-room',(state.playerCount||state.players.length)>4);
  $('show-yut-winner').classList.toggle('hidden',g?.status!=='finished'&&!g?.placements?.length);
  if(socket.connected)showConnectionVersion(state.serverVersion);
@@ -425,7 +427,7 @@ function renderRoster(){
    b.style.borderColor=color;b.style.setProperty('--player-color',color);
    const avatar=oldImages.get(`${p}:${i}`)||document.createElement('img');const desiredAvatar=avatarUrl(state.players[p]);if(avatar.getAttribute('src')!==desiredAvatar)avatar.src=desiredAvatar;avatar.alt='';avatar.loading='eager';
    const label=document.createElement('span');label.textContent=`${i+1} ${n==='FIN'?'✓':n===null?'대기':'이동중'}`;
-   const mini=document.createElement('span');mini.className='hodon-reserve-character';mini.style.setProperty('--character-slot',String((team?(p===0?1:0):yutCharacterId(state.players[p],p))*100/9)+'%');mini.setAttribute('aria-hidden','true');
+   const mini=document.createElement('span');mini.className='hodon-reserve-character';mini.style.setProperty('--character-slot',String((team?(p===0?1:0):yutCharacterId(state.players[p],p))*100/9)+'%');mini.style.backgroundImage=`url(/hodon-piece-${yutCharacterId(state.players[p],p)}.svg)`;mini.setAttribute('aria-hidden','true');
    b.append(avatar,mini,label);b.title=n==='FIN'?'완주':n===null?'대기 중':`${n}번 칸`;
    b.setAttribute('aria-label',`${team?(p===0?'청팀':'홍팀'):state.players[p]?.name||'대기'} 말 ${i+1} · ${b.title}`);
    b.disabled=!ready;b.addEventListener('click',()=>selectPiece(i));tokens.append(b);
@@ -481,8 +483,8 @@ function installYutDepthDefs(defs){
  gradient('yut-token-face',[['0%','#fff5d7'],['50%','#ead5a4'],['100%','#b18c51']]);
  gradient('yut-contact-shadow',[['0%','#17270f',.58],['65%','#263f1d',.22],['100%','#263f1d',0]],true);
 }
-const HODON_CHARACTER_NAMES=['축구 주장 호돈','왕관 호돈','요리사 호돈','탐험가 호돈','닌자 호돈','소방관 호돈','파일럿 호돈','마법사 호돈','낚시꾼 호돈','우주인 호돈'];
-function yutCharacterId(player,pool=0){return ((Number(pool)||0)%10+10)%10;}
+const HODON_CHARACTER_NAMES=["브라질 유니폼 호돈", "스트릿 호돈", "감독 호돈", "골키퍼 호돈", "캡틴 호돈", "볼러 호돈", "챔피언 호돈", "스피드 호돈", "헤드기어 호돈", "응원단장 호돈"];
+function yutCharacterId(player,pool=0){return avatarIndex(player);}
 function animateYutTravel(g,{x,y,scale,nodeId,pieceState}){
  const oldNode=g.dataset.node,wasVisible=g.getAttribute('display')!=='none',oldTransform=g.getAttribute('transform');
  const changed=oldNode!==undefined&&oldNode!==String(nodeId);
@@ -528,7 +530,7 @@ function drawHodongPiece(root,{key,nodeId,x,y,color,index,portrait=HODON_FACE,st
   root.append(g);
  }
  animateYutTravel(g,{x,y,scale,nodeId,pieceState});
- g.querySelector('.character-art').style.backgroundPosition=`${characterId*100/9}% 0`;setSvgAttr(g.querySelector('.character-art'),'data-character',characterId);setSvgAttr(g.querySelector('.piece-own-marker'),'display',owned?'inline':'none');setSvgAttr(g.querySelector('.character-footing'),'fill',color);
+ g.querySelector('.character-art').style.backgroundImage=`url(/approved-bust-${characterId}.svg)`;setSvgAttr(g.querySelector('.character-art'),'data-character',characterId);setSvgAttr(g.querySelector('.piece-own-marker'),'display',owned?'inline':'none');setSvgAttr(g.querySelector('.character-footing'),'fill',color);
  setSvgAttr(g,'data-x',x);setSvgAttr(g,'data-y',y);setSvgAttr(g,'data-scale',scale);
  setSvgAttr(g.querySelector('image'),'href',portrait);setSvgAttr(g,'data-node',nodeId);setSvgAttr(g,'data-stack',stack);
  setSvgAttr(g,'transform',`translate(${x} ${y}) scale(${scale})`);setSvgAttr(g,'class','piece-avatar'+(selected?' selected-piece':'')+(g.dataset.walking?' piece-walking':''));
@@ -595,7 +597,7 @@ function drawBoard(){const root=$('board');
    const selected=playable&&selectedPiece!==null&&bundle.some(e=>e.i===selectedPiece);
    const color=g.mode==='team'?(p===0?COLORS[1]:COLORS[0]):COLORS[p];
    const key=`${p}:${base.i}`;visibleKeys.add(key);
-   drawHodongPiece(pieceLayer,{key,nodeId:base.n,x,y,color,index:base.i,seatNumber:g.mode==='team'?null:p+1,playerName:g.playerNames?.[p]||state.players[p]?.name||'',scale:bundles.size>4?.65:1,portrait:avatarUrl(state.players[p]),characterId:g.mode==='team'?(p===0?1:0):yutCharacterId(state.players[p],p),pieceState:displayPools(g)[p][base.i],owned:!isSpectator&&Number.isInteger(seat)&&(g.mode==='team'?p===seat%2:p===seat),stack:bundle.length,selected,clickable:playable,onClick:()=>selectPiece(base.i)});
+   drawHodongPiece(pieceLayer,{key,nodeId:base.n,x,y,color,index:base.i,seatNumber:g.mode==='team'?null:p+1,playerName:g.playerNames?.[p]||state.players[p]?.name||'',scale:bundles.size>4?.65:1,portrait:avatarUrl(state.players[p]),characterId:yutCharacterId(state.players[g.mode==='team'?p:p],p),pieceState:displayPools(g)[p][base.i],owned:!isSpectator&&Number.isInteger(seat)&&(g.mode==='team'?p===seat%2:p===seat),stack:bundle.length,selected,clickable:playable,onClick:()=>selectPiece(base.i)});
   });
  }
  pieceLayer.querySelectorAll('.piece-avatar').forEach(el=>{if(!visibleKeys.has(el.dataset.pieceKey)){animateYutCapture(el,g.lastCapture,root.querySelector('#board-effects'));setSvgAttr(el,'display','none');}});
@@ -1099,6 +1101,7 @@ function renderLobbyControls(){
  $('tab-all').classList.toggle('selected',lobbyFilter==='all');
  for(const type of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$('tab-'+type).classList.toggle('selected',lobbyFilter===type);
  const input=$('room-title'),automatic=($('nickname').value.trim()||'호돈')+'의 '+lobbyGameName(chosenGame)+'방';if(!input.value||input.value===input.dataset.autoTitle){input.value=automatic;input.dataset.autoTitle=automatic;}
+ globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});
 }
 function showLobbyDialog(id,focusId){
  if(state)return;const dialog=$(id);if(!dialog||dialog.open)return;
