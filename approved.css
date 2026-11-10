@@ -176,3 +176,28 @@ body.approved-theme #approved-match-head{overflow:visible!important}.approved-se
 body.approved-theme .approved-arena .poker-bets [data-poker-bet='check'],body.approved-theme .approved-arena .seotda-bets [data-seotda-bet='check'],body.approved-theme .approved-arena .bet-bar [data-bet='check']{order:0}body.approved-theme .approved-arena .poker-bets [data-poker-bet='call'],body.approved-theme .approved-arena .seotda-bets [data-seotda-bet='call'],body.approved-theme .approved-arena .bet-bar [data-bet='call']{order:1}body.approved-theme .approved-arena .poker-bets [data-poker-bet='quarter']{order:2}body.approved-theme .approved-arena .poker-bets [data-poker-bet='half'],body.approved-theme .approved-arena .seotda-bets [data-seotda-bet='half'],body.approved-theme .approved-arena .bet-bar [data-bet='half']{order:3}body.approved-theme .approved-arena .poker-bets [data-poker-bet='double'],body.approved-theme .approved-arena .seotda-bets [data-seotda-bet='double'],body.approved-theme .approved-arena .bet-bar [data-bet='double']{order:4}body.approved-theme .approved-arena .poker-bets [data-poker-bet='fold'],body.approved-theme .approved-arena .seotda-bets [data-seotda-bet='fold'],body.approved-theme .approved-arena .bet-bar [data-bet='fold']{order:5}.bet-bar [data-bet='allin']{order:6}
 .approved-extra-bets{position:absolute;z-index:50;right:88px;top:15px;color:#4c6c3e;font-size:11px;font-weight:900}.approved-extra-bets>summary{cursor:pointer;list-style:none;border:1px solid #d1bf77;border-radius:14px;background:linear-gradient(#fffaab,#e9d56a);padding:4px 10px;box-shadow:0 2px #b6a77555}.approved-extra-bets>summary::-webkit-details-marker{display:none}.approved-extra-bets>div{position:absolute;right:0;bottom:calc(100% + 7px);min-width:145px;padding:8px;border:2px solid #dcc48b;border-radius:16px;background:#fff8e6;box-shadow:0 5px 15px #173e2f66;display:flex;flex-direction:column;gap:6px}.approved-extra-bets:not([open])>div{display:none}.approved-extra-bets[open]>div button{display:block!important;width:100%!important;min-height:36px!important;font-size:15px!important;border-radius:12px!important;padding:5px 12px!important}
 @media(max-width:760px){.approved-extra-bets{right:59px;top:11px;font-size:9px}.approved-extra-bets>summary{padding:3px 7px}.approved-extra-bets>div{min-width:120px;padding:6px}.approved-extra-bets[open]>div button{font-size:12px!important;min-height:33px!important}}
+
+/* Keep the profile silhouette and interactive header inside separate regions. */
+#approved-lobby-brand{display:none}
+@media(min-width:761px){
+body.approved-theme #approved-lobby-brand{display:flex;align-items:center;box-sizing:border-box;position:absolute;left:1.7%;top:6.5%;width:96.6%;height:11.5%;padding:0 3cqw;border:2px solid #e3cfaa;border-radius:3cqw;background:linear-gradient(#fffdf6,#f3e6cf);box-shadow:inset 0 0 0 3px #fff9ec,0 3px 0 #bba78055;color:#005b3e;font-size:3.5cqw;font-weight:900;line-height:1;z-index:1;pointer-events:none}
+body.approved-theme #public-lobby .lobby-profile{overflow:hidden!important}
+body.approved-theme #public-lobby .lobby-profile:before{display:none!important}
+body.approved-theme #public-lobby #lobby-profile-avatar{left:1%!important;top:2%!important;width:49%!important;height:96%!important;max-height:100%!important}
+body.approved-theme #public-lobby #lobby-profile-name{left:53%!important;top:18%!important;width:44%!important;max-height:36%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+body.approved-theme #public-lobby #lobby-profile-edit{left:52%!important;top:61%!important;width:46%!important;font-size:1.1cqw!important}
+body.approved-theme .approved-lobby-tools{left:auto;right:4%;top:9%;z-index:2}
+}
+
+/* One locally served heavy Gothic face for every native UI and SVG text. */
+@font-face{font-family:HodonRound;src:url('/hodon-round.woff?v=61.1') format('woff');font-style:normal;font-weight:100 900;font-display:swap}
+html body.approved-theme.approved-theme,html body.approved-theme.approved-theme *{font-family:HodonRound,ApprovedHanja,sans-serif!important;font-weight:400!important;font-synthesis:none!important}
+html body.approved-theme.approved-theme input::placeholder,html body.approved-theme.approved-theme textarea::placeholder{font-family:HodonRound,ApprovedHanja,sans-serif!important}
+body.approved-theme #approved-games button span{clip-path:none!important;overflow:hidden!important;left:3%;top:62%;width:94%;height:35%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:0 0 1.5cqw 1.5cqw;font-size:2.35cqw;line-height:1;color:#fffdf2;text-shadow:0 2px 2px #00351b,1px 0 #00351b;background:linear-gradient(#047b3f,#036d38)}
+body.approved-theme #approved-games [data-approved-game='badugi'] span{background:linear-gradient(#087c61,#046149)}
+body.approved-theme #approved-games [data-approved-game='gomoku'] span,body.approved-theme #approved-games [data-approved-game='alkkagi'] span{background:linear-gradient(#dc9b32,#bb781d)}
+body.approved-theme #approved-games [data-approved-game='seotda'] span{background:linear-gradient(#a62d20,#91261d)}
+body.approved-theme #approved-games [data-approved-game='poker'] span{background:linear-gradient(#1676a6,#074a7b)}
+body.approved-theme #approved-games [data-approved-game='kkung'] span{background:linear-gradient(#1eb2d4,#078fb7)}
+body.approved-theme #approved-games [data-approved-game='sichuan'] span{background:linear-gradient(#42a933,#1b972f)}
+@media(max-width:760px){body.approved-theme #approved-games button span{font-size:16px!important;border-radius:0 0 11px 11px}}

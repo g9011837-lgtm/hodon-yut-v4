@@ -1,4 +1,4 @@
-const BUILD_VERSION='v61.0';
+const BUILD_VERSION='v61.1';
 document.getElementById('client-load-status')?.remove();
 document.documentElement.dataset.uiRelease='v54-yut';
 function roomReady(s){if(s.seotdaRelay?.status==='playing')return true;const n=s.players.filter(p=>p?.connected).length;return s.gameType==='gomoku'||s.matchMode==='team'?n===(s.gameType==='gomoku'?2:4):n>=2;}
@@ -11,7 +11,7 @@ let rollEffectTimer=null, lastWinnerKey='', lastRollId=null, lastEffectAt=0, fir
 const $=id=>document.getElementById(id);
 const AVATARS=[{"name": "브라질 유니폼", "color": "#e6ba27"}, {"name": "스트릿", "color": "#8b50ce"}, {"name": "감독", "color": "#1a9b64"}, {"name": "골키퍼", "color": "#52aeed"}, {"name": "캡틴", "color": "#ef4e54"}, {"name": "볼러", "color": "#3f5ba0"}, {"name": "챔피언", "color": "#e3b631"}, {"name": "스피드", "color": "#319b73"}, {"name": "헤드기어", "color": "#e07c30"}, {"name": "응원단장", "color": "#52bd49"}];
 const avatarIndex=p=>Number.isInteger(p?.avatarId)&&p.avatarId>=0&&p.avatarId<10?p.avatarId:0;
-const avatarUrl=p=>`/hodon-avatar-${avatarIndex(p)}.svg?v=61.0`;
+const avatarUrl=p=>`/hodon-avatar-${avatarIndex(p)}.svg?v=61.1`;
 function avatarNode(p){const img=document.createElement('img');img.className='profile-avatar';img.src=avatarUrl(p);img.alt=AVATARS[avatarIndex(p)].name+' 호돈';img.style.borderColor=AVATARS[avatarIndex(p)].color;return img;}
 function avatarHtml(p){return `<img class="profile-avatar" src="${avatarUrl(p)}" alt="${AVATARS[avatarIndex(p)].name} 호돈" style="border-color:${AVATARS[avatarIndex(p)].color}"/>`;}
 let selectedAvatar=Number(localStorage.getItem('hodon:avatar')||0);if(!Number.isInteger(selectedAvatar)||selectedAvatar<0||selectedAvatar>9)selectedAvatar=0;

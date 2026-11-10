@@ -22,7 +22,7 @@ app.get('/version.json',(req,res)=>res.set({'Cache-Control':'no-store, max-age=0
 // Bonto: HTML/CSS/JS assets reside alongside server.js at application root.
 app.get('/',(req,res)=>res.sendFile(join(ROOT,'index.html')));
 app.get('/index.html',(req,res)=>res.sendFile(join(ROOT,'index.html')));
-for(const name of ['stadium-banner.webp','stadium-hanja.woff2','stadium-ui.woff','stadium.css','stadium-ui.js','stadium-scene.webp',...Array.from({length:10},(_,i)=>`hodon-avatar-${i}.svg`),...Array.from({length:10},(_,i)=>`hodon-piece-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
+for(const name of ['stadium-banner.webp','stadium-hanja.woff2','stadium-ui.woff','hodon-round.woff','stadium.css','stadium-ui.js','stadium-scene.webp',...Array.from({length:10},(_,i)=>`hodon-avatar-${i}.svg`),...Array.from({length:10},(_,i)=>`hodon-piece-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 for(const name of ["approved.css", "approved-ui.js", "approved-busts.webp", "approved-tables.webp", "approved-food.webp", "approved-lobby.webp", "approved-lobby-chrome.svg", "approved-crest.svg","approved-yut-log.webp",...["approved-hero-yut.webp", "approved-hero-gomoku.webp", "approved-hero-poker.webp", "approved-hero-kkung.webp"],"approved-medal.svg","approved-tier-icons.svg",...Array.from({length:10},(_,i)=>`approved-bust-${i}.svg`)])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 const voiceFiles=new Set(['do','gae','geol','yut','mo','backdo']);
 app.get('/voice/:clip.mp3',(req,res)=>voiceFiles.has(req.params.clip)?res.sendFile(join(ROOT,`voice-${req.params.clip}.mp3`)):res.sendStatus(404));
@@ -30,7 +30,7 @@ app.get('/hwatu/:card.svg',(req,res)=>/^(?:[0-9]|1[0-9])$/.test(req.params.card)
 app.get('/HWATU-SOURCES.json',(req,res)=>res.sendFile(join(ROOT,'HWATU-SOURCES.json')));
 app.get('/HWATU-LICENSE.txt',(req,res)=>res.sendFile(join(ROOT,'HWATU-LICENSE.txt')));
 app.get('/app.js',(req,res)=>res.sendFile(join(ROOT,'app.js')));
-app.get('/hodon-client-v58.js',(req,res)=>{const source=readFileSync(join(ROOT,'app.js'),'utf8');if(!source.startsWith("const BUILD_VERSION='v61.0'"))return res.status(503).type('text/plain').send('v61 통합본의 실행 파일과 서버를 함께 적용해 주세요.');res.type('application/javascript').send(source);});
+app.get('/hodon-client-v58.js',(req,res)=>{const source=readFileSync(join(ROOT,'app.js'),'utf8');if(!source.startsWith("const BUILD_VERSION='v61.1'"))return res.status(503).type('text/plain').send('v61 통합본의 실행 파일과 서버를 함께 적용해 주세요.');res.type('application/javascript').send(source);});
 app.get('/hodon-client-v61.js',(req,res)=>res.sendFile(join(ROOT,'hodon-client-v61.js')));
 app.get('/style.css',(req,res)=>res.sendFile(join(ROOT,'style.css')));
 for(const asset of ['yut-garden.webp','yut-characters-v53.webp','yut-characters.webp','yut-wood-panel.webp'])app.get('/'+asset,(req,res)=>res.sendFile(join(ROOT,asset)));
