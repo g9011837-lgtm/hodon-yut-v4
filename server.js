@@ -70,6 +70,18 @@ const cfProxies=proxyRanges(cloudflareProxies);
 const extraProxies=proxyRanges((process.env.HODON_TRUSTED_PROXIES||'').split(',').map(s=>s.trim()).filter(Boolean));
 const inRange=(ranges,ip)=>ranges.check(ip,isIP(ip)===4?'ipv4':'ipv6');
 const trustedProxy=ip=>inRange(localProxies,ip)||inRange(cfProxies,ip)||inRange(extraProxies,ip);
+// Bonto terminates Cloudflare at its internal gateway. That gateway can strip
+// the public hops from XFF while retaining Cloudflare's original visitor header.
+// This is a platform boundary, not a general permission to trust arbitrary CF headers.
+function bontoVisitorIp(request,remote){
+ if(!inRange(localProxies,remote))return null;
+ const headers=request.headers||{},host=headers.host;
+ if(typeof host!=='string'||!/(?:^|\.)[a-z0-9-]+\.bonto\.run(?::\d+)?$/i.test(host))return null;
+ const ray=headers['cf-ray'];
+ if(typeof ray!=='string'||!/^([a-f0-9]{16,32})(?:-[a-z]{3})?$/i.test(ray))return null;
+ const client=normalizedIp(headers['cf-connecting-ip']);
+ return client&&!trustedProxy(client)?client:null;
+}
 function connectionIp(request){
  const remote=normalizedIp(request?.socket?.remoteAddress);if(!remote)return null;
  // Public direct clients cannot choose their own identity using forwarding headers.
@@ -84,10 +96,12 @@ function connectionIp(request){
   // Some gateways retain only the verified Cloudflare hop in XFF. Its original
   // visitor header is usable only after that trusted hop was established.
   if(cloudflareHop){const client=normalizedIp(headers['cf-connecting-ip']);if(client&&!trustedProxy(client))return client;}
-  // A chain containing only infrastructure addresses is not a visitor identity.
-  return null;
+  // On Bonto the public edge may have been removed from the forwarded chain.
+  // Never use the common internal gateway itself as the visitor identity.
+  return bontoVisitorIp(request,remote);
  }
  if(inRange(cfProxies,remote))return normalizedIp(headers['cf-connecting-ip']);
+ const bontoIp=bontoVisitorIp(request,remote);if(bontoIp)return bontoIp;
  // A local direct connection is useful for development; a private gateway without
  // visitor headers must fail clearly instead of treating every visitor as one IP.
  if(remote.startsWith('127.')||remote==='::1')return remote;
@@ -96,7 +110,12 @@ function connectionIp(request){
 function ipAccessError(code,message){const error=new Error(message);error.data={code};return error;}
 io.use((socket,next)=>{
  if(!SINGLE_IP_ENABLED)return next();
- const ip=connectionIp(socket.request);if(!ip)return next(ipAccessError('IP_UNAVAILABLE','접속 IP를 확인할 수 없습니다. 서버의 실제 IP 전달 설정을 확인해 주세요.'));
+ const ip=connectionIp(socket.request);if(!ip){
+  // Log only header shape, never IP values, session tokens or other headers.
+  const h=socket.request.headers||{};
+  console.warn('HODON_IP_UNAVAILABLE',JSON.stringify(Object.fromEntries(['host','x-forwarded-for','cf-connecting-ip','cf-ray','x-real-ip','forwarded'].map(k=>[k,typeof h[k]==='string'?'present':h[k]===undefined?'absent':'invalid']))));
+  return next(ipAccessError('IP_UNAVAILABLE','접속 IP를 확인할 수 없습니다. 서버의 실제 IP 전달 설정을 확인해 주세요.'));
+ }
  let current=ipConnections.get(ip);
  if(current?.socket.conn.readyState==='closed'){ipConnections.delete(ip);current=null;}
  if(current){
