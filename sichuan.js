@@ -101,7 +101,7 @@ export function createProfileStore(directory){
  mkdirSync(directory,{recursive:true});const file=join(directory,'sichuan-profiles.state');let data={version:1,profiles:{}};
  try{let source;try{source=readFileSync(file,'utf8');}catch(e){if(e.code!=='ENOENT')throw e;source=readFileSync(join(directory,'sichuan-profiles.json'),'utf8');}data=JSON.parse(source);if(data.version!==1||!data.profiles)throw Error('unsupported profile schema');}catch(e){if(e.code!=='ENOENT')throw Error('사천성 기록 파일을 읽지 못했습니다: '+e.message);}
  const checkpoint=()=>{writeFileSync(file+'.tmp',JSON.stringify(data),{mode:0o600});renameSync(file+'.tmp',file);};
- const gameTypes=['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'];
+ const gameTypes=['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'];
  const stats=(p,type)=>type==='sichuan'?p:{...p,xp:0,played:0,wins:0,...p.byGame?.[type]};
  const leader=()=>Object.values(data.profiles).filter(p=>p.xp>=2200).sort((a,b)=>b.xp-a.xp||a.createdAt-b.createdAt||a.id.localeCompare(b.id))[0]?.id??null;
  const publicRow=(p,type='sichuan')=>{

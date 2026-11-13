@@ -40,7 +40,7 @@ function setVictoryAvatar(id){const img=document.querySelector('.victory-face');
 function sound(kind,key){if(typeof HodonSound!=='undefined')HodonSound.play(kind==='select'&&['seotda','badugi','poker'].includes(state?.gameType)?'squeeze':kind,key);}
 function betAnnouncement(previous,next,kind){const old=previous?.code===next?.code?previous?.[kind]:null,g=next?.[kind];if(!old||!g||old.handNo!==g.handNo||(old.replayNo||0)!==(g.replayNo||0)||g.revision<=old.revision||old.phase!=='bet'||!Number.isInteger(old.turn))return null;const text=g.players[old.turn]?.lastAction||'';const map={'콜':'call','콜(체크)':'call','하프':'half','따당':'double','쿼터':'quarter','체크':'check','삥':'small','올인':'allin','다이':'fold','맥스':'allin'};return map[text]||null;}
 function gameSounds(old,s){
- if(s.gameType==='alkkagi'||s.gameType==='kkung'||s.gameType==='sichuan')return;
+ if(s.gameType==='alkkagi'||s.gameType==='kkung'||s.gameType==='sichuan'||s.gameType==='tetris')return;
  if(!old||old.code!==s.code||old.gameType!==s.gameType){if(s[s.gameType==='yut'?'game':s.gameType]?.status==='playing')sound(s.gameType==='gomoku'?'select':'deal',`join:${s.code}:${s.gameType}`);return;}
  const type=s.gameType,g=s[type==='yut'?'game':type],p=old[type==='yut'?'game':type];if(!g)return;
  const no=g.id||g.gameNo||g.handNo,key=`${s.code}:${type}:${no}:${g.replayNo||0}:${g.revision||g.log?.length||0}`;
@@ -51,7 +51,7 @@ function gameSounds(old,s){
  else{if(g.phase==='replay'&&p.phase!=='replay')sound('replay',key+':replay');else if(g.players.some((v,i)=>v.hand.length>(p.players[i]?.hand.length||0)||(v.draws?.length||0)>(p.players[i]?.draws?.length||0)))sound('deal',key+':deal');else if(g.players.some((v,i)=>v.total>(p.players[i]?.total||0)))sound('chips',key+':chips');else if(g.players.some((v,i)=>v.folded&&!p.players[i]?.folded))sound('fold',key+':fold');if(type==='badugi'&&g.status==='finished'&&p.status!=='finished')sound('table-win',key+':win');}
 }
 const ui={landing:$('landing'),room:$('room-section')};
-let chosenGame=['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(localStorage.getItem('hodon:last-game'))?localStorage.getItem('hodon:last-game'):'yut',createBusy=false,creationGame=null;
+let chosenGame=['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].includes(localStorage.getItem('hodon:last-game'))?localStorage.getItem('hodon:last-game'):'yut',createBusy=false,creationGame=null;
 let lobbyRooms=[],lobbyLoaded=false,lobbyFilter='all',lobbyJoinBusy=false,leaveBusy=false;
 let lobbyPage=1,lobbyChats=[],lobbyChatBusy=false,lobbyDialogFocus=null,lobbyProfileSnapshot=null,lobbyAfterProfile=null;
 let state=null,seat=null,token=null,isSpectator=false,selectedMove=0,chosenCount=4,chosenPlayers=4,chosenMode='solo',turnSeconds=15,toastTimer=null;
@@ -270,7 +270,7 @@ socket.on('lobby:chat',row=>{if(!row||typeof row.id!=='string'||typeof row.name!
 socket.on('lobby:state',payload=>{lobbyRooms=Array.isArray(payload?.rooms)?payload.rooms:[];lobbyLoaded=true;renderPublicLobby();});
 socket.on('room:left',r=>{if(state?.code!==r.code)return;forgetSession();notify('현재 판이 끝나 로비로 이동했습니다.');$('lobby-heading')?.focus();});
 socket.on('room:role',r=>{if(r.role==='player'){saveSession(r.code,r.token,r.seat,r.role);notify('빈자리로 참가했습니다. 다음 경기를 시작할 수 있습니다.');}});
-socket.on('room:state',s=>{if(!['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(s.gameType)||(creationGame&&s.gameType!==creationGame)){notify('방 종류가 일치하지 않습니다. 서버 파일 교체 후 재시작이 필요합니다.');return;}gameSounds(state,s);if(s.gameType==='alkkagi'||s.gameType==='kkung'||s.gameType==='sichuan'){state=s;render();return;}const old=state?.game;if(s.gameType==='poker'){const fx=tableTransition(state,s,'poker');state=s;render();animateTableTransition(fx);return;}if(s.gameType==='seotda'){const fx=tableTransition(state,s,'seotda');state=s;render();animateTableTransition(fx);return;}if(s.gameType==='gomoku'){state=s;checkGomokuVictory(s.gomoku);render();return;}if(s.gameType==='badugi'){const fx=tableTransition(state,s,'badugi');state=s;clearSelection();render();animateTableTransition(fx);return;}const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(displayPools(old))!==JSON.stringify(displayPools(s.game)));if(turnChanged)clearSelection();state=s;checkVictory(old,s.game);render();if(s.game?.lastThrow?.id&&old?.lastThrow?.id!==s.game.lastThrow.id&&old)showRollEffect(s.game.lastThrow);if(old&&s.game?.lastCapture?.id!==old.lastCapture?.id)showCaptureEffect(s.game.lastCapture);checkVictory(old,s.game);});
+socket.on('room:state',s=>{if(!['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].includes(s.gameType)||(creationGame&&s.gameType!==creationGame)){notify('방 종류가 일치하지 않습니다. 서버 파일 교체 후 재시작이 필요합니다.');return;}gameSounds(state,s);if(s.gameType==='alkkagi'||s.gameType==='kkung'||s.gameType==='sichuan'||s.gameType==='tetris'){state=s;render();return;}const old=state?.game;if(s.gameType==='poker'){const fx=tableTransition(state,s,'poker');state=s;render();animateTableTransition(fx);return;}if(s.gameType==='seotda'){const fx=tableTransition(state,s,'seotda');state=s;render();animateTableTransition(fx);return;}if(s.gameType==='gomoku'){state=s;checkGomokuVictory(s.gomoku);render();return;}if(s.gameType==='badugi'){const fx=tableTransition(state,s,'badugi');state=s;clearSelection();render();animateTableTransition(fx);return;}const turnChanged=old&&s.game&&(old.turn!==s.game.turn||old.moves.join(',')!==s.game.moves.join(',')||JSON.stringify(displayPools(old))!==JSON.stringify(displayPools(s.game)));if(turnChanged)clearSelection();state=s;checkVictory(old,s.game);render();if(s.game?.lastThrow?.id&&old?.lastThrow?.id!==s.game.lastThrow.id&&old)showRollEffect(s.game.lastThrow);if(old&&s.game?.lastCapture?.id!==old.lastCapture?.id)showCaptureEffect(s.game.lastCapture);checkVictory(old,s.game);});
 socket.on('game:finished',s=>{if(s?.code===state?.code&&s?.gameType==='yut'&&s.game?.status==='finished')checkVictory(null,s.game);});
 function showCaptureEffect(event){
  if(!event||Date.now()-event.at>5000)return;
@@ -362,7 +362,7 @@ socket.on('session:replaced',()=>{notify('다른 브라우저에서 같은 참�
 socket.on('session:kicked',()=>{notify('방장에 의해 방에서 강퇴되었습니다.');forgetSession()});
 let yutNoticeKey='',yutNoticeTimer=null;
 function render(){try{return renderCore();}finally{globalThis.HodonStadium?.flush?.();}}
-function renderCore(){globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
+function renderCore(){globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});if(typeof renderGameHub==='function')renderGameHub();globalThis.HodonTetrisUI?.hide?.(state?.gameType==='tetris');globalThis.HodonRoomControls?.render({state,seat,isSpectator,connected:socket.connected,action,leave:requestRoomLeave,leaveText:state?roomLeaveText():'나가기'});if(state?.gameType==='tetris'){ui.landing.classList.add('hidden');globalThis.HodonTetrisUI?.render({state,seat,isSpectator,socket,action,notify,leave:requestRoomLeave});return;}if(state?.gameType==='sichuan'){ui.landing.classList.add('hidden');globalThis.HodonSichuanUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='kkung'){ui.landing.classList.add('hidden');globalThis.HodonKkungUI?.render({state,seat,isSpectator,socket,action,sound,leave:requestRoomLeave,leaveText:roomLeaveText(),invite:()=>{$('copy-link').click()},notify});return;}if(state?.gameType==='alkkagi'){renderAlkkagi();return;}if(state?.gameType==='poker'){renderPoker();return;}if(state?.gameType==='seotda'){renderSeotda();return;}if(state?.gameType==='gomoku'){renderGomoku();return;}if(state?.gameType==='badugi'){renderBadugi();return;}ui.landing.classList.toggle('hidden',!!state);ui.room.classList.toggle('hidden',!state);if(!state)return;
  const g=state.game;document.body.classList.toggle('yut-large-room',(state.playerCount||state.players.length)>4);
  $('show-yut-winner').classList.toggle('hidden',g?.status!=='finished'&&!g?.placements?.length);
  if(socket.connected)showConnectionVersion(state.serverVersion);
@@ -650,14 +650,14 @@ function renderGameHub(){
  renderPublicLobby();renderLeaveReservation();
  renderSeatEntry();
  const type=state?.gameType||chosenGame;if(!state||type!=='sichuan')globalThis.HodonSichuanUI?.hide?.();if(!state||type!=='kkung')globalThis.HodonKkungUI?.hide?.();document.body.classList.toggle('yut-garden',!!state&&type==='yut');const bad=type==='badugi',gom=type==='gomoku',sut=type==='seotda',pok=type==='poker';if(!state||bad||pok||((gom||sut)&&$('victory-overlay').dataset.gameType!==type))hideVictory();
- for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])document.body.classList.toggle(name+'-mode',!!state&&type===name);
- for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$('tab-'+name).classList.toggle('selected',name===type);
- for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$(name+'-options')?.classList.toggle('hidden',name!==type);
- const limit=type==='yut'||type==='kkung'||type==='sichuan'?10:sut?(Number($('seotda-cards').value)===3?6:10):pok?5:gom||type==='alkkagi'?2:4;if(chosenPlayers>limit)chosenPlayers=limit;
+ for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])document.body.classList.toggle(name+'-mode',!!state&&type===name);
+ for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])$('tab-'+name).classList.toggle('selected',name===type);
+ for(const name of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])$(name+'-options')?.classList.toggle('hidden',name!==type);
+ const limit=type==='tetris'?6:type==='yut'||type==='kkung'||type==='sichuan'?10:sut?(Number($('seotda-cards').value)===3?6:10):pok?5:gom||type==='alkkagi'?2:4;if(chosenPlayers>limit)chosenPlayers=limit;
  if(sut){let hint=$('seotda-capacity-hint');if(!hint){hint=document.createElement('small');hint.id='seotda-capacity-hint';hint.style.cssText='display:block;grid-column:1/-1;line-height:1.5';$('seotda-options').append(hint);}hint.textContent='화투 20장 · 2장 섯다 최대 10명 / 3장 섯다 최대 6명 · 동일 패 중복 배분 없음';}
  document.querySelectorAll('.player-limit').forEach(b=>{const n=Number(b.dataset.n);b.classList.toggle('hidden',n>limit||(type==='yut'&&chosenMode==='team'&&n>4));b.disabled=gom||type==='alkkagi'||(chosenMode==='team'&&type==='yut');b.classList.toggle('selected',n===((gom||type==='alkkagi')?2:chosenMode==='team'&&type==='yut'?4:chosenPlayers));});
- for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$(name+'-section').classList.toggle('hidden',!state||name!==type);if(bad||gom||sut||pok||type==='alkkagi'||type==='kkung'||type==='sichuan')$('room-section').classList.add('hidden');
- const name={yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[type];$('create').textContent=name+' 방 만들기 ↗';
+ for(const name of ['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])$(name+'-section').classList.toggle('hidden',!state||name!==type);if(bad||gom||sut||pok||type==='alkkagi'||type==='kkung'||type==='sichuan'||type==='tetris')$('room-section').classList.add('hidden');
+ const name={yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성',tetris:'테트리스'}[type];$('create').textContent=name+' 방 만들기 ↗';
  const heading=document.querySelector('.join-box h2');if(heading)heading.textContent='호돈 '+name+' 시작하기';const stats=document.querySelectorAll('.landing-stats strong');if(stats.length>=3){stats[0].textContent=gom?'2명':sut?'2~'+limit+'명':pok?'2~5명':type==='yut'?'2~10명':'2~4명';stats[1].textContent=gom?'국제 렌주':pok?'일반 / 초이스':sut?'2장 / 3장':bad?'무료 가상칩':'개인전/팀전';stats[2].textContent=gom?'15×15':pok?'7장':sut?'20장 화투':bad?'4장':'1~4개';}
  const statLabels=document.querySelectorAll('.landing-stats span');if(statLabels.length>=3)statLabels[2].textContent=sut?'사용 화투':gom?'오목판':bad||pok?'손패':'말 선택';
  const title=document.querySelector('.landing-copy h1');if(title)title.innerHTML=`친구와 함께 ${gom?'두는':type==='yut'?'던지는':'즐기는'}<br/><em>호돈 ${name}.</em>`;
@@ -712,7 +712,7 @@ function renderBadugiBase(){
  if(g&&phaseKey!==lastBadugiPhase){lastBadugiPhase=phaseKey;const table=document.querySelector('.badugi-table');table.classList.add('round-enter');}
 }
 async function sendBadugi(data){if(badugiBusy||!state?.badugi||isSpectator)return;const revision=state.badugi.revision;badugiBusy=true;renderBadugi();try{await action('badugi:act',{...data,revision});}finally{badugiBusy=false;if(state?.gameType==='badugi')renderBadugi();}}
-for(const type of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$('tab-'+type).addEventListener('click',()=>{if(state){notify('현재 방에서 나간 뒤 다른 게임을 선택해 주세요.');return;}if(createBusy)return;chosenGame=type;lobbyFilter=type;lobbyPage=1;localStorage.setItem('hodon:last-game',type);render();});
+for(const type of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])$('tab-'+type).addEventListener('click',()=>{if(state){notify('현재 방에서 나간 뒤 다른 게임을 선택해 주세요.');return;}if(createBusy)return;chosenGame=type;lobbyFilter=type;lobbyPage=1;localStorage.setItem('hodon:last-game',type);render();});
 // Badugi's action clock is updated centrally.
 // Included in app.js; no client-side rule adjudication or opponent control.
 let gomokuBusy=false;
@@ -1097,7 +1097,7 @@ setInterval(updateActionCountdown,200);
 
 function roomLeaveText(){
  if(isSpectator)return '관전 종료';if(state?.leavePending?.includes(seat))return '나가기 예약 취소';
- const active=(['countdown','playing'].includes(state?.sichuan?.status)&&state?.sichuan?.players[seat]?.status==='playing')||(state?.kkung?.status==='playing'&&state.kkung.players[seat]?.lives>0)||state?.game?.status==='playing'||state?.poker?.status==='playing'||state?.badugi?.status==='playing'||state?.gomoku?.status==='playing'||state?.seotda?.status==='playing'&&!state?.seotdaRelay?.eliminated?.includes(seat);
+ const active=(state?.tetris?.status==='playing'&&state.tetris.players[seat]?.alive)||(['countdown','playing'].includes(state?.sichuan?.status)&&state?.sichuan?.players[seat]?.status==='playing')||(state?.kkung?.status==='playing'&&state.kkung.players[seat]?.lives>0)||state?.game?.status==='playing'||state?.poker?.status==='playing'||state?.badugi?.status==='playing'||state?.gomoku?.status==='playing'||state?.seotda?.status==='playing'&&!state?.seotdaRelay?.eliminated?.includes(seat);
  return active?'나가기 예약':'나가기';
 }
 async function requestRoomLeave(){
@@ -1113,7 +1113,7 @@ function renderLeaveReservation(){
 }
 function lobbyEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 // Public lobby: table browser, profile/create/join dialogs, and server-backed chat.
-function lobbyGameName(type){return {yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[type]||'게임';}
+function lobbyGameName(type){return {yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성',tetris:'테트리스'}[type]||'게임';}
 function lobbyRoomTitle(r){return r.roomTitle||`${r.hostName||'친구'}의 ${lobbyGameName(r.gameType)}방`;}
 function renderLobbyControls(){
  if(state){for(const id of ['create-dialog','profile-dialog','join-dialog'])closeLobbyDialog(id,false,true);return;}
@@ -1122,7 +1122,7 @@ function renderLobbyControls(){
  $('lobby-current-game').textContent=lobbyGameName(chosenGame);$('create-game').value=chosenGame;
  $('create-dialog-title').textContent='방 만들기';$('create').textContent='방 만들고 입장';
  $('tab-all').classList.toggle('selected',lobbyFilter==='all');
- for(const type of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])$('tab-'+type).classList.toggle('selected',lobbyFilter===type);
+ for(const type of ['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])$('tab-'+type).classList.toggle('selected',lobbyFilter===type);
  const input=$('room-title'),automatic=($('nickname').value.trim()||'호돈')+'의 '+lobbyGameName(chosenGame)+'방';if(!input.value||input.value===input.dataset.autoTitle){input.value=automatic;input.dataset.autoTitle=automatic;}
  globalThis.HodonStadium?.render({state,seat,isSpectator,chosenGame,selectedAvatar,socket,name:$('nickname')?.value||'',choose:type=>$('tab-'+type)?.click()});
 }
@@ -1146,12 +1146,12 @@ function openLobbyProfile(next=null){
 function withLobbyProfile(next){if(!$('nickname').value.trim()){openLobbyProfile(next);return;}next();}
 function openLobbyCreate(){withLobbyProfile(()=>{renderGameHub();showLobbyDialog('create-dialog','room-title');});}
 function openLobbyCode(){withLobbyProfile(()=>showLobbyDialog('join-dialog','joincode'));}
-function lobbyMode(r){return r.gameType==='sichuan'?'사천성 · '+(r.sichuanMode==='first'?'1등 모드':'릴레이 모드'): r.gameType==='kkung'?'세 글자 명사 · 7초 · 목숨 3개':r.gameType==='alkkagi'?'2인 대전 · 드래그 발사 · 고정 장애물':r.gameType==='yut'?(r.matchMode==='team'?'2대2 팀전 · 공용 말 3개':'개인전 · 말 '+r.piecesPerPlayer+'개'):r.gameType==='seotda'?r.seotdaCards+'장 · 릴레이':r.gameType==='gomoku'?'국제 렌주 · '+r.gomokuMinutes+'분':r.gameType==='poker'?'7포커 · '+(r.pokerRule==='choice'?'초이스':'일반'):'4장 바둑이';}
+function lobbyMode(r){return r.gameType==='tetris'?'2~6인 · 공격/상쇄 블록 대전':r.gameType==='sichuan'?'사천성 · '+(r.sichuanMode==='first'?'1등 모드':'릴레이 모드'): r.gameType==='kkung'?'세 글자 명사 · 7초 · 목숨 3개':r.gameType==='alkkagi'?'2인 대전 · 드래그 발사 · 고정 장애물':r.gameType==='yut'?(r.matchMode==='team'?'2대2 팀전 · 공용 말 3개':'개인전 · 말 '+r.piecesPerPlayer+'개'):r.gameType==='seotda'?r.seotdaCards+'장 · 릴레이':r.gameType==='gomoku'?'국제 렌주 · '+r.gomokuMinutes+'분':r.gameType==='poker'?'7포커 · '+(r.pokerRule==='choice'?'초이스':'일반'):'4장 바둑이';}
 function renderPublicLobby(){
  const root=$('public-lobby');if(!root)return;root.hidden=!!state;document.body.classList.toggle('public-lobby-open',!state);if(state)return;
  renderLobbyControls();
  const query=($('lobby-search')?.value||'').trim().toLocaleLowerCase(),only=$('lobby-open-only')?.checked;
- const list=lobbyRooms.filter(r=>['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(r.gameType)&&(lobbyFilter==='all'||r.gameType===lobbyFilter)&&(!only||r.canJoin)&&(!query||(lobbyRoomTitle(r)+' '+r.hostName+' '+lobbyGameName(r.gameType)).toLocaleLowerCase().includes(query)));
+ const list=lobbyRooms.filter(r=>['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].includes(r.gameType)&&(lobbyFilter==='all'||r.gameType===lobbyFilter)&&(!only||r.canJoin)&&(!query||(lobbyRoomTitle(r)+' '+r.hostName+' '+lobbyGameName(r.gameType)).toLocaleLowerCase().includes(query)));
  document.querySelectorAll('[data-lobby-filter]').forEach(b=>{const selected=b.dataset.lobbyFilter===lobbyFilter;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
  $('lobby-status').textContent=!socket.connected?'서버 연결을 확인하고 있습니다.':!lobbyLoaded?'방 목록을 불러오고 있습니다.':'열린 방 '+list.length+'개';
  const pages=Math.max(1,Math.ceil(list.length/8));lobbyPage=Math.max(1,Math.min(lobbyPage,pages));const visible=list.slice((lobbyPage-1)*8,lobbyPage*8);

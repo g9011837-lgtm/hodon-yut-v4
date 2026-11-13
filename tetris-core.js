@@ -1,0 +1,12 @@
+/* Shared deterministic movement and locking, used by both authority and prediction. */
+(()=>{const SHAPES={I:[[0,1],[1,1],[2,1],[3,1]],O:[[1,0],[2,0],[1,1],[2,1]],T:[[1,0],[0,1],[1,1],[2,1]],S:[[1,0],[2,0],[0,1],[1,1]],Z:[[0,0],[1,0],[1,1],[2,1]],J:[[0,0],[0,1],[1,1],[2,1]],L:[[2,0],[0,1],[1,1],[2,1]]};
+ const cells=a=>{let q=SHAPES[a.kind];for(let n=0;n<a.r&&a.kind!=='O';n++)q=q.map(([x,y])=>[(a.kind==='I'?3:2)-y,x]);return q.map(([x,y])=>[x+a.x,y+a.y]);};
+ const fits=(p,a)=>cells(a).every(([x,y])=>x>=0&&x<10&&y>=0&&y<20&&!p.board[y][x]);
+ function spawn(p,kind,now){if(!kind){p.piece=null;return;}p.piece={kind,x:3,y:0,r:0};p.pieceNo=(p.pieceNo||0)+1;p.fallAt=now;p.lockAt=null;p.resets=0;p.lastRotation=false;if(!fits(p,p.piece))p.alive=false;}
+ function move(p,action,now){let a={...p.piece};if(action==='left')a.x--;else if(action==='right')a.x++;else if(action==='down')a.y++;else if(action==='cw'||action==='ccw'){a.r=(a.r+(action==='cw'?1:3))%4;a=[0,-1,1,-2,2].map(dx=>({...a,x:a.x+dx})).concat([1,2].map(dy=>({...a,y:a.y-dy}))).find(x=>fits(p,x));if(!a)return false;}else return false;
+ if(!fits(p,a))return false;p.piece=a;p.lastRotation=action==='cw'||action==='ccw';if(action==='down'){p.score++;p.fallAt=now;}if(p.lockAt!==null&&p.resets<15){p.lockAt=now;p.resets++;}return true;}
+ function lock(p){const a=p.piece,cx=a.x+1,cy=a.y+1;const spin=a.kind==='T'&&p.lastRotation&&[[-1,-1],[1,-1],[-1,1],[1,1]].filter(([x,y])=>cx+x<0||cx+x>=10||cy+y<0||cy+y>=20||p.board[cy+y][cx+x]).length>=3;
+ for(const[x,y]of cells(a))p.board[y][x]=a.kind;const rows=[];p.board.forEach((row,y)=>{if(row.every(Boolean))rows.push(y);});const n=rows.length,kept=p.board.filter(row=>row.some(c=>!c));p.board=[...Array.from({length:n},()=>Array(10).fill('')),...kept];p.score+=(spin?[400,800,1200,1600][n]:[0,100,300,500,800][n])*p.level;p.lines+=n;p.level=1+Math.floor(p.lines/10);p.held=false;return {lines:n,rows,spin,perfect:n>0&&p.board.every(row=>row.every(c=>!c))};}
+ function predict(p,action,now){if(!p?.alive||!p.piece)return false;if(action==='hold'){if(p.held)return false;const old=p.hold;p.hold=p.piece.kind;spawn(p,old||p.next.shift(),now);p.held=true;return true;}if(action==='drop'){let n=0;while(fits(p,{...p.piece,y:p.piece.y+1})){p.piece.y++;n++;}if(n)p.lastRotation=false;p.score+=n*2;lock(p);spawn(p,p.next.shift(),now);return true;}return move(p,action,now);}
+ globalThis.HodonTetrisCore={SHAPES,cells,fits,spawn,move,lock,predict,fallInterval:p=>Math.max(80,800-(p.level-1)*60)};
+})();

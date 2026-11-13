@@ -1,3 +1,4 @@
+import {createTetris,inputTetris,tickTetris,resignTetris,publicTetris,publicTetrisPlayer,chooseTarget} from './tetris.js';
 import {createAlkkagi,actAlkkagi,tickAlkkagi,resignAlkkagi,publicAlkkagi} from './alkkagi.js';
 import {createPoker,actPoker,publicPoker,removePoker,timeoutPoker} from './poker.js';
 import {createSeotda,updateSeotdaRelay,forfeitSeotdaRelay,actSeotda,publicSeotda,removeSeotda,timeoutSeotda} from './seotda.js';
@@ -44,13 +45,21 @@ app.get('/avatars/:avatarId.svg',(req,res)=>{
  res.type('image/svg+xml').set('Cache-Control','public, max-age=86400').send(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="${id%3*512} ${Math.floor(id/3)*512} 512 512"><image width="1536" height="1024" href="data:image/jpeg;base64,${avatarData}"/></svg>`);
 });
 app.get('/hodon-face.png',(req,res)=>res.sendFile(join(ROOT,'hodon-face.png')));
-for(const name of ['sichuan-ui.js','room-controls.js','studio.css','premium.css','kkung.css','kkung-ui.js','badugi.css','gomoku.css','seotda.css','poker.css','sound.js','stadium.svg','lounge.css'])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
+for(const name of ['tetris-core.js','tetris-ui.js','tetris.css','sichuan-ui.js','room-controls.js','studio.css','premium.css','kkung.css','kkung-ui.js','badugi.css','gomoku.css','seotda.css','poker.css','sound.js','stadium.svg','lounge.css'])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 app.get('/welcome.mp3',(req,res)=>res.type('audio/mpeg').sendFile(join(ROOT,'welcome.mp3')));
 for(const name of ['sichuan-art.webp','sichuan-tiles.webp'])app.get('/'+name,(req,res)=>res.sendFile(join(ROOT,name)));
 const server=createServer(app);
 const io=new Server(server,{maxHttpBufferSize:50_000,pingInterval:20000,pingTimeout:60000,cors:{origin:false}});
 // BEGIN SINGLE-IP POLICY: all game and lobby access passes this Socket.IO gate.
-const SINGLE_IP_ENABLED=process.env.HODON_SINGLE_IP_LIMIT!=='0';
+const SINGLE_IP_ENABLED=process.env.HODON_SINGLE_IP_LIMIT==='1';
+// Explicit deployment setting: Bonto rewrites Host to an internal name.
+// CF-Ray is only a format check. Trust comes from the operator-selected relay
+// boundary: Bonto's edge must overwrite CF-Connecting-IP before forwarding.
+// On a new VM, remove bonto-proxy.json (or set HODON_BONTO_CF_RELAY=0).
+const BONTO_CF_RELAY=(()=>{
+ if(process.env.HODON_BONTO_CF_RELAY!==undefined)return process.env.HODON_BONTO_CF_RELAY==='1';
+ try{return JSON.parse(readFileSync(join(ROOT,'bonto-proxy.json'),'utf8')).trustCloudflareRelay===true;}catch{return false;}
+})();
 const IP_ACCESS_MESSAGE='같은 IP에서 이미 접속 중입니다. 기존 게임 창을 닫은 뒤 다시 연결해 주세요.';
 const ipConnections=new Map();
 const cloudflareProxies=['173.245.48.0/20','103.21.244.0/22','103.22.200.0/22','103.31.4.0/22','141.101.64.0/18','108.162.192.0/18','190.93.240.0/20','188.114.96.0/20','197.234.240.0/22','198.41.128.0/17','162.158.0.0/15','104.16.0.0/13','104.24.0.0/14','172.64.0.0/13','131.0.72.0/22','2400:cb00::/32','2606:4700::/32','2803:f800::/32','2405:b500::/32','2405:8100::/32','2a06:98c0::/29','2c0f:f248::/32'];
@@ -76,7 +85,7 @@ const trustedProxy=ip=>inRange(localProxies,ip)||inRange(cfProxies,ip)||inRange(
 function bontoVisitorIp(request,remote){
  if(!inRange(localProxies,remote))return null;
  const headers=request.headers||{},host=headers.host;
- if(typeof host!=='string'||!/(?:^|\.)[a-z0-9-]+\.bonto\.run(?::\d+)?$/i.test(host))return null;
+ if(!BONTO_CF_RELAY&&(typeof host!=='string'||!/(?:^|\.)[a-z0-9-]+\.bonto\.run(?::\d+)?$/i.test(host)))return null;
  const ray=headers['cf-ray'];
  if(typeof ray!=='string'||!/^([a-f0-9]{16,32})(?:-[a-z]{3})?$/i.test(ray))return null;
  const client=normalizedIp(headers['cf-connecting-ip']);
@@ -161,7 +170,8 @@ function checkpointRooms(immediate=false){
 }
 function extendRecoveredClock(g,delta){
  if(!g||!['playing','countdown'].includes(g.status))return;
- for(const key of ['deadline','turnDeadline','startsAt','tickAt'])if(Number.isFinite(g[key]))g[key]+=delta;
+ for(const key of ['deadline','turnDeadline','startsAt','startedAt','tickAt'])if(Number.isFinite(g[key]))g[key]+=delta;
+ if(g.sequence&&g.players)for(const p of g.players)if(p){p.fallAt+=delta;p.tokenAt=(p.tokenAt||0)+delta;if(p.lockAt!==null)p.lockAt+=delta;for(const q of p.incoming||[])q.readyAt+=delta;}
  if(Number.isFinite(g.pending?.expires))g.pending.expires+=delta;
  if(Number.isFinite(g.shot?.startedAt))g.shot.startedAt+=delta;
 }
@@ -172,12 +182,12 @@ async function restoreRooms(){
  for(const room of saved.rooms){
   if(!/^[A-Z2-9]{6}$/.test(room?.code)||!Array.isArray(room.players)||!Array.isArray(room.spectators))continue;
   // Match the existing expiry policy for fully disconnected rooms.
-  if(now-room.createdAt>24*3600_000&&!['game','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].some(k=>['playing','countdown'].includes(room[k]?.status)))continue;
+  if(now-room.createdAt>24*3600_000&&!['game','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].some(k=>['playing','countdown'].includes(room[k]?.status)))continue;
   try{
    if(room.sichuan)await getSichuan();if(room.kkung)await getKkungEngine();
    room.sichuanStarting=false;room.kkungStarting=false;
    for(const p of [...room.players,...room.spectators])if(p){p.socketId=null;delete p.requestedSeat;}
-   for(const key of ['game','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'])extendRecoveredClock(room[key],delta);
+   for(const key of ['game','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'])extendRecoveredClock(room[key],delta);
    if(Number.isFinite(room.seotdaRelay?.nextAt))room.seotdaRelay.nextAt+=delta;
    rooms.set(room.code,room);
   }catch(e){console.error('Room recovery engine failed:',room.code,e.message);}
@@ -210,7 +220,7 @@ function reply(callback,data={}) {if(typeof callback==='function')callback({ok:t
 function seotdaStarters(room){const seats=new Set([room.host]);const g=room.seotda;if(g?.status==='finished')for(const pot of g.pots||[])if(!pot.refund)for(const i of pot.winners||[])if(room.players[i]&&room.seotdaTokens?.[i]===room.players[i].token)seats.add(i);return [...seats].filter(i=>room.players[i]);}
 function seotdaHandParticipants(room){return room.players.map((p,i)=>!!p&&!!room.seotda?.players[i]?.name&&room.seotdaTokens?.[i]===p.token);}
 function seotdaNeedsReset(room){return room.seotdaRelay?.status==='finished'||!!room.seotda&&room.wallets.filter((n,i)=>room.players[i]&&n>0).length<2;}
-function summary(room,viewer=null) {return {myRecords:viewer!==null&&room.players[viewer]?.profileId?scStore?.records(room.players[viewer].profileId):null,serverNow:Date.now(),sichuan:scEngine?.publicSichuan(room.sichuan,viewer!==null&&room.sichuanTokens?.[viewer]===room.players[viewer]?.token?viewer:null)||null,sichuanMap:room.sichuanMap,sichuanMode:room.sichuanMode,sichuanChat:room.sichuanChat||[],sichuanProfiles:room.players.map(p=>p?.profileId?scStore?.row(p.profileId):null),sichuanGod:scStore?.leaders().find(p=>p.god)||null,sichuanSaveError:!!room.sichuan?.recordError,kkung:room.kkung?kkEngine.publicKkung(room.kkung):null,kkungChat:room.kkungChat||[],roomTitle:room.roomTitle,alkkagi:publicAlkkagi(room.alkkagi),leavePending:room.players.flatMap((p,i)=>p?.leaveRequested?[i]:[]),seatEntryBlocked:seatEntryBlocked(room),seatRequests:room.spectators.filter(w=>Number.isInteger(w.requestedSeat)).map(w=>({id:w.id,seat:w.requestedSeat,name:w.name})),seotdaRelay:room.seotdaRelay?{...room.seotdaRelay,eliminated:[...room.seotdaRelay.eliminated],retired:[...room.seotdaRelay.retired]}:null,seotdaStarters:seotdaStarters(room),seotdaParticipants:seotdaHandParticipants(room),seotdaNeedsReset:seotdaNeedsReset(room),poker:publicPoker(room.poker,viewer!==null&&room.pokerTokens?.[viewer]===room.players[viewer]?.token?viewer:null),wallets:[...room.wallets],serverVersion:SERVER_VERSION,gameType:room.gameType||'yut',pokerRule:room.pokerRule,seotdaCards:room.seotdaCards,seotda:publicSeotda(room.seotda,viewer!==null&&room.seotdaTokens?.[viewer]===room.players[viewer]?.token?viewer:null),gomoku:publicGomoku(room.gomoku),gomokuSamePlayers:!!room.gomokuTokens?.every((t,i)=>t===room.players[i]?.token),gomokuMinutes:room.gomokuMinutes,base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.sichuan?.status||room.kkung?.status||room.alkkagi?.status||room.poker?.status||room.seotda?.status||room.gomoku?.status||room.badugi?.status||room.game?.status||'lobby',
+function summary(room,viewer=null) {return {myRecords:viewer!==null&&room.players[viewer]?.profileId?scStore?.records(room.players[viewer].profileId):null,serverNow:Date.now(),tetris:publicTetris(room.tetris),sichuan:scEngine?.publicSichuan(room.sichuan,viewer!==null&&room.sichuanTokens?.[viewer]===room.players[viewer]?.token?viewer:null)||null,sichuanMap:room.sichuanMap,sichuanMode:room.sichuanMode,sichuanChat:room.sichuanChat||[],sichuanProfiles:room.players.map(p=>p?.profileId?scStore?.row(p.profileId):null),sichuanGod:scStore?.leaders().find(p=>p.god)||null,sichuanSaveError:!!room.sichuan?.recordError,kkung:room.kkung?kkEngine.publicKkung(room.kkung):null,kkungChat:room.kkungChat||[],roomTitle:room.roomTitle,alkkagi:publicAlkkagi(room.alkkagi),leavePending:room.players.flatMap((p,i)=>p?.leaveRequested?[i]:[]),seatEntryBlocked:seatEntryBlocked(room),seatRequests:room.spectators.filter(w=>Number.isInteger(w.requestedSeat)).map(w=>({id:w.id,seat:w.requestedSeat,name:w.name})),seotdaRelay:room.seotdaRelay?{...room.seotdaRelay,eliminated:[...room.seotdaRelay.eliminated],retired:[...room.seotdaRelay.retired]}:null,seotdaStarters:seotdaStarters(room),seotdaParticipants:seotdaHandParticipants(room),seotdaNeedsReset:seotdaNeedsReset(room),poker:publicPoker(room.poker,viewer!==null&&room.pokerTokens?.[viewer]===room.players[viewer]?.token?viewer:null),wallets:[...room.wallets],serverVersion:SERVER_VERSION,gameType:room.gameType||'yut',pokerRule:room.pokerRule,seotdaCards:room.seotdaCards,seotda:publicSeotda(room.seotda,viewer!==null&&room.seotdaTokens?.[viewer]===room.players[viewer]?.token?viewer:null),gomoku:publicGomoku(room.gomoku),gomokuSamePlayers:!!room.gomokuTokens?.every((t,i)=>t===room.players[i]?.token),gomokuMinutes:room.gomokuMinutes,base:room.base,startingChips:room.startingChips,badugi:publicBadugi(room.badugi,viewer!==null&&room.badugiTokens?.[viewer]===room.players[viewer]?.token?viewer:null),code:room.code,host:room.host,mode:room.tetris?.status||room.sichuan?.status||room.kkung?.status||room.alkkagi?.status||room.poker?.status||room.seotda?.status||room.gomoku?.status||room.badugi?.status||room.game?.status||'lobby',
   piecesPerPlayer:room.piecesPerPlayer,playerCount:room.playerCount,matchMode:room.matchMode,turnSeconds:room.turnSeconds,players:room.players.map(p=>p?({name:p.name,avatarId:p.avatarId??0,connected:!!p.socketId}):null),
   spectators:(room.spectators||[]).map(p=>({name:p.name,avatarId:p.avatarId??0,connected:!!p.socketId,id:p.id})),
   colors:COLORS,game:room.game?publicGame(room.game):null};}
@@ -233,7 +243,7 @@ function continueSeotdaRoom(room,now=Date.now()){
   if(room.seotda.status==='finished'){updateSeotdaRelay(relay,room.seotda,now);room.wallets=room.seotda.players.map((p,i)=>seotdaHandParticipants(room)[i]?p.chips:room.wallets[i]);}
  }
 }
-function seatEntryBlocked(room){return scActive(room)||room.seotdaRelay?.status==='playing'||[room.kkung,room.game,room.badugi,room.gomoku,room.seotda,room.poker,room.alkkagi].some(g=>g?.status==='playing');}
+function seatEntryBlocked(room){return room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||[room.kkung,room.game,room.badugi,room.gomoku,room.seotda,room.poker,room.alkkagi].some(g=>g?.status==='playing');}
 function availableSeat(room){return room.players.findIndex((p,i)=>!p&&!room.spectators.some(w=>w.requestedSeat===i));}
 function promoteWatcher(room,watcher,seat){
  const client=io.sockets.sockets.get(watcher.socketId);if(!client||room.players[seat])return null;
@@ -250,8 +260,9 @@ function syncFinishedWallets(room){
  if(room.seotda?.status==='finished')room.wallets=room.seotda.players.map((p,i)=>seotdaHandParticipants(room)[i]?p.chips:room.wallets[i]);
  if(room.badugi?.status==='finished')room.wallets=room.badugi.players.map((p,i)=>room.badugiParticipants?.[i]===false||room.badugiTokens?.[i]!==room.players[i]?.token?room.wallets[i]:p.chips);
 }
-function currentHandPlaying(room,seat){return (scActive(room)&&room.sichuan.players[seat]?.status==='playing')||(room.kkung?.status==='playing'&&room.kkung.players[seat]?.lives>0)||room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||(room.seotda?.status==='playing'&&!(room.seotdaRelay?.eliminated||[]).includes(seat));}
+function currentHandPlaying(room,seat){return (room.tetris?.status==='playing'&&room.tetris.players[seat]?.alive)||(scActive(room)&&room.sichuan.players[seat]?.status==='playing')||(room.kkung?.status==='playing'&&room.kkung.players[seat]?.lives>0)||room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||(room.seotda?.status==='playing'&&!(room.seotdaRelay?.eliminated||[]).includes(seat));}
 function removeRoomPlayer(room,seat,notify=false){
+ if(room.gameType==='tetris')resignTetris(room.tetris,seat);
  const player=room.players[seat];if(!player)return;
  if(room.seotdaRelay?.status==='playing'){forfeitSeotdaRelay(room.seotdaRelay,room.seotda,seat);room.wallets[seat]=0;}
  room.players[seat]=null;
@@ -273,7 +284,7 @@ const LOBBY_CHANNEL='__public_lobby__';let lastLobbySnapshot='';
 const lobbyChats=[];
 function publicRooms(){return [...rooms.values()].filter(r=>r.players.some(p=>p?.socketId)||r.spectators.some(p=>p.socketId)).sort((a,b)=>b.createdAt-a.createdAt||a.code.localeCompare(b.code)).slice(0,200).map(r=>{
  const playing=seatEntryBlocked(r),host=r.players[r.host],available=r.players.filter((p,i)=>!p&&!r.spectators.some(w=>w.requestedSeat===i)).length;
- return {code:r.code,gameType:r.gameType,hostName:host?.name||'함께할 친구',hostAvatarId:host?.avatarId??0,playerCount:r.playerCount,occupied:r.players.filter(Boolean).length,connectedPlayers:r.players.filter(p=>p?.socketId).length,spectators:r.spectators.filter(w=>w.socketId).length,availableSeats:available,canJoin:!playing&&available>0,status:playing?'playing':r.sichuan||r.kkung||r.game||r.badugi||r.gomoku||r.seotda||r.poker||r.alkkagi?'finished':'waiting',sichuanMap:r.sichuanMap,sichuanMode:r.sichuanMode,matchMode:r.matchMode,piecesPerPlayer:r.piecesPerPlayer,roomTitle:r.roomTitle,pokerRule:r.pokerRule,seotdaCards:r.seotdaCards,base:r.base,startingChips:r.startingChips,gomokuMinutes:r.gomokuMinutes,createdAt:r.createdAt};
+ return {code:r.code,gameType:r.gameType,hostName:host?.name||'함께할 친구',hostAvatarId:host?.avatarId??0,playerCount:r.playerCount,occupied:r.players.filter(Boolean).length,connectedPlayers:r.players.filter(p=>p?.socketId).length,spectators:r.spectators.filter(w=>w.socketId).length,availableSeats:available,canJoin:!playing&&available>0,status:playing?'playing':r.tetris||r.sichuan||r.kkung||r.game||r.badugi||r.gomoku||r.seotda||r.poker||r.alkkagi?'finished':'waiting',sichuanMap:r.sichuanMap,sichuanMode:r.sichuanMode,matchMode:r.matchMode,piecesPerPlayer:r.piecesPerPlayer,roomTitle:r.roomTitle,pokerRule:r.pokerRule,seotdaCards:r.seotdaCards,base:r.base,startingChips:r.startingChips,gomokuMinutes:r.gomokuMinutes,createdAt:r.createdAt};
  });}
 function broadcastLobby(){checkpointRooms();const list=publicRooms(),snapshot=JSON.stringify(list);if(snapshot===lastLobbySnapshot)return;lastLobbySnapshot=snapshot;io.to(LOBBY_CHANNEL).emit('lobby:state',{rooms:list});}
 function broadcast(room){
@@ -331,15 +342,15 @@ io.on('connection',socket=>{
   });
 
 
-  socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:SERVER_VERSION,roomProtocol:2,singleIpLimit:SINGLE_IP_ENABLED,bootId:BOOT_ID,uptimeMs:Date.now()-BOOT_AT,roomRecovery:!recoverySaveFailed,games:['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan']}));
+  socket.on('server:info',(_,cb)=>reply(cb,{serverVersion:SERVER_VERSION,roomProtocol:2,singleIpLimit:SINGLE_IP_ENABLED,bootId:BOOT_ID,uptimeMs:Date.now()-BOOT_AT,roomRecovery:!recoverySaveFailed,games:['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris']}));
   socket.on('room:create',(data={},cb)=>{data=data||{};if(!validAvatar(data))return failure(cb,'캐릭터를 10종 중에서 선택해 주세요.');
     if(authorization(socket)||spectatorAuthorization(socket)) return failure(cb,'이미 방에 참가 중입니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
     const playerCount=Number(data.playerCount);
-    const maxPlayers=data.gameType==='poker'?5:(!data.gameType||['yut','seotda','kkung','sichuan'].includes(data.gameType))?10:['gomoku','alkkagi'].includes(data.gameType)?2:4;
-    if(!Number.isInteger(playerCount)||playerCount<2||playerCount>maxPlayers)return failure(cb,'참가 인원을 확인하세요. 윷놀이 2~10명, 팀전 4명, 2장 섯다 2~10명, 3장 섯다 2~6명, 바둑이 2~4명, 포커 2~5명, 오목 2명입니다.');
-    if(data.gameType!==undefined&&!['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(data.gameType))return failure(cb,'게임 종류를 확인해 주세요.');
-    const gameType=['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan'].includes(data.gameType)?data.gameType:'yut';
+    const maxPlayers=data.gameType==='tetris'?6:data.gameType==='poker'?5:(!data.gameType||['yut','seotda','kkung','sichuan'].includes(data.gameType))?10:['gomoku','alkkagi'].includes(data.gameType)?2:4;
+    if(!Number.isInteger(playerCount)||playerCount<2||playerCount>maxPlayers)return failure(cb,'참가 인원을 확인하세요. 윷놀이 2~10명, 팀전 4명, 2장 섯다 2~10명, 3장 섯다 2~6명, 테트리스 2~6명, 바둑이 2~4명, 포커 2~5명, 오목 2명입니다.');
+    if(data.gameType!==undefined&&!['yut','badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].includes(data.gameType))return failure(cb,'게임 종류를 확인해 주세요.');
+    const gameType=['badugi','gomoku','seotda','poker','alkkagi','kkung','sichuan','tetris'].includes(data.gameType)?data.gameType:'yut';
     if(['gomoku','alkkagi'].includes(gameType)&&playerCount!==2)return failure(cb,'오목과 장기알까기는 대국자 2명 전용입니다.');
     const gomokuMinutes=[5,10,15].includes(Number(data.gomokuMinutes))?Number(data.gomokuMinutes):5;
     const matchMode=gameType==='yut'&&data.matchMode==='team'?'team':'solo';
@@ -354,9 +365,9 @@ io.on('connection',socket=>{
     if(gameType==='seotda'&&playerCount*seotdaCards>20)return failure(cb,'3장 섯다는 화투 20장을 중복 없이 나누기 위해 최대 6명까지 참가할 수 있습니다. 7~10명은 2장 섯다를 선택하세요.');
     const pokerRule=data.pokerRule??'normal';if(gameType==='poker'&&!['normal','choice'].includes(pokerRule))return failure(cb,'일반 또는 초이스 룰을 선택하세요.');
     const titleIn=typeof data.roomTitle==='string'?data.roomTitle.trim().replace(/[\u0000-\u001f\u007f]/g,'').slice(0,32):'';
-    const roomTitle=titleIn||name+'의 '+({yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성'}[gameType])+'방';
+    const roomTitle=titleIn||name+'의 '+({yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'장기알까기',kkung:'쿵쿵따',sichuan:'사천성',tetris:'테트리스'}[gameType])+'방';
     const sichuanMap=['butterfly','heart','diamond','bridge','square','flower','random'].includes(data.sichuanMap)?data.sichuanMap:'butterfly',sichuanMode=data.sichuanMode==='first'?'first':'relay';
-    const room={sichuan:null,sichuanMap,sichuanMode,sichuanChat:[],kkung:null,kkungChat:[],roomTitle,alkkagi:null,poker:null,pokerRule,seotda:null,seotdaCards,gomoku:null,gomokuMinutes,gameType,base,startingChips,wallets:Array(playerCount).fill(startingChips),badugi:null,code:id,host:0,piecesPerPlayer:matchMode==='team'?3:count,matchMode,turnSeconds,playerCount,players:[{name,avatarId:data.avatarId??0,...(socket.data.account||{}),token,socketId:socket.id},...Array(playerCount-1).fill(null)],spectators:[],game:null,createdAt:Date.now()};
+    const room={tetris:null,sichuan:null,sichuanMap,sichuanMode,sichuanChat:[],kkung:null,kkungChat:[],roomTitle,alkkagi:null,poker:null,pokerRule,seotda:null,seotdaCards,gomoku:null,gomokuMinutes,gameType,base,startingChips,wallets:Array(playerCount).fill(startingChips),badugi:null,code:id,host:0,piecesPerPlayer:matchMode==='team'?3:count,matchMode,turnSeconds,playerCount,players:[{name,avatarId:data.avatarId??0,...(socket.data.account||{}),token,socketId:socket.id},...Array(playerCount-1).fill(null)],spectators:[],game:null,createdAt:Date.now()};
     rooms.set(id,room);checkpointRooms(true);socket.join(id);socket.data={account:socket.data.account,roomCode:id,token,role:'player'};
     reply(cb,{code:id,token,seat:0,role:'player',gameType:room.gameType,serverVersion:SERVER_VERSION});broadcast(room);
   });
@@ -374,7 +385,7 @@ io.on('connection',socket=>{
       reply(cb,{code:id,token:tokenIn,seat,role:'player'});broadcast(room);return;
     }
     let spectatorIndex=(room.spectators||[]).findIndex(p=>p.token===tokenIn&&tokenIn);
-    const wantsWatch=scActive(room)||room.seotdaRelay?.status==='playing'||!!data.spectator||spectatorIndex>=0||(room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing');
+    const wantsWatch=room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||!!data.spectator||spectatorIndex>=0||(room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing');
     if(wantsWatch){
       if(spectatorIndex>=0){
         const watcher=room.spectators[spectatorIndex],former=watcher.socketId;
@@ -444,6 +455,9 @@ io.on('connection',socket=>{
     const [watcher]=room.spectators.splice(index,1);if(watcher.socketId){const client=io.sockets.sockets.get(watcher.socketId);if(client){client.data={account:client.data.account,};client.leave(room.code);client.emit('session:kicked');}}
     say(room,`${watcher.name} 님이 관전방에서 강퇴되었습니다.`);reply(cb);broadcast(room);
   });
+  socket.on('tetris:input',(data={},cb)=>{const a=authorization(socket);if(!a||a.room.gameType!=='tetris')return failure(cb,'테트리스 참가자만 조작할 수 있습니다.');const g=a.room.tetris;if(!g||!data||typeof data!=='object'||data.gameId!==g.id)return failure(cb,'현재 경기를 확인해 주세요.');const accepted=inputTetris(g,a.seat,data.action,Date.now(),data.seq,data.pieceNo);reply(cb,{accepted,gameId:g.id,revision:g.revision,serverNow:Date.now(),player:publicTetrisPlayer(g,a.seat)});if(g.status==='finished')broadcast(a.room);});
+  socket.on('tetris:target',(data={},cb)=>{const a=authorization(socket);if(!a||a.room.gameType!=='tetris'||data?.gameId!==a.room.tetris?.id||!chooseTarget(a.room.tetris,a.seat,data?.target))return failure(cb,'공격할 상대를 확인해 주세요.');reply(cb);});
+  socket.on('tetris:resign',(data={},cb)=>{const a=authorization(socket);if(!a||a.room.gameType!=='tetris'||data?.gameId!==a.room.tetris?.id||!resignTetris(a.room.tetris,a.seat))return failure(cb,'진행 중인 참가자만 기권할 수 있습니다.');reply(cb);broadcast(a.room);});
   socket.on('game:start',async(data={},cb)=>{data=data||{};
     const a=authorization(socket);if(!a)return failure(cb,'방에 참가해 주세요.');
     const {room,seat}=a;
@@ -451,7 +465,8 @@ io.on('connection',socket=>{
     const connected=room.players.map((p,i)=>p?.socketId?i:-1).filter(i=>i>=0),fixed=['gomoku','alkkagi'].includes(room.gameType)||room.matchMode==='team';
     if(fixed&&connected.length!==room.playerCount)return failure(cb,`${room.playerCount}명 모두 접속해야 시작할 수 있습니다.`);
     if(!fixed&&!(room.gameType==='seotda'&&room.seotdaRelay?.status==='playing')&&connected.length<2)return failure(cb,'접속 중인 참가자 2명 이상이면 바로 시작할 수 있습니다.');
-    if((scActive(room)||room.sichuanStarting||room.kkungStarting||room.kkung?.status==='playing'||room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing'))return failure(cb,'이미 진행 중입니다.');
+    if((room.tetris?.status==='playing'||scActive(room)||room.sichuanStarting||room.kkungStarting||room.kkung?.status==='playing'||room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing'))return failure(cb,'이미 진행 중입니다.');
+    if(room.gameType==='tetris'){room.tetris=createTetris(room.players);reply(cb);broadcast(room);return;}
     if(room.gameType==='sichuan'){
       room.sichuanStarting=true;
       try{const e=await getSichuan();if(authorization(socket)?.room!==room||room.host!==seat)throw Error('방장 연결을 확인해 주세요.');
@@ -658,6 +673,8 @@ setInterval(()=>{for(const room of rooms.values()){
 setInterval(()=>{const now=Date.now();for(const [id,room] of rooms){
   if(now-room.createdAt>24*3600_000 && room.players.every(p=>!p?.socketId) && (room.spectators||[]).every(p=>!p.socketId))rooms.delete(id);
 }broadcastLobby();},3600_000).unref();
+// Tetris uses a lightweight 25 Hz stream; lobby/profile rendering and disk checkpoints stay out of the input path.
+setInterval(()=>{const now=Date.now();for(const room of rooms.values()){const g=room.tetris;if(g?.status!=='playing')continue;tickTetris(g,now);if(g.status==='finished'){broadcast(room);continue;}if(now-(room.tetrisNetAt||0)>=40&&(room.tetrisNetRevision!==g.revision||now-(room.tetrisNetAt||0)>=1000)){room.tetrisNetAt=now;room.tetrisNetRevision=g.revision;io.to(room.code).emit('tetris:state',{code:room.code,serverNow:now,tetris:publicTetris(g)});}}},20).unref();
 await restoreRooms();
 // Keep a recent clock checkpoint even when nobody clicks. Private recovery files have no HTTP route.
 setInterval(()=>{if(rooms.size)checkpointRooms(true);},1000).unref();

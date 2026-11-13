@@ -1,7 +1,7 @@
 /* v57: persistent room actions and original Korean welcome narration. */
 (()=>{
  'use strict';
- const names={yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'알까기',kkung:'쿵쿵따',sichuan:'사천성'};
+ const names={yut:'윷놀이',badugi:'바둑이',gomoku:'오목',seotda:'섯다',poker:'7포커',alkkagi:'알까기',kkung:'쿵쿵따',sichuan:'사천성',tetris:'테트리스'};
  let context=null,busy=false,bar=null;
  const style=document.createElement('style');style.textContent=`
  #room-actions{display:flex;align-items:center;gap:10px;padding:9px 15px;margin:8px 0;background:linear-gradient(#513923,#251b13);border:1px solid #b18a46;border-radius:10px;box-shadow:inset 0 1px #e5c78a44,0 3px 8px #0005;color:#f6e4b7}
@@ -12,13 +12,14 @@
  function eligible(c){const s=c?.state,i=c?.seat;if(!s||!c.connected||c.isSpectator||!Number.isInteger(i)||!s.players?.[i])return false;const t=s.gameType,g=t==='yut'?s.game:s[t];if(!g)return false;
  if(t==='yut')return g.status==='playing'&&g.participants?.[i]!==false&&!g.retired?.includes(i)&&!g.placements?.some(p=>p.seat===i);
  if(t==='sichuan')return ['countdown','playing'].includes(g.status)&&g.players?.[i]?.status==='playing'&&g.players[i].rank===null;
+ if(t==='tetris')return g.status==='playing'&&g.players?.[i]?.alive;
  if(t==='kkung')return g.status==='playing'&&g.players?.[i]?.lives>0;
  if(t==='gomoku'||t==='alkkagi')return g.status==='playing';
  if(!g.players?.[i]?.name||s[t+'Participants']?.[i]===false)return false;
  if(t==='seotda'&&s.seotdaRelay?.status==='playing')return !s.seotdaRelay.retired?.includes(i)&&!s.seotdaRelay.eliminated?.includes(i);
  return g.status==='playing'&&!g.players[i].folded;
  }
- function request(c){const s=c.state,t=s.gameType,g=t==='yut'?s.game:s[t];if(t==='yut')return ['game:resign',{gameId:g.id}];if(t==='sichuan')return ['sichuan:resign',{gameId:g.id}];if(t==='kkung')return ['kkung:resign',{gameId:g.id}];if(t==='gomoku')return ['gomoku:act',{action:'resign',revision:g.revision}];if(t==='alkkagi')return ['alkkagi:resign',{gameNo:g.gameNo,revision:g.revision}];return ['card:resign',{gameType:t,handNo:g.handNo,revision:g.revision,replayNo:g.replayNo??0}];}
+ function request(c){const s=c.state,t=s.gameType,g=t==='yut'?s.game:s[t];if(t==='yut')return ['game:resign',{gameId:g.id}];if(t==='sichuan')return ['sichuan:resign',{gameId:g.id}];if(t==='tetris')return ['tetris:resign',{gameId:g.id}];if(t==='kkung')return ['kkung:resign',{gameId:g.id}];if(t==='gomoku')return ['gomoku:act',{action:'resign',revision:g.revision}];if(t==='alkkagi')return ['alkkagi:resign',{gameNo:g.gameNo,revision:g.revision}];return ['card:resign',{gameType:t,handNo:g.handNo,revision:g.revision,replayNo:g.replayNo??0}];}
  function message(c){const s=c.state,t=s.gameType;if(t==='yut'&&s.game.mode==='team')return '기권하면 우리 팀 전체가 패배합니다. 기권하시겠습니까?';if(t==='seotda'&&s.seotdaRelay?.status==='playing')return '섯다 릴레이를 기권하면 남은 칩 전부가 공동 판돈으로 넘어가며 이번 릴레이에 다시 참가할 수 없습니다. 기권하시겠습니까?';if(['badugi','poker','seotda'].includes(t))return '현재 판을 기권합니다. 남은 보유 칩은 유지되며 이미 낸 판돈은 돌려받지 못합니다. 기권하시겠습니까?';return '이번 경기를 기권하시겠습니까?';}
  function mount(){if(bar)return;bar=document.createElement('nav');bar.id='room-actions';bar.setAttribute('aria-label','게임방 메뉴');bar.hidden=true;const label=document.createElement('span');label.id='room-actions-label';const resign=document.createElement('button');resign.id='room-resign';resign.type='button';resign.textContent='기권';const leave=document.createElement('button');leave.id='room-leave';leave.type='button';bar.append(label,resign,leave);const header=document.querySelector('.app header')||document.querySelector('header');if(header)header.after(bar);else document.body.prepend(bar);
  resign.addEventListener('click',async()=>{const c=context;if(busy||!eligible(c))return;const payload=request(c);if(!globalThis.confirm(message(c)))return;busy=true;render(context);try{await c.action(...payload);}finally{busy=false;render(context);}});
