@@ -7,7 +7,7 @@ for(const mode of ['baseline','nodemon.json','package.json','no-config'])test('r
  if(mode==='baseline'){const p=join(dir,'server.js');writeFileSync(p,readFileSync(p,'utf8').replaceAll("'rooms.state'","'rooms.json'"));}
  const source=join(dir,'server.js');appendFileSync(source,`\nconsole.log('FIXTURE_SERVER_PID',process.pid);\n`);
  const probe=createServer();await new Promise(r=>probe.listen(0,'127.0.0.1',r));const port=probe.address().port;await new Promise(r=>probe.close(r));const launcher=join(dir,'launch.sh');writeFileSync(launcher,'#!/bin/bash\nexec node server.js\n');
- const count=()=>[...output.matchAll(/HODON v61\.0: http/g)].length;
+ const count=()=>[...output.matchAll(/HODON v61\.3: http/g)].length;
  const req=(c,e,d={})=>c.timeout(3000).emitWithAck(e,d);async function ok(c,e,d){const r=await req(c,e,d);assert.ok(r.ok,r.error);return r;}async function connect(){const c=io('http://127.0.0.1:'+port,{reconnection:false});clients.push(c);await new Promise((r,j)=>{c.once('connect',r);c.once('connect_error',j)});return c;}
  try{
   child=spawn(process.execPath,[bin,'--verbose','--legacy-watch','--watch',dir,'--ext','js,mjs,cjs,json','--exec','bash',launcher],{cwd:dir,env:{...process.env,PORT:String(port),HODON_DATA_DIR:dir,NO_COLOR:'1'},detached:true,stdio:['pipe','pipe','pipe']});child.stdout.on('data',b=>output+=b);child.stderr.on('data',b=>output+=b);await until(()=>count()===1);await sleep(500);

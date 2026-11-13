@@ -1,8 +1,568 @@
 {
-  "version": "61.0.0",
+  "version": "61.3.0",
   "tests": {
-    "passed": 325,
-    "failed": 0
+    "passed": 341,
+    "failed": 0,
+    "skipped": 0,
+    "single_ip_tests": 13,
+    "browser_profile_checks": "PASS"
+  },
+  "lobby_fix_checks": {
+    "checks": [
+      {
+        "width": 1180,
+        "id": 0,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 1,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 2,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 3,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 4,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 5,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 6,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 7,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 8,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 1180,
+        "id": 9,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 0,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 1,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 2,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 3,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 4,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 5,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 6,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 7,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 8,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 900,
+        "id": 9,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 0,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 1,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 2,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 3,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 4,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 5,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 6,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 7,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 8,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 761,
+        "id": 9,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 0,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 1,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 2,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 3,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 4,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 5,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 6,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 7,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 8,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 760,
+        "id": 9,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 0,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 1,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 2,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 3,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 4,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 5,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 6,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 7,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 8,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      },
+      {
+        "width": 390,
+        "id": 9,
+        "contained": true,
+        "profileRankSeparate": true,
+        "menuRoomsSeparate": true,
+        "headerSeparate": true,
+        "toolsContained": true,
+        "noHorizontalOverflow": true,
+        "fontUnified": true
+      }
+    ],
+    "errors": [],
+    "profileDialog": "PASS",
+    "soundButton": "PASS"
   },
   "render_checks": {
     "results": [
@@ -116,6 +676,16 @@
       "sha256": "6bad5b71748761e2f2ac0c343ef4fde83d2879658e57483ee44e5b75ea997f6d"
     },
     {
+      "path": "HODON-KOREAN-FONT-LICENSE.txt",
+      "size": 14895,
+      "sha256": "45040bea23dde0fb003c5cf84a1bc2ab4438a240c8a875ace4e8070d673262ff"
+    },
+    {
+      "path": "HODON-ROUND-FONT-LICENSE.txt",
+      "size": 4399,
+      "sha256": "c324192c8b3a988bae45a9a7e4ac1258b684739003bda114e0523423440457c9"
+    },
+    {
       "path": "HWATU-LICENSE.txt",
       "size": 954,
       "sha256": "291b09b9e788f80943aed29be6104d1531a9a2e61cdac72f65106869776973b2"
@@ -124,6 +694,11 @@
       "path": "HWATU-SOURCES.json",
       "size": 6623,
       "sha256": "bd2891753c38d9f4d46088a5714c35b0826fd122c8d967a9d41c7a3bd1a8c5dd"
+    },
+    {
+      "path": "IP-CONNECTION-POLICY.md",
+      "size": 3346,
+      "sha256": "7185c3f034a3f187d6548b478229d90f2e96b7eb89065193264d1fcbb230df7b"
     },
     {
       "path": "KKUNG-ASSETS.txt",
@@ -142,8 +717,8 @@
     },
     {
       "path": "README.md",
-      "size": 2354,
-      "sha256": "6d41023c6ce71d2ae3814ededc1ef73a25b479508776760d8ab000ae04f94cd7"
+      "size": 7083,
+      "sha256": "35c5060d22f8abe4398f4b645f473127e3c6a498531d04e11a4682afeec9d918"
     },
     {
       "path": "SCENERY-ASSET.txt",
@@ -167,8 +742,8 @@
     },
     {
       "path": "START-HERE-v61.md",
-      "size": 2354,
-      "sha256": "6d41023c6ce71d2ae3814ededc1ef73a25b479508776760d8ab000ae04f94cd7"
+      "size": 7083,
+      "sha256": "35c5060d22f8abe4398f4b645f473127e3c6a498531d04e11a4682afeec9d918"
     },
     {
       "path": "TEST-RESULT-v59.txt",
@@ -233,7 +808,7 @@
     {
       "path": "alkkagi-ui.test.js",
       "size": 6219,
-      "sha256": "2389780762d3b4843e322facf9b49e3a7d8fafc86a44e932a61078836ee21822"
+      "sha256": "de7e8744cb32b56c871bef388e098bd52da8bfa69fda5735fd19237922953869"
     },
     {
       "path": "alkkagi.css",
@@ -242,73 +817,73 @@
     },
     {
       "path": "alkkagi.js",
-      "size": 7522,
-      "sha256": "0b1845411b40c16f5c899703cee747f76e677038886e82b227b8d3b82dfd2c58"
+      "size": 7523,
+      "sha256": "45a22dac80b0b41ebaeecab7ab9d65d0e8bb94ebe20720275ba3d941a5bc6411"
     },
     {
       "path": "alkkagi.test.js",
-      "size": 5327,
-      "sha256": "03b802b5fea0d1bf98cf64c5c271a71c0e3d9505ff039372f6a5b36fcaeb9805"
+      "size": 5450,
+      "sha256": "529af35c518873a2af2f7cf2bfb45d7bceb99856b20466d6313800270d9e24ec"
     },
     {
       "path": "app.js",
-      "size": 907067,
-      "sha256": "c708edbc232cf03bbf5841d81d5c7d08b154901e18c7ab353e9309431bef34ae"
+      "size": 911790,
+      "sha256": "983e4970e2d9071d8797b391fde5ab0a6daddd359d83492db07ab26f0cd2a0f6"
     },
     {
       "path": "approved-bust-0.svg",
-      "size": 806530,
-      "sha256": "16295283f644c2b6abe35362df123c4067a3efbc58ca6b82f1b137f048d78577"
+      "size": 225656,
+      "sha256": "c812cdb99ad13e39691993ce7d11de4ac43d427c46ba4e8b803494a4d5daeee7"
     },
     {
       "path": "approved-bust-1.svg",
-      "size": 806531,
-      "sha256": "02e255657bd8bbb0b84d22ceff6d969eb3f4fd27267c07ce356aa84e7d727d05"
+      "size": 239020,
+      "sha256": "54590a86ce51d937554e812473d0c297c2355e1adccf377b3e3a0ce46aeeb645"
     },
     {
       "path": "approved-bust-2.svg",
-      "size": 806531,
-      "sha256": "458c5c70cbb4a05dbd011a1c975b166e16da6bcca8f55d6dd7b8d35fbb87353e"
+      "size": 283376,
+      "sha256": "5b9613d7d4320dd906179eb46138dea320ca0ab187679af3f801b535ad3006a7"
     },
     {
       "path": "approved-bust-3.svg",
-      "size": 806532,
-      "sha256": "f5480a882582b233df70c7236bed0f9bdc1cc406f129ebd393bd759bec3ed072"
+      "size": 246812,
+      "sha256": "29a9c39aaba5d4aac5f653c3a071a542e66d81f515f7f021d6ec7cbc3f039bc7"
     },
     {
       "path": "approved-bust-4.svg",
-      "size": 806532,
-      "sha256": "3ef3626fd4f6265709c3e32077e36acd2c05211836d58f0ba687e1b34b677b43"
+      "size": 253920,
+      "sha256": "07f6c936bfda4fda70cea77569110f9e36fefecfe4645b01dcd1f51fddc854b7"
     },
     {
       "path": "approved-bust-5.svg",
-      "size": 806532,
-      "sha256": "29c96af84af5e101c69a797bd556658fc13b0f3e76c52c0c74836cf289ec194b"
+      "size": 270688,
+      "sha256": "41545e5301c9bef211476009b9f766aa9763bce770a411920988cf0207ea87aa"
     },
     {
       "path": "approved-bust-6.svg",
-      "size": 806533,
-      "sha256": "504b4843351701393502051cd8b5bedbd07aee3fb526a980ba1fb314cecc4114"
+      "size": 258596,
+      "sha256": "4d99dcd63e0e463efb114d3ba319be3bcde289f27fcdb2962c54f6b9d4ce20ad"
     },
     {
       "path": "approved-bust-7.svg",
-      "size": 806533,
-      "sha256": "57f84c41433d81a8fb5d203215bfeac192ded0f1efc5eed1c629883b7e37e7a0"
+      "size": 254048,
+      "sha256": "b55d23e6007c42b4dca750b96d37d0528f78e63a8f58bb653d5a08224a54c0ff"
     },
     {
       "path": "approved-bust-8.svg",
-      "size": 806534,
-      "sha256": "0d8d518d28bfdc89b303dbe6a51fb004e90d31102771648ec05b8033d236f3c7"
+      "size": 283384,
+      "sha256": "1e9e018de0d8141d51eecb4ba3f4a4bd3de7ce16127e20ce75b0a79bb94f8b23"
     },
     {
       "path": "approved-bust-9.svg",
-      "size": 806534,
-      "sha256": "61466cf50fef8187336e5b071a21200fadcb536156a5c85cdd53640258a29d69"
+      "size": 288052,
+      "sha256": "cda458706adcb0ec825d5e26677cbcaa083497eba5ffbe2c151f2d2e97d2c77b"
     },
     {
       "path": "approved-busts.webp",
-      "size": 604790,
-      "sha256": "d18123154bfa98009a75019b3ce8bae94390be36cacd2589abf1c6c36f9a6bf2"
+      "size": 1380558,
+      "sha256": "3c2bf98826ca6c178cf59bc31e750f448b5f38cab5359f1c888114e62a595d85"
     },
     {
       "path": "approved-crest.svg",
@@ -367,8 +942,13 @@
     },
     {
       "path": "approved-ui.js",
-      "size": 16674,
-      "sha256": "4684a18857e96e94418f41b0f6434a39e41360652cb7c65acf7ca805d9f898a9"
+      "size": 17177,
+      "sha256": "53c980e744c3fc243d15fa8a6004e3f208043880d9f502985ebbc0d1cd62f5b5"
+    },
+    {
+      "path": "approved-yut-drum.webp",
+      "size": 246684,
+      "sha256": "0da2fab6998c3c329e3e3f3f2a7c1c46143680bf657959bc1fedb56f91396093"
     },
     {
       "path": "approved-yut-log.webp",
@@ -377,8 +957,8 @@
     },
     {
       "path": "approved.css",
-      "size": 99091,
-      "sha256": "d9159cf75a70e88bf0ea30e78894d5175c6ff40102649500f10ea9b8a58ab714"
+      "size": 111129,
+      "sha256": "7d4b3f5e0c4791584bd7c37117425c7a66d8ea7e999f3eb79e22c201b48530c2"
     },
     {
       "path": "assets.test.js",
@@ -393,7 +973,7 @@
     {
       "path": "avatar.test.js",
       "size": 5377,
-      "sha256": "62940fce9a83d3ce0faff71db1dbac610a764a88d2e4cd697cb2c39d39134b73"
+      "sha256": "34c785bff0dd81586231c596fb51823f6ffe2c899f761c9301e2e1bfbc69c22f"
     },
     {
       "path": "badugi-ui.test.js",
@@ -473,7 +1053,7 @@
     {
       "path": "card-resign.test.js",
       "size": 3735,
-      "sha256": "a7a8ce2d645d1b583b1f20398931621e641f6268341c1dec8aee107d205f6578"
+      "sha256": "5d354912343ae88d42c4e96f5225c36b57b46c98152a38e188ca8fd712e07433"
     },
     {
       "path": "cash-pile.webp",
@@ -503,7 +1083,7 @@
     {
       "path": "deployment.test.js",
       "size": 3198,
-      "sha256": "673a33362f620897033d55dfe280035d3707dfc5c01aebefb9729758b7502b38"
+      "sha256": "ecf0e6b7f66a190cacff98ed58cea361264ff83f8adcdab6cfd0a174e5d4b18d"
     },
     {
       "path": "face-ready.test.js",
@@ -553,7 +1133,7 @@
     {
       "path": "hand-winner.test.js",
       "size": 4266,
-      "sha256": "a1c8a669be8bd0a98db67417ef547c49c570d5d008e554f389149e76f672e491"
+      "sha256": "a5b28fb507dbdc7fcb5d9816df7c792a489193bc1c019b3d1f704c176ebe7b9f"
     },
     {
       "path": "high-hand.test.js",
@@ -562,58 +1142,58 @@
     },
     {
       "path": "hodon-avatar-0.svg",
-      "size": 692165,
-      "sha256": "0df9e97300d4507a8192e0994c64c03144cd0594a660f67b015124996fb2a172"
+      "size": 225656,
+      "sha256": "c812cdb99ad13e39691993ce7d11de4ac43d427c46ba4e8b803494a4d5daeee7"
     },
     {
       "path": "hodon-avatar-1.svg",
-      "size": 692166,
-      "sha256": "f4f92e47a6650bf0e9c713443b44e7e7f4119601b6cb773d360874d000b6111c"
+      "size": 239020,
+      "sha256": "54590a86ce51d937554e812473d0c297c2355e1adccf377b3e3a0ce46aeeb645"
     },
     {
       "path": "hodon-avatar-2.svg",
-      "size": 692166,
-      "sha256": "794833f5e7007f0a90e4818f03ecf786fa855eadfa30279599de77cf2c6c1446"
+      "size": 283376,
+      "sha256": "5b9613d7d4320dd906179eb46138dea320ca0ab187679af3f801b535ad3006a7"
     },
     {
       "path": "hodon-avatar-3.svg",
-      "size": 692166,
-      "sha256": "5dcbba570e378eb1a1f8d67141d2249a17fb65e833a4085e8e6311bf28e361bc"
+      "size": 246812,
+      "sha256": "29a9c39aaba5d4aac5f653c3a071a542e66d81f515f7f021d6ec7cbc3f039bc7"
     },
     {
       "path": "hodon-avatar-4.svg",
-      "size": 692166,
-      "sha256": "7e2a4e088357374576e4cb01bc103297f28bee7260aebeb97a7015b31782a7d1"
+      "size": 253920,
+      "sha256": "07f6c936bfda4fda70cea77569110f9e36fefecfe4645b01dcd1f51fddc854b7"
     },
     {
       "path": "hodon-avatar-5.svg",
-      "size": 692166,
-      "sha256": "b80d7870750e46b197b7d9083ee0a17c3cf0f7ea20b4aeb8a997d42b74aab38e"
+      "size": 270688,
+      "sha256": "41545e5301c9bef211476009b9f766aa9763bce770a411920988cf0207ea87aa"
     },
     {
       "path": "hodon-avatar-6.svg",
-      "size": 692166,
-      "sha256": "48e6bf47ab885e44c73980ceccdb6f0b9eab374acbd63081bafb0056b72ce468"
+      "size": 258596,
+      "sha256": "4d99dcd63e0e463efb114d3ba319be3bcde289f27fcdb2962c54f6b9d4ce20ad"
     },
     {
       "path": "hodon-avatar-7.svg",
-      "size": 692166,
-      "sha256": "713d5cf440428e2c4f4cb49cbd2e367f120f70d2cf73dcd93a2f5931d7ee07e3"
+      "size": 254048,
+      "sha256": "b55d23e6007c42b4dca750b96d37d0528f78e63a8f58bb653d5a08224a54c0ff"
     },
     {
       "path": "hodon-avatar-8.svg",
-      "size": 692166,
-      "sha256": "cd9565b18460c018ba90f6847f0969692230b6b74aa9c6571b660d481568c148"
+      "size": 283384,
+      "sha256": "1e9e018de0d8141d51eecb4ba3f4a4bd3de7ce16127e20ce75b0a79bb94f8b23"
     },
     {
       "path": "hodon-avatar-9.svg",
-      "size": 692166,
-      "sha256": "b6ee635a64485ecfe9b9710e36fdb2e16db56a1595c345fc3bcbfa4ea256d64e"
+      "size": 288052,
+      "sha256": "cda458706adcb0ec825d5e26677cbcaa083497eba5ffbe2c151f2d2e97d2c77b"
     },
     {
       "path": "hodon-client-v61.js",
-      "size": 907067,
-      "sha256": "c708edbc232cf03bbf5841d81d5c7d08b154901e18c7ab353e9309431bef34ae"
+      "size": 911790,
+      "sha256": "983e4970e2d9071d8797b391fde5ab0a6daddd359d83492db07ab26f0cd2a0f6"
     },
     {
       "path": "hodon-face.png",
@@ -621,54 +1201,64 @@
       "sha256": "67533b4283a5a9d65851c2f948466ebedc656c5e8ec1778627329d887d101452"
     },
     {
+      "path": "hodon-korean.woff",
+      "size": 1501352,
+      "sha256": "6ec3ada21115e492cd16347e515e731681151bfbc0b9deb5ffad1f08a05637e4"
+    },
+    {
       "path": "hodon-piece-0.svg",
-      "size": 692340,
-      "sha256": "1eea3187fe2ac83d7f46adfdc8fa50418f42112c80f4ce72c75e94861b74a366"
+      "size": 201684,
+      "sha256": "d575e9a740063bf1b28b71f7cf9601b8e0440c8bffccaa53f652429da236c381"
     },
     {
       "path": "hodon-piece-1.svg",
-      "size": 692369,
-      "sha256": "03cdde30b9fc1641b527d6d7b8fa3a2c8d918f77ce169e8c459ae213339f0955"
+      "size": 198536,
+      "sha256": "c1e2ff48d605aa232838f487f60ee65878b32aa00fbf28904129795ae2bec115"
     },
     {
       "path": "hodon-piece-2.svg",
-      "size": 692385,
-      "sha256": "f26d0e0e7d691ef75de2ffbca8d828a037c9e5ab004f653b4a47bedb3cdb1dbe"
+      "size": 226968,
+      "sha256": "08884e62efdc460a8f5a17c7c9d69b01c2117d1cba8242da918d1e99a30c8703"
     },
     {
       "path": "hodon-piece-3.svg",
-      "size": 692389,
-      "sha256": "8abae1ace1fe132c838399326d72a975f7b69bf2359c79cca012a61cef971754"
+      "size": 216604,
+      "sha256": "18c8f13784719415df83d1fb5665508370fc82e598fb973df44029e389e001ca"
     },
     {
       "path": "hodon-piece-4.svg",
-      "size": 692376,
-      "sha256": "d3c945e606c41e36e47e5bb1af5b7d7ff1bf02c414e07b08341554f89479241c"
+      "size": 215200,
+      "sha256": "a99b55354b15799612bed3a7ecb90eb640185a1c6c73a84b63efd1873d15ace3"
     },
     {
       "path": "hodon-piece-5.svg",
-      "size": 692400,
-      "sha256": "9371651abd9bf42cfb812a38d310426cc51ef0802a839226cfd2c18937ff7000"
+      "size": 225876,
+      "sha256": "1f0c8bf54444725749933dfae1261c28aedab7ff293443c93b3ad05888cdee02"
     },
     {
       "path": "hodon-piece-6.svg",
-      "size": 692440,
-      "sha256": "f82fafbc43fdf68b930bc37ed9006685ba1dacca8c2919999b2254c0bedc4c57"
+      "size": 214608,
+      "sha256": "995438b7fe290e1c5d2ece36201ed1413b7198bab9c5f9789cc216bf5aa0c8aa"
     },
     {
       "path": "hodon-piece-7.svg",
-      "size": 692407,
-      "sha256": "19e32285b2fa7f36e8e04f6bafb4b4c276d0a5e6d2a7fdf0dcd0e88e5d1bcff4"
+      "size": 197264,
+      "sha256": "1ad51c281463d684a84481063abd2d4f38087c1f7ec57aae1e83931f6cb57474"
     },
     {
       "path": "hodon-piece-8.svg",
-      "size": 692371,
-      "sha256": "834f4ddc0f17c1f3713b2e0294278d248f2dfc760e5ae1ba1e31bbfba811f900"
+      "size": 253492,
+      "sha256": "248f3a91b368aede49758a0baeb934c57b9d71e7f975ab91eab3534ad1446035"
     },
     {
       "path": "hodon-piece-9.svg",
-      "size": 692424,
-      "sha256": "746a003b7258f93d91fe01b0a6f15a22516b7e6bc6a01825558fb2c60d871532"
+      "size": 257296,
+      "sha256": "c45f9d4e4bb714396cb5423dfe5c50481c21b2f7ce1bbe48b15aeee75c72966c"
+    },
+    {
+      "path": "hodon-round.woff",
+      "size": 308096,
+      "sha256": "9af31af2f8ce76d3a78544938f8f979c1b497d9960e11dcd0a7e6ec69d05d985"
     },
     {
       "path": "hwatu-0.svg",
@@ -877,8 +1467,8 @@
     },
     {
       "path": "index.html",
-      "size": 55319,
-      "sha256": "dee58cbea23209053316b60b63726711746616bbc89ec369fea0068737e2a46f"
+      "size": 55417,
+      "sha256": "c9310a9dc9d39dac62041f77ce64f535d8fc2215ca81d7a63dfd6b48efc22f75"
     },
     {
       "path": "kkung-dictionary.json",
@@ -973,7 +1563,7 @@
     {
       "path": "lobby48-ui.test.js",
       "size": 7305,
-      "sha256": "b80774dac70056c71be7ab3fff3a76828c97259d701e53569d17f175201851f6"
+      "sha256": "80620113b7d979a0ffe910bacdd524eae2f117ac718bdd21da99a2e8802ef515"
     },
     {
       "path": "lounge.css",
@@ -998,7 +1588,7 @@
     {
       "path": "nodemon-restart.test.js",
       "size": 4862,
-      "sha256": "cc2414c466b780f796ee77da65c60340dc2a42e0ebc9adc81ab08ee97b33f43f"
+      "sha256": "b82572d4dc1f459f5ae51504122e08ed7914facc0949943b939d308a4246ad06"
     },
     {
       "path": "nodemon.json",
@@ -1008,12 +1598,12 @@
     {
       "path": "package-lock.json",
       "size": 26301,
-      "sha256": "1421c3e852a702975031ba2d816f2b93efb5d924d40cf597ca902032d57ed554"
+      "sha256": "dc9be64f73320d0bf28bec54e3682e37f47c7703449189aa6912786f1e3a1887"
     },
     {
       "path": "package.json",
-      "size": 667,
-      "sha256": "d275e6a83488c0ed48afc26d5609c62677f57e12f2be9ea9ebca922d487dddb2"
+      "size": 693,
+      "sha256": "c17baed1fd7e9309e96a4683054ec25c4ca8840c07749b36b4dc131c9ccce65c"
     },
     {
       "path": "partial-room-multiplayer.test.js",
@@ -1023,7 +1613,7 @@
     {
       "path": "partial-room-ui.test.js",
       "size": 2168,
-      "sha256": "f7293565ae8ba19840914bda8fc139099d347de03cd1201e28f4a84ea7c9ecc8"
+      "sha256": "a2d90e795d91638f407ace68f5216258c169e159e528bd79a254e3deee2f8d4f"
     },
     {
       "path": "partial-room.test.js",
@@ -1048,7 +1638,7 @@
     {
       "path": "poker-ui.test.js",
       "size": 3633,
-      "sha256": "947cbda48a385790fa47f74ab23058ac949f119208a476951c8644ab072a6931"
+      "sha256": "bb3141717b6f294b84bdb8bfe7df34d95614375a5046b40fb9817308724df288"
     },
     {
       "path": "poker.css",
@@ -1078,142 +1668,162 @@
     {
       "path": "presentation-styles.test.js",
       "size": 10083,
-      "sha256": "6ca70c99f96e32ac058efe6141a0491b8e2a770a6f1692cd2affbff62664b049"
+      "sha256": "f87e221ef3a6a501f95cfea7222d8d410f255e2b7d2b961fac6b9b8d92d34139"
     },
     {
       "path": "preview/01-yut-badugi.html",
-      "size": 950,
-      "sha256": "60e9f24eab93c4bfb8eeff368dac8e884c461eff40893e72b54366750c85f3ce"
+      "size": 952,
+      "sha256": "678ddbef8b91f8aeac2406b003578dd76b8c5f3fde58c0fd45410d84d4a2aa15"
     },
     {
       "path": "preview/02-gomoku-seotda.html",
-      "size": 935,
-      "sha256": "704f5aa6ff543d36358e02674741d201c94cb55b42ae128171643fed154d31b9"
+      "size": 937,
+      "sha256": "3b153412751e08121bf1aabbb6c37c754593738370664eccdcb8813cc5c4c598"
     },
     {
       "path": "preview/03-poker-alkkagi.html",
-      "size": 947,
-      "sha256": "46b64954fba67c0381fc37d8bfca1e5ee688d8b431339a0b4fe0e86618e1ec9e"
+      "size": 949,
+      "sha256": "1b27da971601982335cf12537951943d09a228fe45a948e5159bcf20dfa866fc"
     },
     {
       "path": "preview/04-kkung-sichuan.html",
-      "size": 953,
-      "sha256": "7ef45d01b785760edf74b8bb34be23b466908d1150e1ba623f4eace566c0affb"
+      "size": 955,
+      "sha256": "f430ccbee022dd1cb31e30ed41a146dd85e4ff8e684ecaa4ae4b8076d4c570c8"
     },
     {
       "path": "preview/alkkagi-mobile.webp",
-      "size": 82308,
-      "sha256": "56ee9ff426a120513e1b718c21e3392e823cc94f613fdb74c6b109085ca4ea9a"
+      "size": 81376,
+      "sha256": "833fc8fae1a52311e2e94c748fb378acc49b2587b7b7c165f83a8b5122417804"
     },
     {
       "path": "preview/alkkagi.webp",
-      "size": 184040,
-      "sha256": "ef39fd95d365da1f1f152d01775bd65c8c091dff6e5f0fc7f6371e81204111d9"
+      "size": 167892,
+      "sha256": "7209021d9799a9d5c1eef4c06cb25f1dc73226b2819725d41bfed08fdb259990"
     },
     {
       "path": "preview/avatar-picker.webp",
-      "size": 57190,
-      "sha256": "121bb00878742260e75a02f6e29c0d638ec671ce34c2fc3e1ccacb9fbd769e3b"
+      "size": 39422,
+      "sha256": "0bd20e23d3f88d0d84385518a8af56bddc6be78e9a9b20aea155790b3bddbd02"
     },
     {
       "path": "preview/badugi-mobile.webp",
-      "size": 91436,
-      "sha256": "36c7476aa808f3fb6ad3182f575bf5aca29073faf217b4e679ac84eb77c6661e"
+      "size": 92556,
+      "sha256": "ab8b87265ff4ca3ccedb9f3f4a2fdde5c7e78601410e939d36add857a35a9f7e"
     },
     {
       "path": "preview/badugi.webp",
-      "size": 265966,
-      "sha256": "e2e440ea1cde89ba7b3bacbf8e873cd1a4ae24963b869e1bca53c5de5c23cba7"
+      "size": 258522,
+      "sha256": "8dc6ff3bbe85630990de2460d88cdb22302973b93cb7a5dc75c37fb99db42d77"
+    },
+    {
+      "path": "preview/character-fix.webp",
+      "size": 263424,
+      "sha256": "4884c893d9878497086e8c8922d00d617592fafd806d5d373e39424decdaf4ff"
     },
     {
       "path": "preview/gomoku-mobile.webp",
-      "size": 73994,
-      "sha256": "0c6a48d9e63c44c8a59984b172f793a4fca08de8314fed6aac969070bd84fca3"
+      "size": 74390,
+      "sha256": "51b43a7b34f6bb24992e7147e98039d48b8aaa7468bab0a78a4a17e1b6406c7b"
     },
     {
       "path": "preview/gomoku.webp",
-      "size": 158000,
-      "sha256": "ab5254f4aa0fa6188fb06d5b2f579c473f5f0c6f502def5f894b442d54f7199b"
+      "size": 149354,
+      "sha256": "dad1f17c7f93caade4023be5c135ee4896db5b521c6ac86a155de39d51a6c550"
     },
     {
       "path": "preview/index.html",
-      "size": 1943,
-      "sha256": "42b5c59bac759b49fba7c5b3d8eabc5ad5f48cb0f190a1e6cddc5269520c2f6e"
+      "size": 1949,
+      "sha256": "aa5432228959b668a05dc2ad0733a665d2e29d471da32b31d3795e3dd500b710"
     },
     {
       "path": "preview/kkung-mobile.webp",
-      "size": 96604,
-      "sha256": "5f899ff349c434b7890768bcbdcffbad98b27737fb0a65c7f55a677d86aca6f7"
+      "size": 93736,
+      "sha256": "9cabb8dd20da830277acc28b4c7ea06e9fc20853e4992367cc3f87e916288a2a"
     },
     {
       "path": "preview/kkung.webp",
-      "size": 240200,
-      "sha256": "f2456b8eb78ec9b46b2b41e78f8c51c656f1b99a1e6608a5e04689cda7469f69"
+      "size": 219714,
+      "sha256": "ff6d1bc3b0bba7ebb77a4829e90807039ec1e888c07454edc7597013955d7b4b"
+    },
+    {
+      "path": "preview/korean-font.webp",
+      "size": 156948,
+      "sha256": "a67e523cf192679db9544160c9a9335eecabac4be0250399de7baaea231442e4"
     },
     {
       "path": "preview/lobby-comparison.html",
-      "size": 1213,
-      "sha256": "25c1bcd6db510d81a9dd1d8f3e6c06d310b70e867420cc20ca8f4117b268f865"
+      "size": 1217,
+      "sha256": "2811df6f48effe288aa950b91adcfb11ed8e1b2fbf25f52ffce44959394b4071"
     },
     {
       "path": "preview/lobby-mobile.webp",
-      "size": 63982,
-      "sha256": "567e84cbc25a5791111dfa85d3da8049ff9928d8da3e38ac52e686fee9e44266"
+      "size": 60202,
+      "sha256": "76248c768ebd7ac042d4b192362dfffe4bc2ef17630597ae760a463c0df7b341"
     },
     {
       "path": "preview/lobby.webp",
-      "size": 196038,
-      "sha256": "5754bcf9f0ef4a6f1ea491b50c12c1ca257013fc66ac23dadf86d4de83991683"
+      "size": 150684,
+      "sha256": "89bbc76853c44d521369de8ed1d4a54790cf7b299cc0b57574a4db3834ced462"
     },
     {
       "path": "preview/poker-mobile.webp",
-      "size": 92306,
-      "sha256": "aa1da341ad5ae2379c0b5fab2af8676951398e483e5ec63693e0d6165a1178c1"
+      "size": 89700,
+      "sha256": "a98d786a35f6a17447b7a72d2be625ae85d387608f39742b5057560a4f8d7aeb"
     },
     {
       "path": "preview/poker.webp",
-      "size": 255760,
-      "sha256": "9b88bc16ef1ed7912113dc6c92664a2fb2acb12a194c72c02cdb4ab3e76ce176"
+      "size": 230196,
+      "sha256": "17e0c1a827dfb9d6617909820be24c8190a164fd6ebf2291e5176c91c9724946"
     },
     {
       "path": "preview/seotda-mobile.webp",
-      "size": 86164,
-      "sha256": "c0894fd2664a146b6f382a3487bbd549b6584803c0a5fb10ccfe5a134e134ca9"
+      "size": 86886,
+      "sha256": "52d420d27841d3e984dcf537afc4e2e41b1c27d5d0e4f6b11f3e0423762f45f9"
+    },
+    {
+      "path": "preview/seotda-ten.webp",
+      "size": 384754,
+      "sha256": "b0cdeeff352dd0b9566cdc83540085176d45ca8b840df9e02b783162f4c35a13"
     },
     {
       "path": "preview/seotda.webp",
-      "size": 254558,
-      "sha256": "6e8caa2e7a53aa1c25a807e97bb9820d730761811a873dd8725456bb03741ff1"
+      "size": 247698,
+      "sha256": "aff4913abae432aca094ead098eddbb49aa89237948eb758fee9686034a7f9bb"
     },
     {
       "path": "preview/sichuan-mobile.webp",
-      "size": 72010,
-      "sha256": "d4f209c2a06dcefece605b115f0be3121450cf69df6d12d14f7c5786e84ac01c"
+      "size": 67766,
+      "sha256": "4084171b1f6fd5aa2ab2af9d40f97ea870cbeac9ba5a4a9ae522a03ea7c6ae82"
     },
     {
       "path": "preview/sichuan-waiting.webp",
-      "size": 156380,
-      "sha256": "cebf5a1bab8e5cab67e3610daa088ffdf6aa4edf77715ceb9520984c39d4201e"
+      "size": 134190,
+      "sha256": "02dc51d75334a6dcb5295e9e84c8c17857b9944eb3dd0e72828c69ddd8a7d960"
     },
     {
       "path": "preview/sichuan.webp",
-      "size": 223702,
-      "sha256": "b02994fbec6ba736aeaf08113c89678a9bcbc4b6b62d367924e0d2d7aa50e75c"
+      "size": 202186,
+      "sha256": "bd52f8c42cfec01e0924ac29ef322f7da04f7fe46e1f65cf99667e4e865d8c70"
+    },
+    {
+      "path": "preview/single-ip.webp",
+      "size": 44150,
+      "sha256": "83882e375733483818da31d11230c3a486d338c36f19c3a20c2d16489840d574"
     },
     {
       "path": "preview/yut-mobile.webp",
-      "size": 82632,
-      "sha256": "8f0c1a52514fb1306cf348f3ee3fbec033558a13986dc528250cc52fca5c292f"
+      "size": 106408,
+      "sha256": "096da735259e094ded955ed0ee65099102ebde42a62341fb46f26a8fac8a9c84"
     },
     {
       "path": "preview/yut.webp",
-      "size": 295162,
-      "sha256": "92837603560a8aeb3f24d09cb1a9b0a5187cc9ee81eb2bda4362b4cbfa2c5e03"
+      "size": 267088,
+      "sha256": "89c547622632922b4c6ac9ac4dff83dba07ba8cfb00f23baa488052dbf2bf5ec"
     },
     {
       "path": "reconnect.test.js",
       "size": 7232,
-      "sha256": "3c005302c71d81a48d6c262a9812c5b826339510f7eb05b3395cbeab9ccfd89c"
+      "sha256": "73bdc94de2aaf8ef1c802abd45825cfa33a468e596e98e8c3bffd8a9425367e6"
     },
     {
       "path": "render.yaml",
@@ -1233,7 +1843,27 @@
     {
       "path": "room-creation.test.js",
       "size": 5468,
-      "sha256": "f1db7210f41af2889ad5070d0a8881a871b1c81d42b676c991f45a85f7acabff"
+      "sha256": "01d10197c65853475a1c2a84b5e0c69503e681c5a0bdea2270c1e186d0edf242"
+    },
+    {
+      "path": "sculpted-ui.js",
+      "size": 5099,
+      "sha256": "7a81da1a33b47cb1b4e9fe6702b1e2b43409a11d3126eebc33d0c5c5843a8b6d"
+    },
+    {
+      "path": "sculpted-yut-stick.svg",
+      "size": 142092,
+      "sha256": "127ee3244d1f48900eea4d463ddd1ece8ee81809a75c29629895443f6c1c4dd3"
+    },
+    {
+      "path": "sculpted-yut-stick.webp",
+      "size": 106168,
+      "sha256": "269e98bf3582a1fd9a43cc2d64316e76f0106aceaf4e8a499935338876d5771c"
+    },
+    {
+      "path": "sculpted.css",
+      "size": 31400,
+      "sha256": "56eb7827d27e27e5c8577030e44c6cbd09b01db4edbfd12e0404846b1daf9c57"
     },
     {
       "path": "seotda-betting-multiplayer.test.js",
@@ -1262,8 +1892,8 @@
     },
     {
       "path": "seotda-multiplayer.test.js",
-      "size": 4704,
-      "sha256": "376913cdbcc126a7eacbae420319afab8ce3e5c7d5196a68881ca301e5074dcb"
+      "size": 4705,
+      "sha256": "fe253c4ed72fc098fd5831b6d2ce6b9132d232730a3f1405db9c6519bef45cf4"
     },
     {
       "path": "seotda-open-network.test.js",
@@ -1283,7 +1913,7 @@
     {
       "path": "seotda-relay-ui.test.js",
       "size": 2725,
-      "sha256": "801498ba341ed738eb57d1e68b9300bb8d6160a1e0d32be1444e837c2f37562d"
+      "sha256": "d13c76f072c465c197115dde5fa0443419062adb867abab3d659cccf11d71800"
     },
     {
       "path": "seotda-relay.test.js",
@@ -1306,6 +1936,11 @@
       "sha256": "15f1373f9c5a2ff970ac2649957b575bc1c1e3184a490acd010730ef94102246"
     },
     {
+      "path": "seotda-ten.test.js",
+      "size": 2203,
+      "sha256": "62f19835ba7329260080e0bc9a1f1768b4b7b85192044a11a0307c59e147fee5"
+    },
+    {
       "path": "seotda-three-wallet.test.js",
       "size": 6378,
       "sha256": "f7b7eba5a5c01b3190c606f8bcf5f2020bc8acb6f9ad000232f67abb538ab3b8"
@@ -1318,7 +1953,7 @@
     {
       "path": "seotda-ui.test.js",
       "size": 4186,
-      "sha256": "341b394155da0e5874e8cba4939b3fd04b60ef1659f3b9519a3d8315fb69297c"
+      "sha256": "32f77b0e3a128328e29bb201ca77f4f6e4d4a9cfd3c0a1d2939684339c4a02b4"
     },
     {
       "path": "seotda.css",
@@ -1327,8 +1962,8 @@
     },
     {
       "path": "seotda.js",
-      "size": 16134,
-      "sha256": "80454e94aab1c934fcd69c2bdea18f01837bb06ddd3eb836542d8b93059c2db0"
+      "size": 16208,
+      "sha256": "00f3a7bf05d05b41cb4e72e42f995e6798d485cae04fa19671fc696d7bcd6b86"
     },
     {
       "path": "seotda.test.js",
@@ -1337,8 +1972,8 @@
     },
     {
       "path": "server.js",
-      "size": 61508,
-      "sha256": "4342af44b091c9211f49bd84e09032026629acd71e45dd89ce7840b9df403e77"
+      "size": 66938,
+      "sha256": "b6d999c0cf5bd22c3418008b5806de5832fbeb22fe6842097fa0c8116f7b5f9e"
     },
     {
       "path": "sfx-cash.mp3",
@@ -1373,7 +2008,7 @@
     {
       "path": "sichuan-network.test.js",
       "size": 8175,
-      "sha256": "401ca69ae8917fa1c2698c538e7d2dfaea4eab8c33ca827508895643c90e6849"
+      "sha256": "fdf98c14132749c1893872551880134228242aecfc073367d98b97a75ce43aa1"
     },
     {
       "path": "sichuan-tiles.webp",
@@ -1388,7 +2023,7 @@
     {
       "path": "sichuan-ui.test.js",
       "size": 10197,
-      "sha256": "e2ed7af27db3e98a40a1037b2af16ab5cc447272a5fc5971b05bbc5683c578d4"
+      "sha256": "5396d423cbfed6e7cd2c0612350fb1b83d110fb253bed9c36fd204ebb28d22a2"
     },
     {
       "path": "sichuan.js",
@@ -1399,6 +2034,11 @@
       "path": "sichuan.test.js",
       "size": 9485,
       "sha256": "92ccfd44ffe3b560d4ee81df8137be7dfbea77edcfac16841905119bbfbde283"
+    },
+    {
+      "path": "single-ip.test.js",
+      "size": 8770,
+      "sha256": "17174c43fc55364dd2956fb52571c7876b69fd9ccdae29e0c62248750fe64877"
     },
     {
       "path": "sound.js",
@@ -1457,8 +2097,8 @@
     },
     {
       "path": "stadium.test.js",
-      "size": 3108,
-      "sha256": "7ef8ecb96c16deac45cbc45b29427f0a00ee4d28caec14b00ce456b2838732af"
+      "size": 3114,
+      "sha256": "42d56fb64bc32fdbd2151003681f7d736e25ff90fa271857151525d694c52d0a"
     },
     {
       "path": "steady-clock.test.js",
@@ -1521,6 +2161,11 @@
       "sha256": "b6ec955097c5f158115f6ea0ead8b1ea7bcb5328e2ffbf96448edaafca3de67a"
     },
     {
+      "path": "testing-env.js",
+      "size": 265,
+      "sha256": "94c6ae56c42802564437a331a55ae7225f29ffc578c4aa9965dc1046e7160376"
+    },
+    {
       "path": "ui.test.js",
       "size": 7438,
       "sha256": "b5fc316db1de1a208817f12886e0e2a4b158045f8a61297c0d1e86d9a8bc81e9"
@@ -1528,7 +2173,7 @@
     {
       "path": "version.test.js",
       "size": 5320,
-      "sha256": "c2f840d8fcb8dfc0d946b3cadb3a063a3f2a1c7acf71b002bd4e580a04565a42"
+      "sha256": "6e243d24c7471836b56b37e5457e7744c234605acb312fd8fccda06695a8c247"
     },
     {
       "path": "victory-ui.test.js",
@@ -1588,7 +2233,7 @@
     {
       "path": "yut-hold.test.js",
       "size": 5091,
-      "sha256": "0dbcfe04593705af96961db5852b42e744abd28278ed4e1557a23dd6391c4649"
+      "sha256": "73089f0d67b3ad72225b4aee31e7162fbad4c0d647162361d705abdeca6ca675"
     },
     {
       "path": "yut-placements.test.js",
@@ -1612,13 +2257,13 @@
     },
     {
       "path": "yut-ten-multiplayer.test.js",
-      "size": 3962,
-      "sha256": "5e7966daae78feb0813f35dbb3ccc01237b82984d6d2d1707289a436333eddd0"
+      "size": 3976,
+      "sha256": "085e34285e5b46c6040a362bcacd14c7fe9030e30cd82048cd9db2142cd54909"
     },
     {
       "path": "yut-ten-ui.test.js",
-      "size": 3952,
-      "sha256": "688ec2f37d0e6f3e83590a9dd5cb7dffefe639ef7376202e8cc4a6d114960ae4"
+      "size": 4419,
+      "sha256": "59310bf4b9b2011bdc85dc0bca55e2a3c95e8b5388f385194f7f43c96564c017"
     },
     {
       "path": "yut-tray-wood.webp",
@@ -1628,7 +2273,7 @@
     {
       "path": "yut-turn-marker.test.js",
       "size": 3320,
-      "sha256": "c63ef0624f0a5790daaa2ba1064c9e29469d02930bbb93cf31e56c512a6f3d54"
+      "sha256": "5465b508b44f3ff78dc594f1c1cffe67d31e95441ccb4972612a2e63ebcbafb4"
     },
     {
       "path": "yut-wood-panel.webp",
@@ -1640,5 +2285,32 @@
       "size": 16749,
       "sha256": "3b23032658d3c02bba7ad306e6236d689f625bfcafbb2ca0f1830013ec56f22b"
     }
-  ]
+  ],
+  "seotda_ten_checks": {
+    "pc": {
+      "count": 10,
+      "width": 1180,
+      "scroll": 1165,
+      "overlaps": []
+    },
+    "mobile": {
+      "count": 10,
+      "width": 390,
+      "scroll": 375,
+      "overlaps": []
+    },
+    "uniqueCards": 20,
+    "privateHandsHidden": true,
+    "capacityValidated": true,
+    "errors": []
+  },
+  "single_ip_browser_checks": {
+    "sameIpSecondProfileBlocked": true,
+    "firstProfileStillPlaying": true,
+    "refreshResumesRoom": true,
+    "noAutomaticRetryLoop": true,
+    "otherIpAllowed": true,
+    "afterFirstClosesRetrySucceeds": true,
+    "errors": []
+  }
 }
