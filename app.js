@@ -1146,7 +1146,7 @@ function openLobbyProfile(next=null){
 function withLobbyProfile(next){if(!$('nickname').value.trim()){openLobbyProfile(next);return;}next();}
 function openLobbyCreate(){withLobbyProfile(()=>{renderGameHub();showLobbyDialog('create-dialog','room-title');});}
 function openLobbyCode(){withLobbyProfile(()=>showLobbyDialog('join-dialog','joincode'));}
-function lobbyMode(r){return r.gameType==='tetris'?'2~6인 · 공격/상쇄 블록 대전':r.gameType==='sichuan'?'사천성 · '+(r.sichuanMode==='first'?'1등 모드':'릴레이 모드'): r.gameType==='kkung'?'세 글자 명사 · 7초 · 목숨 3개':r.gameType==='alkkagi'?'2인 대전 · 드래그 발사 · 고정 장애물':r.gameType==='yut'?(r.matchMode==='team'?'2대2 팀전 · 공용 말 3개':'개인전 · 말 '+r.piecesPerPlayer+'개'):r.gameType==='seotda'?r.seotdaCards+'장 · 릴레이':r.gameType==='gomoku'?'국제 렌주 · '+r.gomokuMinutes+'분':r.gameType==='poker'?'7포커 · '+(r.pokerRule==='choice'?'초이스':'일반'):'4장 바둑이';}
+function lobbyMode(r){return r.gameType==='tetris'?'2~6인 · 마지막 생존자까지 릴레이':r.gameType==='sichuan'?'사천성 · '+(r.sichuanMode==='first'?'1등 모드':'릴레이 모드'): r.gameType==='kkung'?'세 글자 명사 · 7초 · 목숨 3개':r.gameType==='alkkagi'?'2인 대전 · 드래그 발사 · 고정 장애물':r.gameType==='yut'?(r.matchMode==='team'?'2대2 팀전 · 공용 말 3개':'개인전 · 말 '+r.piecesPerPlayer+'개'):r.gameType==='seotda'?r.seotdaCards+'장 · 릴레이':r.gameType==='gomoku'?'국제 렌주 · '+r.gomokuMinutes+'분':r.gameType==='poker'?'7포커 · '+(r.pokerRule==='choice'?'초이스':'일반'):'4장 바둑이';}
 function renderPublicLobby(){
  const root=$('public-lobby');if(!root)return;root.hidden=!!state;document.body.classList.toggle('public-lobby-open',!state);if(state)return;
  renderLobbyControls();
