@@ -1,0 +1,15 @@
+호돈 게임방 공통 글꼴 개선
+
+Bonto의 기존 앱에 아래 3개 파일만 같은 이름으로 덮어쓰세요.
+- approved.css
+- hodon-round.woff
+- hodon-korean.woff
+READABLE-FONT-LICENSE.txt는 글꼴 라이선스입니다. 함께 보관하세요.
+
+CSS 변경 시 Bonto가 자동 재시작할 수 있으니 진행 중인 경기가 끝난 뒤 적용하세요.
+적용 후 이용자는 새로고침하세요. Mac Chrome은 Command+Shift+R.
+계급과 전적을 보존하려면 사이트 데이터/로컬 저장소는 삭제하지 마세요.
+
+실제 Regular 400 / Bold 700 고딕체 적용.
+공통 글자 그림자·외곽선 제거, 자간 정리, 오목 승리 안내 14px로 조정.
+서버 파일을 포함하지 않으므로 기존 IP 제한 해제 설정은 그대로 유지됩니다.
