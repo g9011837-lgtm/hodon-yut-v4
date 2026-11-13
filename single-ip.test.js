@@ -14,8 +14,8 @@ const source=readFileSync(new URL('./server.js',import.meta.url),'utf8');
 const policy=source.split('// BEGIN SINGLE-IP POLICY:')[1].split('// END SINGLE-IP POLICY')[0].replace(/^.*\n/,'');
 const helpers=vm.runInNewContext(policy+'\n;({normalizedIp,connectionIp,enabled:SINGLE_IP_ENABLED})',{BlockList,isIP,URL,Map,Error,randomBytes,process:{env:{}},io:{use(){}}});
 const request=(remote,forwarded,extra={})=>({socket:{remoteAddress:remote},headers:{...(forwarded===undefined?{}:{'x-forwarded-for':forwarded}),...extra}});
-test('IP 제한은 기본 활성화, IPv4 매핑·IPv6 표기를 같은 주소로 정규화',()=>{
- assert.equal(helpers.enabled,true);
+test('IP 제한은 기본 비활성화, 명시적 활성화 지원, IPv4 매핑·IPv6 표기를 같은 주소로 정규화',()=>{
+ assert.equal(helpers.enabled,false);
  assert.equal(helpers.normalizedIp('::ffff:192.0.2.1'),'192.0.2.1');
  assert.equal(helpers.normalizedIp('::ffff:c000:201'),'192.0.2.1');
  assert.equal(helpers.normalizedIp('2001:db8:0:0:0:0:0:7'),'2001:db8::7');
@@ -43,7 +43,7 @@ test('실제 서버: 동일 IP 차단·서로 다른 IP 허용·새로고침·�
  const dir=mkdtempSync(join(tmpdir(),'hodon-single-ip-')),root=new URL('./',import.meta.url);
  for(const n of readdirSync(root))if(/\.(?:js|json)$/.test(n))copyFileSync(new URL(n,root),join(dir,n));
  symlinkSync(new URL('node_modules',root).pathname,join(dir,'node_modules'),'dir');
- const env={...process.env,PORT:'3447',HODON_DATA_DIR:dir};delete env.HODON_SINGLE_IP_LIMIT;
+ const env={...process.env,PORT:'3447',HODON_DATA_DIR:dir,HODON_BONTO_CF_RELAY:'1'};env.HODON_SINGLE_IP_LIMIT='1';
  const proc=spawn(process.execPath,['server.js'],{cwd:dir,env,stdio:['ignore','pipe','pipe']});
  let logs='';proc.stderr.on('data',b=>logs+=b);const clients=[];
  const connect=async(ip,auth={},options={})=>{
@@ -80,7 +80,7 @@ test('실제 서버: 동일 IP 차단·서로 다른 IP 허용·새로고침·�
    assert.ok((await b.timeout(3000).emitWithAck('server:info',{})).ok);b.disconnect();await delay(40);
   });
   await t.test('먼저 열린 창 종료 후 다른 프로필 접속 가능',async()=>{
-   const a=await ready('198.51.100.50');await deny('198.51.100.50');a.disconnect();await delay(40);
+   const a=await ready('198.51.100.50');await deny('198.51.100.50');a.disconnect();await delay(250);
    const b=await ready('198.51.100.50');assert.equal(b.connected,true);b.disconnect();await delay(20);
   });
   await t.test('동시 접속 8개 경합에서도 정확히 하나만 허용',async()=>{
@@ -94,9 +94,47 @@ test('실제 서버: 동일 IP 차단·서로 다른 IP 허용·새로고침·�
    assert.equal(a.io.engine.transport.name,'websocket');assert.equal(a.connected,true);
    await deny('198.51.100.70',{},{transports:['websocket']});a.disconnect();await delay(20);
   });
+  await t.test('Bonto 내부 중계: 서로 다른 방문자 허용, 같은 방문자 중복 차단',async()=>{
+   const options=ip=>({transports:['websocket'],extraHeaders:{...bontoHeaders,host:'internal.bonto.gateway','x-forwarded-for':'172.18.0.2','cf-connecting-ip':ip}});
+   const a=await ready('unused',{},options('198.51.100.120'));
+   const b=await ready('unused',{},options('198.51.100.121'));
+   await deny('unused',{},options('198.51.100.120'));
+   assert.equal(a.connected,true);assert.equal(b.connected,true);
+   a.disconnect();b.disconnect();await delay(40);
+  });
   await t.test('주소 확인 실패는 중복 IP 오류와 구분하며 다른 정상 이용자를 막지 않음',async()=>{
    const r=await connect('invalid');assert.equal(r.error?.data?.code,'IP_UNAVAILABLE');r.c.disconnect();
    const a=await ready('198.51.100.80');assert.equal(a.connected,true);a.disconnect();
   });
  }finally{clients.forEach(c=>c.disconnect());proc.kill();await new Promise(resolve=>proc.once('exit',resolve));rmSync(dir,{recursive:true,force:true});}
+});
+
+const bontoHeaders={host:'hodon-yut-v4.bonto.run','cf-ray':'a594ab3bef829a6b-LAX','cf-connecting-ip':'198.51.100.120'};
+test('Bonto: 내부 XFF 또는 XFF 생략 시에도 Cloudflare 방문자 IP 복구',()=>{
+ for(const forwarded of [undefined,'172.18.0.2','172.18.0.2, 127.0.0.1']){
+  assert.equal(helpers.connectionIp(request('172.18.0.1',forwarded,bontoHeaders)),'198.51.100.120');
+  assert.equal(helpers.connectionIp(request('127.0.0.1',forwarded,bontoHeaders)),'198.51.100.120');
+ }
+ assert.equal(helpers.connectionIp(request('fd00::1',undefined,{...bontoHeaders,'cf-connecting-ip':'2001:db8::120'})),'2001:db8::120');
+ // Existing authoritative visitor in XFF continues to take precedence.
+ assert.equal(helpers.connectionIp(request('172.18.0.1','198.51.100.121',bontoHeaders)),'198.51.100.121');
+});
+test('Bonto fallback: 다른 호스트·가짜 도메인·잘못된 헤더·외부 직접 접속 차단 유지',()=>{
+ for(const host of ['example.com','bonto.run','evilbonto.run','x.bonto.run.evil.test','hodon-yut-v4.bonto.run@evil.test'])assert.equal(helpers.connectionIp(request('172.18.0.1',undefined,{...bontoHeaders,host})),null);
+ for(const extra of [{'cf-ray':''},{'cf-ray':['a594ab3bef829a6b-LAX']},{'cf-connecting-ip':'bad'},{'cf-connecting-ip':'172.18.0.2'}])assert.equal(helpers.connectionIp(request('172.18.0.1',undefined,{...bontoHeaders,...extra})),null);
+ assert.equal(helpers.connectionIp(request('172.18.0.1','bad-ip',bontoHeaders)),null);
+ assert.equal(helpers.connectionIp(request('198.51.100.99',undefined,bontoHeaders)),'198.51.100.99');
+});
+
+const bontoHelpers=vm.runInNewContext(policy+'\n;({connectionIp})',{BlockList,isIP,URL,Map,Error,randomBytes,process:{env:{HODON_BONTO_CF_RELAY:'1'}},io:{use(){}}});
+test('실제 Bonto 로그 재현: 내부 Host·내부 XFF·공개 CF IP는 명시 설정에서만 복구',()=>{
+ const req=request('172.18.0.1','172.18.0.2',{...bontoHeaders,host:'internal.bonto.gateway'});
+ assert.equal(helpers.connectionIp(req),null);
+ assert.equal(bontoHelpers.connectionIp(req),'198.51.100.120');
+ assert.equal(bontoHelpers.connectionIp(request('198.51.100.99','172.18.0.2',{...bontoHeaders,host:'internal.bonto.gateway'})),'198.51.100.99');
+ for(const extra of [{'cf-ray':'bad'},{'cf-connecting-ip':'invalid'},{'cf-connecting-ip':'172.18.0.2'}])assert.equal(bontoHelpers.connectionIp(request('172.18.0.1','172.18.0.2',{...bontoHeaders,host:'internal.bonto.gateway',...extra})),null);
+});
+test('VM에서 명시 비활성 설정은 남아 있는 Bonto 설정 파일보다 우선',()=>{
+ const h=vm.runInNewContext(policy+'\n;({connectionIp})',{BlockList,isIP,URL,Map,Error,randomBytes,readFileSync:()=>'{"trustCloudflareRelay":true}',join:()=>'',ROOT:'',process:{env:{HODON_BONTO_CF_RELAY:'0'}},io:{use(){}}});
+ assert.equal(h.connectionIp(request('172.18.0.1','172.18.0.2',{...bontoHeaders,host:'internal.bonto.gateway'})),null);
 });

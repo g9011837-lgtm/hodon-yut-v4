@@ -8,7 +8,7 @@ import {io} from 'socket.io-client';
 
 test('실제 서버: 전 게임 관전자 참가·예약·경합·취소·재접속·진행판 격리', {timeout:30000},async t=>{
  const dir=mkdtempSync(join(tmpdir(),'hodon-seat-'));
- for(const f of ['server.js','game.js','badugi.js','gomoku.js','seotda.js','poker.js','alkkagi.js','package.json'])copyFileSync(new URL(f,import.meta.url),join(dir,f));
+ for(const f of ['server.js','game.js','badugi.js','gomoku.js','seotda.js','poker.js','alkkagi.js','tetris.js','tetris-core.js','package.json'])copyFileSync(new URL(f,import.meta.url),join(dir,f));
  symlinkSync(new URL('node_modules',import.meta.url).pathname,join(dir,'node_modules'),'dir');
  const child=spawn(process.execPath,['server.js'],{cwd:dir,env:{...process.env,PORT:'3235'},stdio:['ignore','pipe','pipe']});
  const all=[];
