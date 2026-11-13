@@ -1,13 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 885 690"><defs>
-<linearGradient id="ivory" x2=".5" y2="1"><stop stop-color="#fffef8"/><stop offset=".5" stop-color="#f9f1e2"/><stop offset="1" stop-color="#eee1c9"/></linearGradient>
-<linearGradient id="metal" x2="0" y2="1"><stop stop-color="#fff5d2"/><stop offset=".38" stop-color="#d5ba7a"/><stop offset=".52" stop-color="#fff9df"/><stop offset="1" stop-color="#b28b45"/></linearGradient>
-<pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 1h1m2 2h1" stroke="#b19c78" stroke-opacity=".12" stroke-width=".4"/></pattern>
-<filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#4e5634" flood-opacity=".23"/></filter></defs>
-<g filter="url(#shadow)"><rect x="7" y="44" width="871" height="637" rx="27" fill="none" stroke="url(#metal)" stroke-width="6"/><rect x="10" y="46" width="865" height="632" rx="25" fill="none" stroke="#fffdf2" stroke-width="2"/>
-<rect x="17" y="131" width="242" height="538" rx="20" fill="#eee4d2" stroke="#d3ba84"/><rect x="20" y="134" width="236" height="532" rx="18" fill="url(#ivory)" stroke="#fffdf6" stroke-width="2"/>
-<rect x="283" y="183" width="563" height="161" rx="19" fill="url(#metal)"/><rect x="286" y="186" width="557" height="155" rx="17" fill="url(#ivory)" stroke="#fffdf5" stroke-width="2"/>
-</g><rect x="14" y="48" width="857" height="624" rx="23" fill="url(#grain)"/>
-<path d="M34 641l34 0-23 26H25zM65 641h11l-23 26H42z" fill="#4e9265" opacity=".15"/>
-<rect x="303" y="6" width="280" height="33" rx="16" fill="url(#metal)" stroke="#fff8d3" stroke-width="2"/>
-<text x="443" y="29" text-anchor="middle" fill="#064d32" font-family="sans-serif" font-size="20" font-weight="700">⚽ 호돈 스타디움 로비</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1415 1111"><defs>
+<linearGradient id="cream" x2="0" y2="1"><stop stop-color="#fffef7"/><stop offset=".45" stop-color="#f9f2e5"/><stop offset="1" stop-color="#eee1c8"/></linearGradient>
+<linearGradient id="metal" x2="0" y2="1"><stop stop-color="#fff6d2"/><stop offset=".32" stop-color="#d7b978"/><stop offset=".52" stop-color="#fff9e4"/><stop offset="1" stop-color="#b18a43"/></linearGradient>
+<pattern id="paper" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 1h1m2 2h1" stroke="#ac9470" stroke-opacity=".16" stroke-width=".5"/></pattern>
+<filter id="s" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#5c5130" flood-opacity=".24"/></filter>
+</defs><g filter="url(#s)"><rect x="18" y="67" width="1378" height="1024" rx="43" fill="none" stroke="url(#metal)" stroke-width="9"/><rect x="24" y="72" width="1366" height="1012" rx="38" fill="none" stroke="#fffdf0" stroke-width="4"/>
+<rect x="29" y="184" width="361" height="891" rx="35" fill="url(#cream)" stroke="url(#metal)" stroke-width="4"/><rect x="36" y="191" width="347" height="877" rx="30" fill="url(#paper)" stroke="#fffdf3" stroke-width="3"/>
+<path d="M59 1023h25l-32 43H30zM91 1023h11l-31 43H60z" fill="#7ca47b" opacity=".24"/>
+<rect x="403" y="269" width="975" height="310" rx="34" fill="url(#cream)" stroke="url(#metal)" stroke-width="4"/><rect x="410" y="276" width="961" height="296" rx="28" fill="url(#paper)" stroke="#fffdf3" stroke-width="3"/>
+<rect x="550" y="7" width="326" height="47" rx="23" fill="url(#metal)" stroke="#fff9dc" stroke-width="3"/></g>
+<text x="713" y="41" text-anchor="middle" fill="#075135" font-family="sans-serif" font-size="29" font-weight="700">⚽ 호돈 스타디움 로비</text></svg>
