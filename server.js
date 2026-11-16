@@ -1,7 +1,7 @@
 import {createTetris,inputTetris,tickTetris,resignTetris,publicTetris,publicTetrisPlayer,chooseTarget} from './tetris.js';
 import {createAlkkagi,actAlkkagi,tickAlkkagi,resignAlkkagi,publicAlkkagi} from './alkkagi.js';
 import {createPoker,actPoker,publicPoker,removePoker,timeoutPoker} from './poker.js';
-import {createSeotda,updateSeotdaRelay,forfeitSeotdaRelay,actSeotda,publicSeotda,removeSeotda,timeoutSeotda} from './seotda.js';
+import {createSeotda,seotdaHandRoster,updateSeotdaRelay,forfeitSeotdaRelay,actSeotda,publicSeotda,removeSeotda,timeoutSeotda} from './seotda.js';
 import {newGomoku,actGomoku,publicGomoku,tickGomoku} from './gomoku.js';
 import {createBadugi,actBadugi,publicBadugi,foldRemoved,timeoutBadugi} from './badugi.js';
 import express from 'express';
@@ -237,18 +237,31 @@ function continueSeotdaRoom(room,now=Date.now()){
  updateSeotdaRelay(relay,g,now);room.wallets=g.players.map((p,i)=>seotdaHandParticipants(room)[i]?p.chips:room.wallets[i]);
  if(relay.status==='playing'&&relay.nextAt!==null&&now>=relay.nextAt){
   const bonusPot=relay.carry||0;
-  const names=room.players.map((p,i)=>p&&relay.participants?.[i]!==false?p.name:'');
-  room.seotda=createSeotda(names,room.wallets.map((n,i)=>names[i]?n:0),{base:room.base,turnSeconds:room.turnSeconds,dealer:(g.dealer+1)%room.playerCount,handNo:g.handNo+1,cards:room.seotdaCards,avatars:room.players.map(p=>p?.avatarId??0),bonusPot});
+  const roster=seotdaHandRoster(room);
+  room.seotda=createSeotda(roster.names,roster.balances,{base:room.base,turnSeconds:room.turnSeconds,dealer:(g.dealer+1)%room.playerCount,handNo:g.handNo+1,cards:room.seotdaCards,avatars:room.players.map(p=>p?.avatarId??0),bonusPot});
+  relay.participants=roster.participants;relay.total=roster.total;
   room.seotdaTokens=room.players.map(p=>p?.token||null);relay.carry=0;relay.nextAt=null;
   if(room.seotda.status==='finished'){updateSeotdaRelay(relay,room.seotda,now);room.wallets=room.seotda.players.map((p,i)=>seotdaHandParticipants(room)[i]?p.chips:room.wallets[i]);}
  }
 }
-function seatEntryBlocked(room){return room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||[room.kkung,room.game,room.badugi,room.gomoku,room.seotda,room.poker,room.alkkagi].some(g=>g?.status==='playing');}
-function availableSeat(room){return room.players.findIndex((p,i)=>!p&&!room.spectators.some(w=>w.requestedSeat===i));}
+function liveYutEntry(room){return room.gameType==='yut'&&room.game?.status==='playing'&&room.game.mode==='solo';}
+function emptyYutSeat(room,i){return !liveYutEntry(room)||room.game.participants?.[i]===false;}
+function enrollYutSeat(room,seat){
+ if(!liveYutEntry(room))return;
+ const g=room.game,p=room.players[seat];
+ if(!p||g.participants?.[seat]!==false)throw Error('이번 경기의 빈자리를 확인해 주세요.');
+ g.participants[seat]=true;g.playerNames[seat]=p.name;g.playerAvatars[seat]=p.avatarId??0;
+ g.pieces[seat]=Array.from({length:g.piecesPerPlayer},()=>null);
+ if(g.rankRoster)g.rankRoster[seat]={profileId:p.profileId};
+ say(room,`${p.name} 님이 빈자리에 참가했습니다. 차례가 돌아오면 윷을 던지세요.`);
+}
+function seatEntryBlocked(room){if(liveYutEntry(room))return false;return room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||[room.kkung,room.game,room.badugi,room.gomoku,room.seotda,room.poker,room.alkkagi].some(g=>g?.status==='playing');}
+function availableSeat(room){return room.players.findIndex((p,i)=>!p&&emptyYutSeat(room,i)&&!room.spectators.some(w=>w.requestedSeat===i));}
 function promoteWatcher(room,watcher,seat){
  const client=io.sockets.sockets.get(watcher.socketId);if(!client||room.players[seat])return null;
  room.spectators.splice(room.spectators.indexOf(watcher),1);
  room.players[seat]={name:watcher.name,avatarId:watcher.avatarId,...(client.data.account||{}),token:watcher.token,socketId:client.id};
+ enrollYutSeat(room,seat);
  if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
  if(!room.players[room.host])room.host=seat;
  client.data={account:client.data.account,roomCode:room.code,token:watcher.token,role:'player'};
@@ -283,8 +296,8 @@ function processLeaveRequests(room){
 const LOBBY_CHANNEL='__public_lobby__';let lastLobbySnapshot='';
 const lobbyChats=[];
 function publicRooms(){return [...rooms.values()].filter(r=>r.players.some(p=>p?.socketId)||r.spectators.some(p=>p.socketId)).sort((a,b)=>b.createdAt-a.createdAt||a.code.localeCompare(b.code)).slice(0,200).map(r=>{
- const playing=seatEntryBlocked(r),host=r.players[r.host],available=r.players.filter((p,i)=>!p&&!r.spectators.some(w=>w.requestedSeat===i)).length;
- return {code:r.code,gameType:r.gameType,hostName:host?.name||'함께할 친구',hostAvatarId:host?.avatarId??0,playerCount:r.playerCount,occupied:r.players.filter(Boolean).length,connectedPlayers:r.players.filter(p=>p?.socketId).length,spectators:r.spectators.filter(w=>w.socketId).length,availableSeats:available,canJoin:!playing&&available>0,status:playing?'playing':r.tetris||r.sichuan||r.kkung||r.game||r.badugi||r.gomoku||r.seotda||r.poker||r.alkkagi?'finished':'waiting',sichuanMap:r.sichuanMap,sichuanMode:r.sichuanMode,matchMode:r.matchMode,piecesPerPlayer:r.piecesPerPlayer,roomTitle:r.roomTitle,pokerRule:r.pokerRule,seotdaCards:r.seotdaCards,base:r.base,startingChips:r.startingChips,gomokuMinutes:r.gomokuMinutes,createdAt:r.createdAt};
+ const entryBlocked=seatEntryBlocked(r),playing=entryBlocked||liveYutEntry(r),host=r.players[r.host],available=r.players.filter((p,i)=>!p&&emptyYutSeat(r,i)&&!r.spectators.some(w=>w.requestedSeat===i)).length;
+ return {code:r.code,gameType:r.gameType,hostName:host?.name||'함께할 친구',hostAvatarId:host?.avatarId??0,playerCount:r.playerCount,occupied:r.players.filter(Boolean).length,connectedPlayers:r.players.filter(p=>p?.socketId).length,spectators:r.spectators.filter(w=>w.socketId).length,availableSeats:available,canJoin:!entryBlocked&&available>0,status:playing?'playing':r.tetris||r.sichuan||r.kkung||r.game||r.badugi||r.gomoku||r.seotda||r.poker||r.alkkagi?'finished':'waiting',sichuanMap:r.sichuanMap,sichuanMode:r.sichuanMode,matchMode:r.matchMode,piecesPerPlayer:r.piecesPerPlayer,roomTitle:r.roomTitle,pokerRule:r.pokerRule,seotdaCards:r.seotdaCards,base:r.base,startingChips:r.startingChips,gomokuMinutes:r.gomokuMinutes,createdAt:r.createdAt};
  });}
 function broadcastLobby(){checkpointRooms();const list=publicRooms(),snapshot=JSON.stringify(list);if(snapshot===lastLobbySnapshot)return;lastLobbySnapshot=snapshot;io.to(LOBBY_CHANNEL).emit('lobby:state',{rooms:list});}
 function broadcast(room){
@@ -385,7 +398,7 @@ io.on('connection',socket=>{
       reply(cb,{code:id,token:tokenIn,seat,role:'player'});broadcast(room);return;
     }
     let spectatorIndex=(room.spectators||[]).findIndex(p=>p.token===tokenIn&&tokenIn);
-    const wantsWatch=room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||!!data.spectator||spectatorIndex>=0||(room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&room.game.participants?.[seat]!==false&&!room.game.retired?.includes(seat)&&!room.game.placements?.some(p=>p.seat===seat))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing');
+    const wantsWatch=room.tetris?.status==='playing'||scActive(room)||room.seotdaRelay?.status==='playing'||!!data.spectator||spectatorIndex>=0||(room.alkkagi?.status==='playing'||(room.game?.status==='playing'&&!liveYutEntry(room))||room.poker?.status==='playing'||room.badugi?.status==='playing'||room.gomoku?.status==='playing'||room.seotda?.status==='playing');
     if(wantsWatch){
       if(spectatorIndex>=0){
         const watcher=room.spectators[spectatorIndex],former=watcher.socketId;
@@ -398,11 +411,11 @@ io.on('connection',socket=>{
       const watcher=room.spectators[spectatorIndex];socket.data={account:socket.data.account,roomCode:id,token:watcher.token,role:'spectator'};socket.join(id);
       socket.emit('room:spectator-identity',{id:watcher.id});reply(cb,{code:id,token:watcher.token,seat:null,role:'spectator'});broadcast(room);return;
     }
-    if(room.game?.status==='playing')return failure(cb,'게임이 진행 중입니다. 관전 입장 버튼을 이용해 주세요.');
+    if(room.game?.status==='playing'&&!liveYutEntry(room))return failure(cb,'게임이 진행 중입니다. 관전 입장 버튼을 이용해 주세요.');
     seat=availableSeat(room);
     if(seat<0)return failure(cb,'방이 가득 찼습니다. 관전으로 입장할 수 있습니다.');
     const name=cleanName(data.name);if(!name)return failure(cb,'닉네임을 입력해 주세요.');
-    const newToken=randomUUID();room.players[seat]={name,avatarId:data.avatarId??0,...(socket.data.account||{}),token:newToken,socketId:socket.id};if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
+    const newToken=randomUUID();room.players[seat]={name,avatarId:data.avatarId??0,...(socket.data.account||{}),token:newToken,socketId:socket.id};enrollYutSeat(room,seat);if(['badugi','seotda','poker'].includes(room.gameType))room.wallets[seat]=room.startingChips;
     if(!room.players[room.host])room.host=seat;socket.data={account:socket.data.account,roomCode:id,token:newToken,role:'player'};socket.join(id);
     reply(cb,{code:id,token:newToken,seat,role:'player'});broadcast(room);
   });
@@ -492,13 +505,12 @@ io.on('connection',socket=>{
     }
     if(room.gameType==='seotda'){
       try{
-       const previous=room.seotda,continuing=room.seotdaRelay?.status==='playing',needsReset=seotdaNeedsReset(room);
+       const previous=room.seotda,needsReset=seotdaNeedsReset(room);
        if(needsReset&&data.resetBalances!==true)return failure(cb,'보유칩 초기화로 새 릴레이를 시작하세요.');
        if(data.resetBalances===true&&!needsReset)return failure(cb,'지금은 보유칩을 초기화할 수 없습니다.');
-       const names=room.players.map((p,i)=>p&&(continuing?room.seotdaRelay.participants?.[i]!==false:!!p.socketId)?p.name:'');
-       const balances=room.wallets.map((n,i)=>names[i]?(needsReset?room.startingChips:n):0);
+       const roster=seotdaHandRoster(room,needsReset),{names,balances}=roster;
        const next=createSeotda(names,balances,{base:room.base,turnSeconds:room.turnSeconds,dealer:previous?(previous.dealer+1)%room.playerCount:seat,handNo:(previous?.handNo||0)+1,cards:room.seotdaCards,avatars:room.players.map(p=>p?.avatarId??0),bonusPot:room.seotdaRelay?.carry||0});
-       if(!room.seotdaRelay||needsReset)room.seotdaRelay={id:randomUUID(),status:'playing',total:balances.reduce((a,b)=>a+b,0),participants:names.map(Boolean),firstHand:next.handNo,processedHand:0,nextAt:null,champion:null,carry:0,eliminated:[],retired:[]};else room.seotdaRelay.nextAt=null;
+       if(!room.seotdaRelay||needsReset)room.seotdaRelay={id:randomUUID(),status:'playing',total:roster.total,participants:roster.participants,firstHand:next.handNo,processedHand:0,nextAt:null,champion:null,carry:0,eliminated:[],retired:[]};else {room.seotdaRelay.nextAt=null;room.seotdaRelay.participants=roster.participants;room.seotdaRelay.total=roster.total;}
        room.seotdaRelay.carry=0;room.seotda=next;room.seotdaTokens=room.players.map(p=>p?.token||null);room.wallets=room.wallets.map((n,i)=>names[i]?balances[i]:n);reply(cb);broadcast(room);
       }catch(e){failure(cb,e.message)}return;
     }

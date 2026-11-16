@@ -121,6 +121,17 @@ export function removeSeotda(g,i){if(!g||g.status!=='playing'||g.players[i].fold
 export function timeoutSeotda(g){if(!g||g.status!=='playing')return;const p=g.players[g.turn];let d;if(g.phase==='replay')d={action:'replay'};else if(g.phase==='open')d={indices:[0]};else if(g.phase==='select'){const pairs=[[0,1],[0,2],[1,2]].filter(pair=>pair[1]<p.hand.length);pairs.sort((a,b)=>evaluatePair(b.map(n=>p.hand[n])).value-evaluatePair(a.map(n=>p.hand[n])).value);d={indices:pairs[0]};}else{const a=seotdaActions(g,g.turn);d={action:a.check?'check':a.call&&a.callAmount===0?'call':'fold'};}actSeotda(g,g.turn,{...d,revision:g.revision});}
 export function publicSeotda(g,viewer=null){if(!g)return null;return {status:g.status,phase:g.phase,round:g.round,betting:g.phase==='bet'?{boss:g.boss,target:g.current,lastRaiser:g.lastRaiser,waiting:[...g.pending],raiseLimit:g.betLimit,raiseCounts:[...g.raiseCounts],raiseLocked:[...g.raiseLocked],lastEvent:g.lastBetEvent?{...g.lastBetEvent}:null}:null,dealCount:Math.max(0,...g.players.map(p=>p.hand.length)),cards:g.cards,base:g.base,dealer:g.dealer,handNo:g.handNo,replayNo:g.replayNo,revision:g.revision,deadline:g.deadline,turn:g.turn,pot:g.pot,potBefore:g.potBefore,showdown:g.showdown,avatars:[...g.avatars],payouts:[...g.payouts],pots:g.pots.map(p=>({...p})),log:g.log.slice(-16),actions:seotdaActions(g,viewer),lastShowdown:g.lastShowdown,players:g.players.map((p,i)=>{const visible=viewer===i||(g.showdown&&!p.folded)||g.phase==='replay'&&!p.folded;const selected=p.chosen?p.chosen.map(n=>p.hand[n]):p.hand.slice(0,2);const r=visible&&selected.length===2?evaluatePair(selected):null;return {name:p.name,chips:p.chips,folded:p.folded,bet:p.bet,total:p.total,lastAction:p.lastAction,open:p.open,chosen:visible&&p.chosen?[...p.chosen]:null,hand:p.hand.map((c,n)=>viewer===i||(visible&&!p.folded&&(g.cards===2||p.chosen?.includes(n)))||(!p.folded&&p.open===n)?c:null),label:r?(r.special||r.label):null};})};}
 
+// Build each new hand from the occupied seats, not only the first hand's roster.
+// Late participants join only between hands; eliminated/retired seats get no refill.
+export function seotdaHandRoster(room,reset=false){
+ const relay=!reset&&room.seotdaRelay?.status==='playing'?room.seotdaRelay:null;
+ const participants=room.players.map((p,i)=>!!p&&(relay?.participants?.[i]===true||!!p.socketId));
+ const names=room.players.map((p,i)=>participants[i]&&!(relay?.retired||[]).includes(i)?p.name:'');
+ const balances=room.wallets.map((n,i)=>names[i]?(reset?room.startingChips:n):0);
+ const added=relay?balances.reduce((sum,n,i)=>sum+(relay.participants?.[i]===false?n:0),0):0;
+ return {names,balances,participants,total:relay?relay.total+added:balances.reduce((sum,n)=>sum+n,0)};
+}
+
 // A relay preserves all balances. No chips are replenished between hands.
 export function updateSeotdaRelay(relay,g,now=Date.now()){
  if(!relay||relay.status==='finished'||g?.status!=='finished')return;
